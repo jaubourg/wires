@@ -1,0 +1,4 @@
+{
+	":hello": "./lib/{#configDir}/cache",
+	"configDir": "config"
+}
