@@ -2,13 +2,11 @@ require( "./" );
 
 var cache = require( "./lib/config/cache.js" );
 var cacheThroughWires = require( ":hello" );
+var cacheExpandInline = require( "./lib/{#configDir}/cache" );
+
+console.log( cacheExpandInline );
 
 console.log( cache === cacheThroughWires );
+console.log( cache === cacheExpandInline );
 
-try {
-	var configDir = require( "#configDir" );
-} catch( e ) {
-	console.log( require( "module" )._cache );
-	throw e;
-}
-console.log( configDir );
+console.log( require( "#configDir" ) );
