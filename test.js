@@ -10,3 +10,4 @@ console.log( cache === cacheThroughWires );
 console.log( cache === cacheExpandInline );
 
 console.log( require( "#configDir" ) );
+console.log( require( "#otherInfo" ) );
