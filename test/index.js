@@ -3,10 +3,10 @@
 require( ".." );
 
 var options = ( function( args ) {
-	var r_options = /^--([a-z]+)=(.+)$/i;
+	var rOptions = /^--([a-z]+)=(.+)$/i;
 	var options = {};
 	args.forEach( function( arg ) {
-		var tmp = r_options.exec( arg );
+		var tmp = rOptions.exec( arg );
 		if ( tmp ) {
 			options[ tmp[ 1 ] ] = tmp[ 2 ].trim();
 		} else {
@@ -24,8 +24,8 @@ var fs = require( "fs" );
 var nodeunit = require( "nodeunit" );
 var path = require( "path" );
 
-var r_cleanFunction = /^.*\n|\n.*$/g;
-var r_unit = /[\.\\\/]unit\.js$/;
+var rCleanFunction = /^.*\n|\n.*$/g;
+var rUnit = /[\.\\\/]unit\.js$/;
 
 function generateTree( dir, tree ) {
 	var endAction = [];
@@ -42,15 +42,15 @@ function generateTree( dir, tree ) {
 				filename = path.join( dir, filename );
 				fs.writeFileSync(
 					filename,
-					typeof val === "function"
-						? ( val + "" ).replace( r_cleanFunction, "" )
-						: JSON.stringify( val, null, "  " ),
+					typeof val === "function" ?
+						"\"use strict\";\n" + ( val + "" ).replace( rCleanFunction, "" ) :
+						JSON.stringify( val, null, "  " ),
 					"utf8"
 				);
 				endAction.push( function() {
 					fs.unlinkSync( filename );
 				} );
-				if ( r_unit.test( filename ) ) {
+				if ( rUnit.test( filename ) ) {
 					units.push( filename );
 				}
 			}
@@ -60,7 +60,7 @@ function generateTree( dir, tree ) {
 		units: units,
 		cleanup: function() {
 			var index = endAction.length;
-			while( index-- ) {
+			while ( index-- ) {
 				endAction[ index ]();
 			}
 		}

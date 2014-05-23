@@ -7,14 +7,10 @@ module.exports = {
 	},
 	"test.js": function() {
 
-		"use strict";
-
 		module.exports = {};
 
 	},
 	"base.unit.js": function() {
-
-		"use strict";
 
 		module.exports = {
 			data: function( __ ) {

@@ -9,15 +9,11 @@ module.exports = {
 	"/lib": {
 		"test.js": function() {
 
-			"use strict";
-
 			module.exports = {};
 
 		}
 	},
 	"expansion.unit.js": function() {
-
-		"use strict";
 
 		module.exports = {
 			data: function( __ ) {

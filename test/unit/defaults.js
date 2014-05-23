@@ -13,14 +13,10 @@ module.exports = {
 	},
 	"test.js": function() {
 
-		"use strict";
-
 		module.exports = {};
 
 	},
 	"defaults.unit.js": function() {
-
-		"use strict";
 
 		module.exports = {
 			data: function( __ ) {
