@@ -2,6 +2,23 @@
 
 require( ".." );
 
+var options = ( function( args ) {
+	var r_options = /^--([a-z]+)=(.+)$/i;
+	var options = {};
+	args.forEach( function( arg ) {
+		var tmp = r_options.exec( arg );
+		if ( tmp ) {
+			options[ tmp[ 1 ] ] = tmp[ 2 ].trim();
+		} else {
+			if ( !options.map ) {
+				options.map = {};
+			}
+			options.map[ arg + ".js" ] = true;
+		}
+	} );
+	return options;
+} )( process.argv.slice( 2 ) );
+
 var _ = require( "lodash" );
 var fs = require( "fs" );
 var nodeunit = require( "nodeunit" );
@@ -59,13 +76,16 @@ var units = [];
 var cleanup = [];
 
 fs.readdirSync( unitDir ).forEach( function( unitFilename ) {
+	if ( options.map && !options.map[ unitFilename ] ) {
+		return;
+	}
 	unitFilename = path.join( unitDir, unitFilename );
 	var tree = generateTree( path.join( fixtureDir, path.basename( unitFilename, ".js" ) ), require( unitFilename ) );
 	units.push.apply( units, tree.units );
 	cleanup.push( tree.cleanup );
 } );
 
-nodeunit.reporters.default.run( units, null, function( error ) {
+( nodeunit.reporters[ options.reporter ] || nodeunit.reporters.default ).run( units, null, function( error ) {
 	cleanup.forEach( function( cleanup ) {
 		cleanup();
 	} );
