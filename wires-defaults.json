@@ -1,5 +1,0 @@
-{
-	":hello": "./lib/somethingElse/cache",
-	"configDir": "somethingElse",
-	"otherInfo": "otherInfoValue"
-}
