@@ -2,13 +2,13 @@
 
 module.exports = {
 	"wires.json": {
-		"sub": {
+		"person": {
 			"name": "John"
 		}
 	},
 	"/sub": {
 		"wires.json": {
-			"NAMESPACE": "sub",
+			"NAMESPACE": "person",
 			"age": 27
 		},
 		"namespace.unit.js": function() {
@@ -17,7 +17,7 @@ module.exports = {
 				test: function( __ ) {
 					__.expect( 1 );
 					__.deepEqual( require( "#" ), {
-						NAMESPACE: "sub",
+						NAMESPACE: "person",
 						name: "John",
 						age: 27
 					} );
