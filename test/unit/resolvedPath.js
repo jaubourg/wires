@@ -5,7 +5,9 @@ module.exports = {
 		"path": "./lib",
 		"resolvedPath": "@/lib",
 		"resolvedCMDPath": ">/lib",
-		":resolvedRoute": "@/lib/test"
+		":resolvedRoute": "@/lib/test",
+		"indirectResolvedRoute": "@/lib/test",
+		":indirectResolvedRoute": "{#indirectResolvedRoute}"
 	},
 	"resolvedPath.unit.js": function() {
 
@@ -13,11 +15,12 @@ module.exports = {
 
 		module.exports = {
 			test: function( __ ) {
-				__.expect( 4 );
+				__.expect( 5 );
 				__.strictEqual( require( "#path" ), "./lib" );
 				__.strictEqual( require( "#resolvedPath" ), path.resolve( __dirname, "./lib" ) );
 				__.strictEqual( require( "#resolvedCMDPath" ), path.resolve( process.cwd(), "./lib" ) );
 				__.strictEqual( require( ":resolvedRoute" ), "lib/test" );
+				__.strictEqual( require( ":indirectResolvedRoute" ), "lib/test" );
 				__.done();
 			}
 		};
@@ -35,11 +38,12 @@ module.exports = {
 
 			module.exports = {
 				test: function( __ ) {
-					__.expect( 4 );
+					__.expect( 5 );
 					__.strictEqual( require( "#path" ), "./lib" );
 					__.strictEqual( require( "#resolvedPath" ), path.resolve( __dirname ) );
 					__.strictEqual( require( "#resolvedCMDPath" ), path.resolve( process.cwd(), "./lib" ) );
 					__.strictEqual( require( ":resolvedRoute" ), "lib/test" );
+					__.strictEqual( require( ":indirectResolvedRoute" ), "lib/test" );
 					__.done();
 				}
 			};
