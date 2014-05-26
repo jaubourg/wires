@@ -2,10 +2,13 @@
 
 module.exports = {
 	"wires.json": {
-		array: [ 1, 2, 3 ],
+		array: [ "a", "b", "c" ],
 		"folder": "lib",
 		"lolfolder": "lol{#folder}",
 		":module": "./{#folder}/test.js"
+	},
+	"wires.test.json": {
+		array: [ 1, 2, 3 ]
 	},
 	"/lib": {
 		"test.js": function() {
@@ -27,10 +30,13 @@ module.exports = {
 			module.exports = {
 				test: function( __ ) {
 					__.expect( 4 );
+					var oldEnv = process.env.NODE_ENV;
+					process.env.NODE_ENV = "test";
 					__.deepEqual( require( "#array" ), [ 1, 2, 3 ] );
 					__.strictEqual( require( "#folder" ), "lib" );
 					__.strictEqual( require( "#lolfolder" ), "lollib" );
 					__.strictEqual( require( ":module" ), "in lib" );
+					process.env.NODE_ENV = oldEnv;
 					__.done();
 				}
 			};
@@ -38,6 +44,9 @@ module.exports = {
 		"/then": {
 			"wires.json": {
 				array: [ 4, 5, 6 ],
+				"folder": "none"
+			},
+			"wires.test.json": {
 				"folder": "src"
 			},
 			"/level2": {
@@ -45,10 +54,13 @@ module.exports = {
 					module.exports = {
 						test: function( __ ) {
 							__.expect( 4 );
+							var oldEnv = process.env.NODE_ENV;
+							process.env.NODE_ENV = "test";
 							__.deepEqual( require( "#array" ), [ 4, 5, 6 ] );
 							__.strictEqual( require( "#folder" ), "src" );
 							__.strictEqual( require( "#lolfolder" ), "lolsrc" );
 							__.strictEqual( require( ":module" ), "in src" );
+							process.env.NODE_ENV = oldEnv;
 							__.done();
 						}
 					};
