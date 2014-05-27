@@ -9,7 +9,7 @@ module.exports = {
 		"indirectResolvedRoute": "@/lib/test",
 		":indirectResolvedRoute": "{#indirectResolvedRoute}"
 	},
-	"resolvedPath.unit.js": function() {
+	"resolved_path.unit.js": function() {
 
 		var path = require( "path" );
 
@@ -32,7 +32,7 @@ module.exports = {
 			module.exports = "lib/test";
 
 		},
-		"resolvedPathSub.unit.js": function() {
+		"resolved_path_sub.unit.js": function() {
 
 			var path = require( "path" );
 
