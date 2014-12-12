@@ -23,7 +23,7 @@
 		"nodeunit": "0.9.0",
 		"wrench": "1.5.8"
 	},
-	"script": {
+	"scripts": {
 		"test": "grunt"
 	}
 }
