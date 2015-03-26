@@ -40,6 +40,8 @@
 
 	"requireSpacesInsideArrayBrackets": "all",
 
+	"requireSpacesInsideBrackets": true,
+
 	"disallowSpaceAfterObjectKeys": true,
 
 	"requireCommaBeforeLineBreak": true,
