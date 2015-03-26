@@ -24,7 +24,7 @@ var fs = require( "fs" );
 var nodeunit = require( "nodeunit" );
 var path = require( "path" );
 
-var rCleanFunction = /^.*\n|\n.*$/g;
+var rCleanFunction = /^.*\r?\n|\r?\n.*$/g;
 var rUnit = /[\.\\\/]unit\.js$/;
 
 function generateTree( dir, tree ) {
