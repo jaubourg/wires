@@ -4,6 +4,7 @@ module.exports = {
 	"wires.json": {
 		"folder": "lib",
 		"show": "value_is_{#folder}",
+		"path": "{#>PATH}",
 		":module": "./{#folder}/test.js"
 	},
 	"/lib": {
@@ -17,8 +18,9 @@ module.exports = {
 
 		module.exports = {
 			data: function( __ ) {
-				__.expect( 1 );
+				__.expect( 2 );
 				__.strictEqual( require( "#show" ), "value_is_lib" );
+				__.strictEqual( require( "#path" ), process.env.PATH );
 				__.done();
 			},
 			route: function( __ ) {

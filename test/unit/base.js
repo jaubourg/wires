@@ -23,6 +23,11 @@ module.exports = {
 				__.strictEqual( require( "#notDefined" ), undefined );
 				__.done();
 			},
+			"environment data": function( __ ) {
+				__.expect( 1 );
+				__.strictEqual( require( "#>PATH" ), process.env.PATH );
+				__.done();
+			},
 			route: function( __ ) {
 				__.expect( 1 );
 				__.strictEqual( require( ":module" ), require( "./test" ) );
