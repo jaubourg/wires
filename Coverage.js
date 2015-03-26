@@ -16,17 +16,14 @@ module.exports = function( grunt ) {
 	var lcov = "data.lcov";
 
 	grunt.initConfig( {
-		jscoverage: {
-			lib: {
-				src: lib,
-				dest: libSave
-			}
-		},
 		shell: {
 			coveralls: {
 				command: command( "coveralls" ) + " < " + lcov
 			},
-			nodeunit: {
+			jscoverage: {
+				command: command( "jscoverage" ) + " " + lib + " " + libSave
+			},
+			test: {
 				command: "node test --reporter=lcov > " + lcov
 			}
 		}
@@ -52,9 +49,9 @@ module.exports = function( grunt ) {
 
 	// Tasks
 	grunt.registerTask( "default", [
-		"jscoverage",
+		"shell:jscoverage",
 		"switch-lib",
-		"shell:nodeunit",
+		"shell:test",
 		"lib-back",
 		"shell:coveralls",
 		"cleanup"

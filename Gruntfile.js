@@ -18,7 +18,7 @@ module.exports = function( grunt ) {
 			}
 		},
 		shell: {
-			nodeunit: {
+			test: {
 				command: "node test"
 			}
 		}
@@ -29,6 +29,6 @@ module.exports = function( grunt ) {
 
 	// Tasks
 	grunt.registerTask( "lint", [ "jscs", "jshint" ] );
-	grunt.registerTask( "default", [ "lint", "shell:nodeunit" ] );
+	grunt.registerTask( "default", [ "lint", "shell:test" ] );
 
 };
