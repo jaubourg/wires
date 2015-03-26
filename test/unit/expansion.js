@@ -25,7 +25,7 @@ module.exports = {
 			},
 			route: function( __ ) {
 				__.expect( 1 );
-				__.strictEqual( require( ":module" ), require( "./lib/test") );
+				__.strictEqual( require( ":module" ), require( "./lib/test" ) );
 				__.done();
 			}
 		};
