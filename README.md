@@ -16,9 +16,9 @@ Licensed under the [MIT license](https://raw.githubusercontent.com/jaubourg/wire
 
 [coveralls-image]: https://img.shields.io/coveralls/jaubourg/wires.svg
 [coveralls-url]: https://coveralls.io/r/jaubourg/wires
-[dependency-image]: (https://david-dm.org/jaubourg/wires.svg
+[dependency-image]: https://david-dm.org/jaubourg/wires.svg
 [dependency-url]: https://david-dm.org/jaubourg/wires
-[devDependency-image]: (https://david-dm.org/jaubourg/wires/dev-status.svg
+[devDependency-image]: https://david-dm.org/jaubourg/wires/dev-status.svg
 [devDependency-url]: https://david-dm.org/jaubourg/wires#info=devDependencies
 [gratipay-image]: https://img.shields.io/gratipay/jaubourg.svg
 [gratipay-url]: https://gratipay.com/jaubourg/
