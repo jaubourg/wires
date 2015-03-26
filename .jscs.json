@@ -42,39 +42,7 @@
 
 	"requireCommaBeforeLineBreak": true,
 
-	"disallowLeftStickedOperators": [
-		"?",
-		"+",
-		"-",
-		"/",
-		"*",
-		"=",
-		"==",
-		"===",
-		"!=",
-		"!==",
-		">",
-		">=",
-		"<",
-		"<="
-	],
-
-	"disallowRightStickedOperators": [
-		"?",
-		"+",
-		"-",
-		"/",
-		"*",
-		"=",
-		"==",
-		"===",
-		"!=",
-		"!==",
-		">",
-		">=",
-		"<",
-		"<="
-	],
+	"requireSpacesInConditionalExpression": true,
 
 	"disallowSpaceAfterPrefixUnaryOperators": [ "++", "--", "+", "-", "~", "!" ],
 

@@ -10,17 +10,17 @@
 	},
 	"dependencies": {
 		"cashe": "0.3.1",
-		"lodash": "2.4.1"
+		"lodash": "3.6.0"
 	},
 	"devDependencies": {
-		"coveralls": "2.10.0",
+		"coveralls": "2.11.2",
 		"grunt": "0.4.5",
-		"grunt-contrib-jshint": "0.10.0",
-		"grunt-jscoverage": "0.1.0",
-		"grunt-jscs-checker": " 0.4.4",
-		"grunt-shell": "0.7.0",
-		"load-grunt-tasks": "0.4.0",
-		"nodeunit": "0.9.0",
+		"grunt-contrib-jshint": "0.11.1",
+		"grunt-jscoverage": "0.1.3",
+		"grunt-jscs": " 1.5.0",
+		"grunt-shell": "1.1.2",
+		"load-grunt-tasks": "3.1.0",
+		"nodeunit": "0.9.1",
 		"wrench": "1.5.8"
 	},
 	"scripts": {
