@@ -11,5 +11,5 @@ A simple configuration utility with smart module wiring for unobtrusive dependen
 
 ## License
 
-Copyright (c) 2012 - 2014 [Julian Aubourg](mailto:j@ubourg.net)
+Copyright (c) 2012 - 2015 [Julian Aubourg](mailto:j@ubourg.net)
 Licensed under the [MIT license](https://raw.githubusercontent.com/jaubourg/wires/master/LICENSE-MIT).
