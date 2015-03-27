@@ -1,7 +1,5 @@
 "use strict";
 
-require( ".." );
-
 var options = ( function( args ) {
 	var rOptions = /^--([a-z]+)=(.+)$/i;
 	var options = {};

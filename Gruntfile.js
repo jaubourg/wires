@@ -19,7 +19,7 @@ module.exports = function( grunt ) {
 		},
 		shell: {
 			test: {
-				command: "node test"
+				command: "node bin/wires test"
 			}
 		}
 	} );

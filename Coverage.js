@@ -24,7 +24,7 @@ module.exports = function( grunt ) {
 				command: command( "jscoverage" ) + " " + lib + " " + libSave
 			},
 			test: {
-				command: "node test --reporter=lcov > " + lcov
+				command: "node bin/wires test --reporter=lcov > " + lcov
 			}
 		}
 	} );
