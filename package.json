@@ -9,6 +9,9 @@
 		"type" : "git",
 		"url" : "http://github.com/jaubourg/wires.git"
 	},
+	"engines": {
+		"node" : ">=0.10"
+	},
 	"dependencies": {
 		"cashe": "0.3.1",
 		"lodash": "3.6.0",
