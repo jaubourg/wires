@@ -17,7 +17,6 @@ module.exports = {
 				test: function( __ ) {
 					__.expect( 1 );
 					__.deepEqual( require( "#" ), {
-						NAMESPACE: "person",
 						name: "John",
 						age: 27
 					} );
