@@ -1,14 +1,21 @@
 {
 	"curly": true,
+	"futurehostile": true,
 	"eqeqeq": true,
-	"immed": true,
+	"forin": true,
+	"freeze": true,
 	"latedef": "nofunc",
-	"newcap": true,
+	"maxcomplexity": 10,
+	"maxdepth": 5,
+	"maxparams": 4,
+	"maxstatements": 20,
 	"noarg": true,
-	"sub": true,
+	"nocomma": true,
+	"nonbsp": true,
+	"nonew": true,
 	"undef": true,
-	"boss": true,
+	"unused": true,
 	"eqnull": true,
-	"node": true,
-	"strict": true
+	"strict": true,
+	"node": true
 }
