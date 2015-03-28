@@ -13,6 +13,7 @@
 	"nocomma": true,
 	"nonbsp": true,
 	"nonew": true,
+	"shadow": "outer",
 	"undef": true,
 	"unused": true,
 	"eqnull": true,

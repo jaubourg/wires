@@ -2,19 +2,19 @@
 
 var options = ( function( args ) {
 	var rOptions = /^--([a-z]+)=(.+)$/i;
-	var options = {};
+	var actualOptions = {};
 	args.forEach( function( arg ) {
 		var tmp = rOptions.exec( arg );
 		if ( tmp ) {
-			options[ tmp[ 1 ] ] = tmp[ 2 ].trim();
+			actualOptions[ tmp[ 1 ] ] = tmp[ 2 ].trim();
 		} else {
-			if ( !options.map ) {
-				options.map = {};
+			if ( !actualOptions.map ) {
+				actualOptions.map = {};
 			}
-			options.map[ arg + ".js" ] = true;
+			actualOptions.map[ arg + ".js" ] = true;
 		}
 	} );
-	return options;
+	return actualOptions;
 } )( process.argv.slice( 2 ) );
 
 var _ = require( "lodash" );
@@ -25,7 +25,7 @@ var path = require( "path" );
 var rCleanFunction = /^.*\r?\n|\r?\n.*$/g;
 var rUnit = /[\.\\\/]unit\.js$/;
 
-function generateTree( dir, tree ) {
+function generateTree( _dir, _tree ) {
 	var endAction = [];
 	var units = [];
 	( function internal( dir, tree ) {
@@ -53,7 +53,7 @@ function generateTree( dir, tree ) {
 				}
 			}
 		} );
-	} )( dir, tree );
+	} )( _dir, _tree );
 	return {
 		units: units,
 		cleanup: function() {
@@ -71,7 +71,7 @@ var fixtureDir = path.join( __dirname, "fixture" );
 fs.mkdirSync( fixtureDir );
 
 var units = [];
-var cleanup = [];
+var cleanups = [];
 
 fs.readdirSync( unitDir ).forEach( function( unitFilename ) {
 	if ( options.map && !options.map[ unitFilename ] ) {
@@ -80,11 +80,11 @@ fs.readdirSync( unitDir ).forEach( function( unitFilename ) {
 	unitFilename = path.join( unitDir, unitFilename );
 	var tree = generateTree( path.join( fixtureDir, path.basename( unitFilename, ".js" ) ), require( unitFilename ) );
 	units.push.apply( units, tree.units );
-	cleanup.push( tree.cleanup );
+	cleanups.push( tree.cleanup );
 } );
 
 ( nodeunit.reporters[ options.reporter ] || nodeunit.reporters.default ).run( units, null, function( error ) {
-	cleanup.forEach( function( cleanup ) {
+	cleanups.forEach( function( cleanup ) {
 		cleanup();
 	} );
 	fs.rmdirSync( fixtureDir );
