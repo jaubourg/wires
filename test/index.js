@@ -21,73 +21,58 @@ var _ = require( "lodash" );
 var fs = require( "fs" );
 var nodeunit = require( "nodeunit" );
 var path = require( "path" );
+var wrench = require( "wrench" );
 
 var rCleanFunction = /^.*\r?\n|\r?\n.*$/g;
-var rUnit = /[\.\\\/]unit\.js$/;
 
-function generateTree( _dir, _tree ) {
-	var endAction = [];
-	var units = [];
-	( function internal( dir, tree ) {
-		fs.mkdirSync( dir );
-		endAction.push( function() {
-			fs.rmdirSync( dir );
-		} );
-		_.forOwn( tree, function( val, filename ) {
-			if ( filename[ 0 ] === "/" ) {
-				internal( path.join( dir, filename.substr( 1 ) ), val );
-			} else {
-				filename = path.join( dir, filename );
-				fs.writeFileSync(
-					filename,
-					typeof val === "function" ?
-						"\"use strict\";\n" + ( val + "" ).replace( rCleanFunction, "" ) :
-						JSON.stringify( val, null, "  " ),
-					"utf8"
-				);
-				endAction.push( function() {
-					fs.unlinkSync( filename );
-				} );
-				if ( rUnit.test( filename ) ) {
-					units.push( filename );
-				}
-			}
-		} );
-	} )( _dir, _tree );
-	return {
-		units: units,
-		cleanup: function() {
-			var index = endAction.length;
-			while ( index-- ) {
-				endAction[ index ]();
+var rDirUnit = /\.dirunit\.js$/;
+var rUnit = /\.unit\.js$/;
+
+function generateTree( dir, tree, units ) {
+	fs.mkdirSync( dir );
+	_.forOwn( tree, function( val, filename ) {
+		if ( filename[ 0 ] === "/" ) {
+			generateTree( path.join( dir, filename.substr( 1 ) ), val, units );
+		} else {
+			filename = path.join( dir, filename );
+			fs.writeFileSync(
+				filename,
+				typeof val === "function" ?
+					"\"use strict\";\n" + ( val + "" ).replace( rCleanFunction, "" ) :
+					JSON.stringify( val, null, "  " ),
+				"utf8"
+			);
+			if ( rUnit.test( filename ) ) {
+				units.push( filename );
 			}
 		}
-	};
+	} );
 }
 
 var unitDir = path.join( __dirname, "unit" );
 var fixtureDir = path.join( __dirname, "fixture" );
 
-fs.mkdirSync( fixtureDir );
-
+var tree = {};
 var units = [];
-var cleanups = [];
 
 fs.readdirSync( unitDir ).forEach( function( unitFilename ) {
 	if ( options.map && !options.map[ unitFilename ] ) {
 		return;
 	}
 	unitFilename = path.join( unitDir, unitFilename );
-	var tree = generateTree( path.join( fixtureDir, path.basename( unitFilename, ".js" ) ), require( unitFilename ) );
-	units.push.apply( units, tree.units );
-	cleanups.push( tree.cleanup );
+	if ( rUnit.test( unitFilename ) ) {
+		units.push( unitFilename );
+		return;
+	}
+	if ( rDirUnit.test( unitFilename ) ) {
+		tree[ "/" + path.basename( unitFilename, ".dirunit.js" ) ] = require( unitFilename );
+	}
 } );
 
+generateTree( fixtureDir, tree, units );
+
 ( nodeunit.reporters[ options.reporter ] || nodeunit.reporters.default ).run( units, null, function( error ) {
-	cleanups.forEach( function( cleanup ) {
-		cleanup();
-	} );
-	fs.rmdirSync( fixtureDir );
+	wrench.rmdirSyncRecursive( fixtureDir );
 	if ( error ) {
 		console.error( error );
 		throw error;
