@@ -9,10 +9,11 @@ module.exports = {
 			"--arg",
 			"(flag)",
 			"hello",
-			"(!unflag)",
+			"(!unflag,)",
 			"(bool=true,string='true',otherString='hello')",
 			"tmp",
 			"tmp2",
+			"()",
 			"--help",
 			"(object.flag2,!object.unflag2,object.string=world,object.int=3)",
 			"end"
