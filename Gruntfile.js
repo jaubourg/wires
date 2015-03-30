@@ -70,4 +70,5 @@ module.exports = function( grunt ) {
 		"coverage-file-manipulation",
 		"shell:testWithCoverage",
 		"shell:coveralls"
-	] );};
+	] );
+};
