@@ -49,7 +49,7 @@ function generateTree( dir, tree, units ) {
 	} );
 }
 
-var unitDir = path.join( __dirname, "unit" );
+var unitDir = __dirname;
 var fixtureDir = path.join( __dirname, "fixture" );
 
 var tree = {};
