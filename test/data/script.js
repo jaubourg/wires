@@ -8,4 +8,4 @@ console.error( JSON.stringify( {
 	config: require( "#" )
 } ) );
 
-process.exit( 1204 );
+process.exit( 180 );
