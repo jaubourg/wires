@@ -69,13 +69,18 @@ fs.readdirSync( unitDir ).forEach( function( unitFilename ) {
 	}
 } );
 
+process.on( "exit", function() {
+	try {
+		wrench.rmdirSyncRecursive( fixtureDir );
+	} catch ( e ) {}
+} );
+
 generateTree( fixtureDir, tree, units );
 
 // jshint freeze:false
 Object.prototype.__TEST_WHEN_OBJECT_PROTOTYPE_IS_MODIFIED = true;
 
 ( nodeunit.reporters[ options.reporter ] || nodeunit.reporters.default ).run( units, null, function( error ) {
-	wrench.rmdirSyncRecursive( fixtureDir );
 	if ( error ) {
 		console.error( error );
 		throw error;
