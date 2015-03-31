@@ -1,52 +1,47 @@
 "use strict";
 
 var commandLine = require( "../../lib/cli" );
-var stream = require( "stream" );
-
-function stdStream() {
-	var self = new stream.Writable();
-	var string = "";
-	self._write = function( chunk, encoding, callback ) {
-		string += chunk;
-		callback();
-	};
-	self.getString = function() {
-		return string;
-	};
-	return self;
-}
 
 module.exports = function( argv, callback ) {
 	return function( __ ) {
-		var stdout = stdStream();
-		var stderr = stdStream();
+		var stdout = "";
+		var stderr = "";
 		var exitMarker = {};
 		var exitCode;
-		function errorListener( error ) {
-			process.removeListener( "error", errorListener );
-			if ( error !== exitMarker ) {
-				throw error;
-			}
-			callback( __, stdout.getString(), stderr.getString(), exitCode );
+		function finish() {
+			setTimeout( callback, 0, __, stdout, stderr, exitCode );
 		}
-		process.addListener( "error", errorListener );
+		var childProcess;
 		try {
-			commandLine( {
+			childProcess = commandLine( {
 				argv: argv,
-				stdio: [ process.stdin, stdout, stderr ],
+				stdio: "pipe",
 				log: function( message ) {
-					stdout.write( message + "\n" );
+					stdout += message + "\n";
 				},
 				error: function( message ) {
-					stderr.write( message + "\n" );
+					stderr += message + "\n";
 				},
 				exit: function( code ) {
 					exitCode = code;
-					throw exitMarker;
+					if ( exitMarker ) {
+						throw exitMarker;
+					}
+					finish();
 				}
 			} );
+			exitMarker = undefined;
 		} catch ( error ) {
-			errorListener( error );
+			if ( error !== exitMarker ) {
+				throw error;
+			}
+			return finish();
 		}
+		childProcess.stdio[ 1 ].on( "data", function( buffer ) {
+			stdout += buffer;
+		} );
+		childProcess.stdio[ 2 ].on( "data", function( buffer ) {
+			stderr += buffer;
+		} );
 	};
 };
