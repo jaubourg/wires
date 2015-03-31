@@ -1,6 +1,6 @@
 "use strict";
 
-var commandLineTest = require( "./util/commandLineTest" );
+var commandLineTest = require( "./helper/commandLineTest" );
 
 var versionString = "v" + require( "../package" ).version + " (some_exe " + process.version + ")\n";
 

@@ -1,6 +1,6 @@
 "use strict";
 
-var commandLineTest = require( "./util/commandLineTest" );
+var commandLineTest = require( "./helper/commandLineTest" );
 
 var helpString =
 	require( "fs" ).readFileSync( __dirname + "/../data/help.txt" ).toString()
