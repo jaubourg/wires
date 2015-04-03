@@ -70,18 +70,18 @@ require( ":models/article" ) === require ( "myAppDataModel/dbo/article" )
 wires uses 4 types of configuration file:
 
 - `wires-defaults.json` contains default settings
-- `wires-defaults.XXX.json` contains default settings specific to when the NODE_ENV environment variable is set to `"XXX"`
+- `wires-defaults.XXX.json` contains default settings specific to when the `NODE_ENV` environment variable is set to `"XXX"`
 - `wires.json` contains actual settings
-- `wires.XXX.json` contains default settings specific to when the NODE_ENV environment variable is set to `"XXX"`
+- `wires.XXX.json` contains default settings specific to when the `NODE_ENV` environment variable is set to `"XXX"`
 
 Actual configuration depends on the position of the file requiring it in the filesystem hierarchy. Each directory gets its own configuration which is computed as follows:
 
 1. start with an empty object
 2. override with `wires-defaults.json` if it exists
-3. if NODE_ENV is set to `"XXX"`, override with `wires-defaults.XXX.json` if it exists
+3. if `NODE_ENV` is set to `"XXX"`, override with `wires-defaults.XXX.json` if it exists
 4. override with the configuration of the parent directory if it exists
 5. override with `wires.json` if it exists
-6. if NODE_ENV is set to `"XXX"`, override with `wires.XXX.json` if it exists
+6. if `NODE_ENV` is set to `"XXX"`, override with `wires.XXX.json` if it exists
 
 In practice, you'll rarely use all files at once. Typically, parts of your application will define default values in their respective directories while the main app will set actual settings in the root directory, as in the following example:
 
