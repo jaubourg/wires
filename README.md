@@ -162,6 +162,8 @@ Note that routes are impervious to namespaces.
 - usual file paths
     + `require( "./lib/myUtil.js" )`
     + `require( "fs" )`
+- tilde-slash-lead, for file paths relative to home directory
+    + `require( "~/.jshint.json" )`
 - chevron-slash-lead, for file paths relative to current working directory
     + `require( ">/logger.js" )`
 - hash-lead, to recover settings
@@ -220,6 +222,7 @@ File paths may refer to a file:
 
 - globally (relying on `NODE_PATH`)
 - relatively to the directory of the configuration file (starts with `"./"` or `"../"`)
+- relatively to the home directory (starts with `"~/"`)
 - relatively to the current working directory (starts with `">/"`)
 
 ```js
@@ -229,6 +232,7 @@ File paths may refer to a file:
 	":dbRequest": "mysql/request",
 	":cacheFactory": "./lib/util/cacheFactory",
 	":data": ">/data.json"
+	":jshint": "~/.jshint.json"
 }
 
 //directory/index.js
@@ -236,13 +240,14 @@ File paths may refer to a file:
 require( ":dbRequest" ) === require( "mysql/request" );
 require( ":cacheFactory" ) === require( "/myApp/lib/util/cacheFactory" );
 require( ":data" ) === require( "/current/working/directory/data.json" );
+require( ":jshint" ) === require( "/path/to/home/directory/.jshint.json" );
 ```
 
 ## Generic Routes
 
 In your configuration files, every object property which name is colon-lead and ends with a slash defines a generic route.
 
-Like normal routes, they must be strings, they do accept the templated syntax and they have the same semantics (`NODE_PATH`, `"./"`, `"../"`, `">/"` ). However, they may not point to the path of an existing file since the final string will be used as a replacement for the property name in require expressions.
+Like normal routes, they must be strings, they do accept the templated syntax and they have the same semantics (`NODE_PATH`, `"./"`, `"../"`, `"~/"`, `">/"` ). However, they may not point to the path of an existing file since the final string will be used as a replacement for the property name in require expressions.
 
 ```js
 //myApp/wires.json
