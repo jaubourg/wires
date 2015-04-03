@@ -159,9 +159,11 @@ Note that routes are impervious to namespaces.
 
 ## Require Syntax
 
-- usual file path
+- usual file paths
     + `require( "./lib/myUtil.js" )`
     + `require( "fs" )`
+- chevron-slash-lead, for file paths relative to current working directory
+    + `require( ">/logger.js" )`
 - hash-lead, to recover settings
     + `require( "#username" )`
     + `require( "#server.db.host" )`
@@ -174,6 +176,8 @@ Note that routes are impervious to namespaces.
 - templated, to construct paths dynamically
     + `require( "./lib/{#vendor}/main.js" )`
     + `require( "nodeunit/reporters/{#unit.reporter}" )`
+- two-colons-lead, to bypass wires entirely
+	+ `require( "::wires-will-not-transform-this" )`
 
 ## Settings
 
@@ -210,7 +214,7 @@ require( "#env" ) === process.env.SOME_VAR;
 
 In your configuration files, every object property which name is colon-lead and does not end with a slash defines a route.
 
-Routes can only be strings. Like settings, they accept the templated syntax seen above. The final string must be a path to a file that actually exists.
+Routes can only be strings. Like settings, they accept the templated syntax. The final string must be a path to a file that actually exists.
 
 File paths may refer to a file:
 

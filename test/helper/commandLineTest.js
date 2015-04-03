@@ -2,7 +2,7 @@
 
 var commandLine = require( "../../lib/cli" );
 
-module.exports = function( argv, callback ) {
+module.exports = function( argv, callback, cwd ) {
 	return function( __ ) {
 		var stdout = "";
 		var stderr = "";
@@ -12,6 +12,11 @@ module.exports = function( argv, callback ) {
 			setTimeout( callback, 0, __, stdout, stderr, exitCode );
 		}
 		var childProcess;
+		var previousCwd;
+		if ( cwd ) {
+			previousCwd = process.cwd();
+			process.chdir( cwd );
+		}
 		try {
 			childProcess = commandLine( {
 				argv: argv,
@@ -36,6 +41,10 @@ module.exports = function( argv, callback ) {
 				throw error;
 			}
 			return finish();
+		} finally {
+			if ( cwd ) {
+				process.chdir( previousCwd );
+			}
 		}
 		childProcess.stdio[ 1 ].on( "data", function( buffer ) {
 			stdout += buffer;
