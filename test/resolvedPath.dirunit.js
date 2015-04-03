@@ -23,6 +23,9 @@ module.exports = {
 
 	},
 	"/lib": {
+		"wires.json": {
+			":backResolvedRoute": "../lib/test"
+		},
 		"test.js": function() {
 
 			module.exports = "lib/test";
@@ -32,10 +35,11 @@ module.exports = {
 
 			module.exports = {
 				test: function( __ ) {
-					__.expect( 4 );
+					__.expect( 5 );
 					__.strictEqual( require( "#path" ), "./lib" );
 					__.strictEqual( require( "#cmdPath" ), ">/lib" );
 					__.strictEqual( require( ":resolvedRoute" ), "lib/test" );
+					__.strictEqual( require( ":backResolvedRoute" ), "lib/test" );
 					__.strictEqual( require( ":indirectResolvedRoute" ), "lib/test" );
 					__.done();
 				}
