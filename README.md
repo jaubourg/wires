@@ -5,10 +5,6 @@
 [![devDependency Status][devDependency-image]][devDependency-url]
 [![gratipay][gratipay-image]][gratipay-url]
 
-__THE FOLLOWING DOCUMENTATION IS FOR FORTHCOMING VERSION 0.3.0__
-
-__CURRENT STABLE VERSION (0.2.0) IS INCOMPATIBLE IN KEY AREAS__
-
 # wires
 
 A simple configuration utility for npm compatible platforms (node.js, io.js, etc) featuring smart module wiring for unobtrusive dependency injection.
