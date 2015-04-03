@@ -261,7 +261,7 @@ require( ":dbo/product" ) ===  require( "/myApp/db/models/model-product" );
 
 ## Command Line Definitions
 
-It's possible to add definitions on-the-fly using command line arguments. wires regards any parenthesis-enclosed argument as such. Definitions are comma-separated assignments. For instance: `wires (path=80,debug=true) script.js` will set the `path` setting to 80 and the `debug` setting to true.
+It's possible to add definitions on-the-fly using command line arguments. wires regards any parenthesis-enclosed argument as such. Definitions are comma-separated assignments. For instance: `wires (path=80,debug=true) script.js` will set the `path` setting to `80` and the `debug` setting to `true`.
 
 It's perfectly possible to define settings within objects using point-based paths, like `(path.to.my.setting=value)`.
 
