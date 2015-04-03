@@ -2,10 +2,10 @@
 
 module.exports = {
 	"wires.json": {
-		":dir/": "@/dir1/",
-		":dir/two/": "@/dir2/",
-		":dir/three/": "@/dir2/three-",
-		":dir/three/sub/": "@/dir3/"
+		":dir/": "./dir1/",
+		":dir/two/": "./dir2/",
+		":dir/three/": "./dir2/three-",
+		":dir/three/sub/": "./dir3/"
 	},
 	"/dir1": {
 		"number.json": 1
