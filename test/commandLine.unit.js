@@ -14,6 +14,8 @@ module.exports = {
 		__.expect( 2 );
 		__.strictEqual( exitCode, 180, "correct exit code (1204)" );
 		__.deepEqual( JSON.parse( stderr ), {
+			noParent: true,
+			isMain: true,
 			argv: [
 				path.resolve( __dirname + "/../bin/wires" ),
 				path.resolve( __dirname + "/data/script.js" )
