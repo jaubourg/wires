@@ -72,7 +72,7 @@ As of version 0.4.0, `wires` will look for local installations based on the curr
 > wires --version
 v0.4.0 (node v0.12.2)
 
-> npm install --save-dev wires@0.2.0
+> npm install --save wires@0.2.0
 wires@0.2.0 node_modules\wires
 ├── temp@0.8.1 (rimraf@2.2.8)
 └── lodash@3.6.0
