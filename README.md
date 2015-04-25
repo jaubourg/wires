@@ -58,9 +58,32 @@ require( ":models/article" ) === require ( "myAppDataModel/dbo/article" )
 
 ## Getting started
 
-1. Install wires globally: `npm -g install wires`
-2. Use `wires` in lieu of `node` or `iojs`.
-   For instance, `node --harmony path/to/myScript.js scriptArg` becomes `wires --harmony path/to/myScript.js scriptArg`.
+Typically,
+
+1. install wires globally: `npm -g install wires`
+2. use `wires` in lieu of `node` or `iojs`.
+
+So, `node --harmony path/to/myScript.js scriptArg`
+becomes `wires --harmony path/to/myScript.js scriptArg`.
+
+As of version 0.4.0, `wires` will look for local installations based on the current working directory. This means you can add wires as a dependency to your project and have this specific version take precedence whenever the global command is ran from within said project.
+
+```
+> wires --version
+v0.4.0 (node v0.12.2)
+
+> npm install --save-dev wires@0.2.0
+wires@0.2.0 node_modules\wires
+├── temp@0.8.1 (rimraf@2.2.8)
+└── lodash@3.6.0
+
+> wires --version
+v0.2.0 (node v0.12.2)
+```
+
+This behaviour is compatible with version 0.2.0 and up.
+
+Alternatively, if you cannot, or don't want to, use the command, you may simply require wires in your main source file. Note that you only need to require it once for the entire code base.
 
 ## Cascading Configuration
 

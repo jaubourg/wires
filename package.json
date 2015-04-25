@@ -1,10 +1,9 @@
 {
 	"name": "wires",
-	"version": "0.3.2-pre",
+	"version": "0.4.0-pre",
 	"author": "Julian Aubourg <j@ubourg.net> (http://jaubourg.net)",
 	"description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
 	"main": "./lib/index.js",
-	"preferGlobal": true,
 	"repository" : {
 		"type" : "git",
 		"url" : "http://github.com/jaubourg/wires.git"
@@ -14,7 +13,8 @@
 	},
 	"dependencies": {
 		"cashe": "0.3.1",
-		"lodash": "3.6.0"
+		"lodash": "3.6.0",
+		"resolve": "1.1.6"
 	},
 	"devDependencies": {
 		"coveralls": "2.11.2",

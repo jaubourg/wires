@@ -1,10 +1,16 @@
 #!/usr/bin/env node
-require( "../lib/cli" )( {
-	argv: process.argv,
-	stdio: "inherit",
-	log: console.log,
-	error: console.error,
-	exit: function( code ) {
-		process.exit( code );
-	}
+"use strict";
+
+require( "resolve" )( "wires/lib/cli", {
+	basedir: process.cwd()
+}, function( error, filename ) {
+	require( filename || "../lib/cli" )( {
+		argv: process.argv,
+		stdio: "inherit",
+		log: console.log,
+		error: console.error,
+		exit: function( code ) {
+			process.exit( code );
+		}
+	} );
 } );
