@@ -15,7 +15,7 @@ module.exports = function( grunt ) {
 	var lcov = "data.lcov";
 	var lib = path.resolve( __dirname, "lib" );
 	var libSave = lib + "-save";
-	var lintTargets = [ "*.js", "lib/**/*.js", "test/**/*.js" ];
+	var lintTargets = [ "*.js", "lib/**/*.js", "test/**/*.js", "bin/wires" ];
 
 	grunt.initConfig( {
 		jscs: {
