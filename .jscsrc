@@ -1,4 +1,11 @@
 {
+
+	"validateIndentation": "\t",
+
+	"excludeFiles": [ "manipulator/_generated/*.js", "gallery/Gruntfile.js" ],
+
+	"esnext": true,
+
 	"requireCurlyBraces": [
 		"if",
 		"else",
@@ -98,7 +105,7 @@
 
 	"requireDotNotation": true,
 
-	"validateJSDoc": {
+	"jsDoc": {
 		"checkParamNames": true,
 		"checkRedundantParams": true,
 		"requireParamTypes": true

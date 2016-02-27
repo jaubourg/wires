@@ -19,11 +19,11 @@
 	"devDependencies": {
 		"coveralls": "2.11.2",
 		"grunt": "0.4.5",
-		"grunt-contrib-jshint": "0.11.1",
-		"grunt-jscs": " 1.6.0",
+		"grunt-contrib-jshint": "1.0.0",
+		"grunt-jscs": "2.7.0",
 		"grunt-shell": "1.1.2",
 		"jscoverage": "0.5.9",
-		"load-grunt-tasks": "3.1.0",
+		"load-grunt-tasks": "3.4.0",
 		"nodeunit": "0.9.1",
 		"wrench": "1.5.8"
 	},

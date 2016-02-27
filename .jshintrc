@@ -1,0 +1,19 @@
+{
+	"node": true,
+	"eqnull": true,
+	"browser": false,
+	"esnext": true,
+	"bitwise": true,
+	"curly": true,
+	"eqeqeq": true,
+	"latedef": "nofunc",
+	"noarg": true,
+	"regexp": true,
+	"undef": true,
+	"unused": true,
+	"strict": true,
+	"trailing": true,
+	"smarttabs": true,
+	"futurehostile": true,
+	"jquery": false
+}

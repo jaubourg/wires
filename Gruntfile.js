@@ -21,13 +21,13 @@ module.exports = function( grunt ) {
 		jscs: {
 			files: lintTargets,
 			options: {
-				config: ".jscs.json"
+				config: ".jscsrc"
 			}
 		},
 		jshint: {
 			files: lintTargets,
 			options: {
-				jshintrc: ".jshint.json"
+				jshintrc: ".jshintrc"
 			}
 		},
 		shell: {
