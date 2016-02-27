@@ -301,7 +301,7 @@ Command line definitions respect cascading configurations. They will override an
 
 ## License
 
-Copyright (c) 2012 - 2015 [Julian Aubourg](mailto:j@ubourg.net)
+Copyright (c) 2012 - 2016 [Julian Aubourg](mailto:j@ubourg.net)
 Licensed under the [MIT license](https://raw.githubusercontent.com/jaubourg/wires/master/LICENSE-MIT).
 
 [coveralls-image]: https://img.shields.io/coveralls/jaubourg/wires.svg
