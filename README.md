@@ -201,6 +201,13 @@ Note that routes are impervious to namespaces.
 - two-colons-lead, to bypass wires entirely
 	+ `require( "::wires-will-not-transform-this" )`
 
+Targeting `undefined` or `null` values in expressions may yield potentially undesirable `"undefined"` or `"null"` in the resulting string. If and when you change the leading `#` to a leading `?` and the targeted value is "falsy" (`undefined`, `null`, `false`, etc...), then the result is an empty string (`""`). For instance:
+
+- the expression `"value={#undefinedValue}"` yields `"value=undefined"`
+- the expression `"value={?undefinedValue}"` yields `"value="`
+
+This is especially handy for environment variables that may or may not be set. While `"#>UNSET_VAR"` would yield `"undefined"`, `?>UNSET_VAR` yields `""`.
+
 ## Settings
 
 In your configuration files, every object property which name is not colon-lead is a setting.
@@ -219,7 +226,7 @@ A setting can be of any type, including an object. When the value of a setting i
     "object": {
         "templateString": "boolean is {#boolean}"
     },
-    "env": "{#>SOME_VAR}"
+    "env": "?>SOME_VAR"
 }
 
 // file.js
