@@ -7,7 +7,9 @@ var wrench = require( "wrench" );
 function command( expr ) {
 	expr = expr.split( " " );
 	expr[ 0 ] = path.resolve( __dirname, "node_modules/.bin/" + expr[ 0 ] + ( path.sep === "/" ? "" : ".cmd" ) );
-	return expr.join( " " );
+	expr = expr.join( " " );
+	console.log( "COMMAND: " + expr );
+	return expr;
 }
 
 module.exports = function( grunt ) {
