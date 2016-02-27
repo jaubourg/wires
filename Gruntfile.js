@@ -7,15 +7,13 @@ var wrench = require( "wrench" );
 function command( expr ) {
 	expr = expr.split( " " );
 	expr[ 0 ] = path.resolve( __dirname, "node_modules/.bin/" + expr[ 0 ] + ( path.sep === "/" ? "" : ".cmd" ) );
-	expr = expr.join( " " );
-	console.log( "COMMAND: " + expr );
-	return expr;
+	return expr.join( " " );
 }
 
 module.exports = function( grunt ) {
 
 	var lcov = "data.lcov";
-	var lib = path.resolve( __dirname, "lib" );
+	var lib = "lib";
 	var libSave = lib + "-save";
 	var lintTargets = [ "*.js", "lib/**/*.js", "test/**/*.js", "bin/wires" ];
 
