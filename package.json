@@ -1,6 +1,6 @@
 {
 	"name": "wires",
-	"version": "0.5.0-pre",
+	"version": "0.5.0",
 	"license": "MIT",
 	"author": "Julian Aubourg <j@ubourg.net> (http://jaubourg.net)",
 	"description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
