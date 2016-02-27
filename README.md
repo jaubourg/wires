@@ -226,7 +226,7 @@ A setting can be of any type, including an object. When the value of a setting i
     "object": {
         "templateString": "boolean is {#boolean}"
     },
-    "env": "?>SOME_VAR"
+    "env": "{?>SOME_VAR}"
 }
 
 // file.js
@@ -236,7 +236,7 @@ require( "#string" ) === "some string";
 require( "#templateString" ) === "number is 56";
 require( "#array" ); // [ 1, 2 ]
 require( "#object.templateString" ) === "boolean is false";
-require( "#env" ) === process.env.SOME_VAR;
+require( "#env" ) === ( process.env.SOME_VAR || "" );
 ```
 
 ## Routes
