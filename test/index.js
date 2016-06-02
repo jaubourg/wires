@@ -19,9 +19,9 @@ var options = ( function( args ) {
 
 var _ = require( "lodash" );
 var fs = require( "fs" );
+var fse = require( "fs-extra" );
 var nodeunit = require( "nodeunit" );
 var path = require( "path" );
-var wrench = require( "wrench" );
 
 var rCleanFunction = /^.*\r?\n|\r?\n.*$/g;
 
@@ -71,7 +71,7 @@ fs.readdirSync( unitDir ).forEach( function( unitFilename ) {
 
 process.on( "exit", function() {
 	try {
-		wrench.rmdirSyncRecursive( fixtureDir );
+		fse.removeSync( fixtureDir );
 	} catch ( e ) {}
 } );
 

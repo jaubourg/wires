@@ -1,8 +1,8 @@
 "use strict";
 
 var fs = require( "fs" );
+var fse = require( "fs-extra" );
 var path = require( "path" );
-var wrench = require( "wrench" );
 
 function command( expr ) {
 	expr = expr.split( " " );
@@ -59,7 +59,7 @@ module.exports = function( grunt ) {
 		fs.renameSync( libSave, lib );
 		fs.renameSync( "__coverage_tmp", libSave );
 		process.on( "exit", function() {
-			wrench.rmdirSyncRecursive( lib );
+			fse.removeSync( lib );
 			fs.renameSync( libSave, lib );
 			fs.unlinkSync( lcov );
 		} );

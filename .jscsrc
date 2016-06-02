@@ -4,8 +4,6 @@
 
 	"excludeFiles": [ "manipulator/_generated/*.js", "gallery/Gruntfile.js" ],
 
-	"esnext": true,
-
 	"requireCurlyBraces": [
 		"if",
 		"else",
