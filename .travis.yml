@@ -1,7 +1,8 @@
 language: node_js
 node_js:
-    - "5.7"
-    - "4.3"
+    - "6.2"
+    - "5.11"
+    - "4.4"
     - "0.12"
     - "0.10"
 before_install:
