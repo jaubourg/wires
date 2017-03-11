@@ -1,37 +1,37 @@
 {
-	"name": "wires",
-	"version": "0.5.2-pre",
-	"license": "MIT",
-	"author": "Julian Aubourg <j@ubourg.net> (http://jaubourg.net)",
-	"description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
-	"main": "./lib/index.js",
-	"repository" : {
-		"type" : "git",
-		"url" : "http://github.com/jaubourg/wires.git"
-	},
-	"engines": {
-		"node" : ">=0.10"
-	},
-	"dependencies": {
-		"cashe": "0.3.1",
-		"lodash": "4.13.1",
-		"resolve": "1.1.7"
-	},
-	"devDependencies": {
-		"coveralls": "2.11.9",
-		"fs-extra": "0.30.0",
-		"grunt": "1.0.1",
-		"grunt-contrib-jshint": "1.0.0",
-		"grunt-jscs": "2.8.0",
-		"grunt-shell": "1.3.0",
-		"jscoverage": "0.6.0",
-		"load-grunt-tasks": "3.5.0",
-		"nodeunit": "0.9.1"
-	},
-	"bin": {
-		"wires": "./bin/wires"
-	},
-	"scripts": {
-		"test": "grunt"
-	}
+    "author": "Julian Aubourg <j@ubourg.net> (http://jaubourg.net)",
+    "bin": {
+        "wires": "./bin/wires"
+    },
+    "dependencies": {
+        "cashe": "0.3.1",
+        "lodash": "4.17.4",
+        "resolve": "1.3.2"
+    },
+    "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
+    "devDependencies": {
+        "coveralls": "2.12.0",
+        "eslint-config-creative-area": "0.3.0",
+        "fs-extra": "2.0.0",
+        "grunt": "1.0.1",
+        "grunt-eslint": "19.0.0",
+        "grunt-shell": "2.1.0",
+        "jscoverage": "0.6.0",
+        "load-grunt-tasks": "3.5.2",
+        "nodeunit": "0.11.0"
+    },
+    "engines": {
+        "node" : ">=0.10"
+    },
+    "license": "MIT",
+    "main": "./lib/index.js",
+    "name": "wires",
+    "repository" : {
+        "type" : "git",
+        "url" : "http://github.com/jaubourg/wires.git"
+    },
+    "scripts": {
+        "test": "grunt"
+    },
+    "version": "0.5.2-pre"
 }

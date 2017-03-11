@@ -301,18 +301,18 @@ Command line definitions respect cascading configurations. They will override an
 
 ## License
 
-Copyright (c) 2012 - 2016 [Julian Aubourg](mailto:j@ubourg.net)
+Copyright (c) 2012 - 2017 [Julian Aubourg](mailto:j@ubourg.net)
 Licensed under the [MIT license](https://raw.githubusercontent.com/jaubourg/wires/master/LICENSE-MIT).
 
-[coveralls-image]: https://img.shields.io/coveralls/jaubourg/wires.svg
+[coveralls-image]: https://img.shields.io/coveralls/jaubourg/wires.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/jaubourg/wires
-[dependency-image]: https://david-dm.org/jaubourg/wires.svg
+[dependency-image]: https://img.shields.io/david/jaubourg/wires.svg?style=flat-square
 [dependency-url]: https://david-dm.org/jaubourg/wires
-[devDependency-image]: https://david-dm.org/jaubourg/wires/dev-status.svg
-[devDependency-url]: https://david-dm.org/jaubourg/wires#info=devDependencies
-[gratipay-image]: https://img.shields.io/gratipay/jaubourg.svg
+[devDependency-image]: https://img.shields.io/david/dev/jaubourg/wires.svg?style=flat-square
+[devDependency-url]: https://david-dm.org/jaubourg/wires?type=dev
+[gratipay-image]: https://img.shields.io/gratipay/jaubourg.svg?style=flat-square
 [gratipay-url]: https://gratipay.com/jaubourg/
-[npm-image]: https://img.shields.io/npm/v/wires.svg
+[npm-image]: https://img.shields.io/npm/v/wires.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/wires
-[travis-image]: https://travis-ci.org/jaubourg/wires.svg
+[travis-image]: https://img.shields.io/travis/jaubourg/wires.svg?style=flat-square
 [travis-url]: https://travis-ci.org/jaubourg/wires
