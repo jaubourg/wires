@@ -36,19 +36,16 @@ module.exports = function( grunt ) {
         },
     } );
 
-    var eslintLoaded = false;
+    var oldNode = /^0\./.test( process.versions.node );
 
     // load npm modules
     grunt.loadNpmTasks( "grunt-shell" );
-    try {
+    if ( !oldNode ) {
         grunt.loadNpmTasks( "grunt-eslint" );
-        eslintLoaded = true;
-    } catch ( e ) {
-        // grunt-eslint will fail on older versions of node
     }
 
     // tasks
-    grunt.registerTask( "default", eslintLoaded ? [ "eslint", "shell:test" ] : [ "shell:test" ] );
+    grunt.registerTask( "default", oldNode ? [ "shell:test" ] : [ "eslint", "shell:test" ] );
 
     // coverage
     grunt.registerTask( "coverage-file-manipulation", function() {
