@@ -2,7 +2,6 @@
 
 var fs = require( "fs" );
 var fse = require( "fs-extra" );
-var loadGruntTasks = require( "load-grunt-tasks" );
 var path = require( "path" );
 
 function command( expr ) {
@@ -37,12 +36,19 @@ module.exports = function( grunt ) {
         },
     } );
 
+    var eslintLoaded = false;
+
     // load npm modules
-    loadGruntTasks( grunt );
+    grunt.loadNpmTasks( "grunt-shell" );
+    try {
+        grunt.loadNpmTasks( "grunt-eslint" );
+        eslintLoaded = true;
+    } catch ( e ) {
+        // grunt-eslint will fail on older versions of node
+    }
 
     // tasks
-    grunt.registerTask( "lint", [ "eslint" ] );
-    grunt.registerTask( "default", [ "lint", "shell:test" ] );
+    grunt.registerTask( "default", eslintLoaded ? [ "eslint", "shell:test" ] : [ "shell:test" ] );
 
     // coverage
     grunt.registerTask( "coverage-file-manipulation", function() {
