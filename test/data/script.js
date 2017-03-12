@@ -11,4 +11,5 @@ console.error( JSON.stringify( {
     "config": require( "#" ),
 } ) );
 
+// eslint-disable-next-line no-process-exit
 process.exit( 180 );

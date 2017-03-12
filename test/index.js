@@ -24,48 +24,24 @@ var nodeunit = require( "nodeunit" );
 var path = require( "path" );
 
 var rCleanFunction = /^.*\r?\n|\r?\n.*$/g;
-
 var rDirUnit = /\.dirunit\.js$/;
 var rUnit = /\.unit\.js$/;
-
-function generateTree( dir, tree, units ) {
-    fs.mkdirSync( dir );
-    _.forOwn( tree, function( val, filename ) {
-        if ( filename[ 0 ] === "/" ) {
-            generateTree( path.join( dir, filename.substr( 1 ) ), val, units );
-        } else {
-            filename = path.join( dir, filename );
-            fs.writeFileSync(
-                filename,
-                typeof val === "function" ?
-                    "\"use strict\";\n" + String( val ).replace( rCleanFunction, "" ) :
-                    JSON.stringify( val, null, "  " ),
-                "utf8"
-            );
-            if ( rUnit.test( filename ) ) {
-                units.push( filename );
-            }
-        }
-    } );
-}
 
 var unitDir = __dirname;
 var fixtureDir = path.join( __dirname, "fixture" );
 
-var tree = {};
+var dirUnits = {};
 var units = [];
 
-fs.readdirSync( unitDir ).forEach( function( unitFilename ) {
-    if ( options.map && !options.map[ unitFilename ] ) {
+fs.readdirSync( unitDir ).forEach( function( basename ) {
+    if ( options.map && !options.map[ basename ] ) {
         return;
     }
-    unitFilename = path.join( unitDir, unitFilename );
-    if ( rUnit.test( unitFilename ) ) {
-        units.push( unitFilename );
-        return;
-    }
-    if ( rDirUnit.test( unitFilename ) ) {
-        tree[ "/" + path.basename( unitFilename, ".dirunit.js" ) ] = require( unitFilename );
+    var filename = path.join( unitDir, basename );
+    if ( rUnit.test( filename ) ) {
+        units.push( filename );
+    } else if ( rDirUnit.test( filename ) ) {
+        dirUnits[ "/" + path.basename( filename, ".dirunit.js" ) ] = require( filename );
     }
 } );
 
@@ -75,7 +51,27 @@ process.on( "exit", function() {
     } catch ( e ) {}
 } );
 
-generateTree( fixtureDir, tree, units );
+( function generateTree( dir, tree ) {
+    fs.mkdirSync( dir );
+    _.forOwn( tree, function( val, key ) {
+        var filename;
+        if ( key[ 0 ] === "/" ) {
+            generateTree( path.join( dir, key.substr( 1 ) ), val, units );
+        } else {
+            filename = path.join( dir, key );
+            fs.writeFileSync(
+                filename,
+                typeof val === "function" ?
+                    "\"use strict\";\n" + String( val ).replace( rCleanFunction, "" ) :
+                    JSON.stringify( val, null, "    " ),
+                "utf8"
+            );
+            if ( rUnit.test( filename ) ) {
+                units.push( filename );
+            }
+        }
+    } );
+} )( fixtureDir, dirUnits );
 
 // eslint-disable-next-line no-extend-native
 Object.prototype.__MODIFIED_PROTOTYPE = true;

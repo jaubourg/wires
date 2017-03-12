@@ -12,6 +12,7 @@ require( "resolve" )( "wires/bin/cli", {
         "log": console.log,
         "error": console.error,
         "exit": function( code ) {
+            // eslint-disable-next-line no-process-exit
             process.exit( code );
         },
     } );

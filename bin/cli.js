@@ -82,6 +82,7 @@ module.exports = function( options ) {
             // handle info options
             if ( wiresInfoOptions[ arg ] ) {
                 if ( typeof wiresInfoOptions[ arg ] === "string" ) {
+                    // eslint-disable-next-line no-param-reassign
                     arg = wiresInfoOptions[ arg ];
                 }
                 wiresInfoOptions[ arg ]();
