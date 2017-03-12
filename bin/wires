@@ -2,11 +2,11 @@
 
 "use strict";
 
-require( "resolve" )( "wires/lib/cli", {
+require( "resolve" )( "wires/bin/cli", {
     "basedir": process.cwd(),
 }, function( _, filename ) {
     /* eslint-disable no-console */
-    require( filename || "../lib/cli" )( {
+    require( filename || "./cli" )( {
         "argv": process.argv,
         "stdio": "inherit",
         "log": console.log,

@@ -1,6 +1,6 @@
 "use strict";
 
-var commandLine = require( "../../lib/cli" );
+var commandLine = require( "../../bin/cli" );
 
 module.exports = function( argv, callback, cwd ) {
     return function( __ ) {

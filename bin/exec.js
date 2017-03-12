@@ -15,6 +15,6 @@ var minusLastTwo = -2;
 module.exports = function( argv ) {
     process.argv = argv;
     process.execArgv = process.execArgv.slice( 0, minusLastTwo );
-    require( "./index" );
+    require( ".." );
     requireMain( argv[ 1 ] );
 };

@@ -4,7 +4,7 @@ var fs = require( "fs" );
 var path = require( "path" );
 
 var rCommand = /^-/;
-var rOverride = require( "./config/rOverride" );
+var rOverride = /^\([^)]*\)$/;
 
 function generateCall( name, param ) {
     return name + "(" + JSON.stringify( param ) + ")";
