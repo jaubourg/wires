@@ -19,7 +19,7 @@
         "nodeunit": "0.11.0"
     },
     "engines": {
-        "node" : ">=4.8"
+        "node" : ">=4"
     },
     "license": "MIT",
     "main": "./lib/index.js",
