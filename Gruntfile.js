@@ -14,15 +14,14 @@ module.exports = grunt => {
     const lcov = `data.lcov`;
     const lib = `lib`;
     const libSave = `${ lib }-save`;
-    const lintTargets = [ `*.js`, `lib/**/*.js`, `test/**/*.js`, `bin/wires` ];
 
     grunt.initConfig( {
-        "eslint": {
-            "files": lintTargets,
-        },
         "shell": {
             "coveralls": {
                 "command": command( `coveralls < ${ lcov }` ),
+            },
+            "eslint": {
+                "command": command( `eslint --color -f codeframe .` ),
             },
             "jscoverage": {
                 "command": command( `jscoverage ${ lib } ${ libSave }` ),
@@ -38,10 +37,9 @@ module.exports = grunt => {
 
     // load npm modules
     grunt.loadNpmTasks( `grunt-shell` );
-    grunt.loadNpmTasks( `grunt-eslint` );
 
     // tasks
-    grunt.registerTask( `default`, [ `eslint`, `shell:test` ] );
+    grunt.registerTask( `default`, [ `shell:eslint`, `shell:test` ] );
 
     // coverage
     grunt.registerTask( `coverage-file-manipulation`, () => {

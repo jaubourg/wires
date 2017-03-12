@@ -1,6 +1,6 @@
 "use strict";
 
-var config = require( `eslint-config-creative-area/factory` )( {
+const config = require( `eslint-config-creative-area/factory` )( {
     "arrowFunctions": true,
     "destructuring": false,
     "dotKeywords": true,

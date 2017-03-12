@@ -41,7 +41,7 @@ module.exports = function( options ) {
     const wiresInfoOptions = {
         "--help": help,
         "--version"() {
-            options.log( `v` + require( `../package` ).version + ` (` + engineName + ` ` + process.version + `)` );
+            options.log( `v${ require( `../package` ).version } (${ engineName } ${ process.version })` );
             options.exit( 0 );
         },
         "-h": `--help`,
