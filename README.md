@@ -1,11 +1,11 @@
+# wires
+
 [![NPM][npm-image]][npm-url]
 [![Build Status][travis-image]][travis-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![Dependency Status][dependency-image]][dependency-url]
 [![devDependency Status][devDependency-image]][devDependency-url]
 [![gratipay][gratipay-image]][gratipay-url]
-
-# wires
 
 A simple configuration utility for npm compatible platforms (node.js, io.js, etc) featuring smart module wiring for unobtrusive dependency injection.
 
