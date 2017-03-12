@@ -3,7 +3,7 @@
 const options = ( args => {
     const rOptions = /^--([a-z]+)=(.+)$/i;
     const actualOptions = {};
-    for ( let arg of args ) {
+    for ( const arg of args ) {
         const test = rOptions.exec( arg );
         if ( test ) {
             actualOptions[ test[ 1 ] ] = test[ 2 ].trim();
