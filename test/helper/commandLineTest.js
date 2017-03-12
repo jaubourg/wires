@@ -1,33 +1,33 @@
 "use strict";
 
-var commandLine = require( "../../bin/cli" );
+const commandLine = require( `../../bin/cli` );
 
 module.exports = function( argv, callback, cwd ) {
     return function( __ ) {
-        var stdout = "";
-        var stderr = "";
-        var exitMarker = {};
-        var exitCode;
-        function finish() {
+        let stdout = ``;
+        let stderr = ``;
+        let exitMarker = {};
+        let exitCode;
+        const finish = () => {
             setTimeout( callback, 0, __, stdout, stderr, exitCode );
-        }
-        var childProcess;
-        var previousCwd;
+        };
+        let childProcess;
+        let previousCwd;
         if ( cwd ) {
             previousCwd = process.cwd();
             process.chdir( cwd );
         }
         try {
             childProcess = commandLine( {
-                "argv": argv,
-                "stdio": "pipe",
-                "log": function( message ) {
-                    stdout += message + "\n";
+                argv,
+                "stdio": `pipe`,
+                log( message ) {
+                    stdout += `${ message }\n`;
                 },
-                "error": function( message ) {
-                    stderr += message + "\n";
+                error( message ) {
+                    stderr += `${ message }\n`;
                 },
-                "exit": function( code ) {
+                exit( code ) {
                     exitCode = code;
                     if ( exitMarker ) {
                         throw exitMarker;
@@ -46,12 +46,8 @@ module.exports = function( argv, callback, cwd ) {
                 process.chdir( previousCwd );
             }
         }
-        childProcess.stdio[ 1 ].on( "data", function( buffer ) {
-            stdout += buffer;
-        } );
-        childProcess.stdio[ 2 ].on( "data", function( buffer ) {
-            stderr += buffer;
-        } );
+        childProcess.stdio[ 1 ].on( `data`, buffer => ( stdout += buffer ) );
+        childProcess.stdio[ 2 ].on( `data`, buffer => ( stderr += buffer ) );
         return undefined;
     };
 };

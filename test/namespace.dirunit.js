@@ -3,20 +3,20 @@
 module.exports = {
     "wires.json": {
         "person": {
-            "name": "John",
+            "name": `John`,
         },
     },
     "/sub": {
-        "wires-namespace.json": "person",
+        "wires-namespace.json": `person`,
         "wires.json": {
             "age": 27,
         },
-        "namespace.unit.js": function() {
+        "namespace.unit.js"() {
             module.exports = {
-                "test": function( __ ) {
+                test( __ ) {
                     __.expect( 1 );
-                    __.deepEqual( require( "#" ), {
-                        "name": "John",
+                    __.deepEqual( require( `#` ), {
+                        "name": `John`,
                         "age": 27,
                     } );
                     __.done();

@@ -2,13 +2,13 @@
 
 module.exports = {
     "wires.json": {
-        ":fs": "fs",
+        ":fs": `fs`,
     },
-    "route_to_main.unit.js": function() {
+    "route_to_main.unit.js"() {
         module.exports = {
-            "test": function( __ ) {
+            test( __ ) {
                 __.expect( 1 );
-                __.strictEqual( require( ":fs" ), require( "fs" ) );
+                __.strictEqual( require( `:fs` ), require( `fs` ) );
                 __.done();
             },
         };

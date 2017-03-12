@@ -2,18 +2,18 @@
 
 module.exports = {
     "wires.json": {
-        "key": "value from json",
+        "key": `value from json`,
     },
-    "wires.js": function() {
+    "wires.js"() {
         module.exports = {
-            "key": "value from js",
+            "key": `value from js`,
         };
     },
-    "javascript.unit.js": function() {
+    "javascript.unit.js"() {
         module.exports = {
-            "javascript": function( __ ) {
+            javascript( __ ) {
                 __.expect( 1 );
-                __.strictEqual( require( "#key" ), "value from js" );
+                __.strictEqual( require( `#key` ), `value from js` );
                 __.done();
             },
         };

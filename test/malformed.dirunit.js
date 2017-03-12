@@ -1,17 +1,17 @@
 "use strict";
 
 module.exports = {
-    "wires.json": function() {
+    "wires.json"() {
         return {
-            "key": "value",
+            "key": `value`,
         };
     },
-    "malformed.unit.js": function() {
+    "malformed.unit.js"() {
         module.exports = {
-            "test": function( __ ) {
+            test( __ ) {
                 __.expect( 1 );
-                __.throws( function() {
-                    require( "#key" );
+                __.throws( () => {
+                    require( `#key` );
                 } );
                 __.done();
             },

@@ -1,13 +1,13 @@
 "use strict";
 
 module.exports = {
-    "unknown_route.unit.js": function() {
+    "unknown_route.unit.js"() {
         module.exports = {
-            "test": function( __ ) {
+            test( __ ) {
                 __.expect( 1 );
-                __.throws( function() {
-                    require( ":xf56z" );
-                }, "unknown route 'xf56z'" );
+                __.throws( () => {
+                    require( `:xf56z` );
+                }, `unknown route 'xf56z'` );
                 __.done();
             },
         };

@@ -2,16 +2,16 @@
 
 "use strict";
 
-require( "resolve" )( "wires/bin/cli", {
+require( `resolve` )( `wires/bin/cli`, {
     "basedir": process.cwd(),
-}, function( _, filename ) {
+}, ( _, filename ) => {
     /* eslint-disable no-console */
-    require( filename || "./cli" )( {
+    require( filename || `./cli` )( {
         "argv": process.argv,
-        "stdio": "inherit",
+        "stdio": `inherit`,
         "log": console.log,
         "error": console.error,
-        "exit": function( code ) {
+        exit( code ) {
             // eslint-disable-next-line no-process-exit
             process.exit( code );
         },

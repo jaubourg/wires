@@ -1,19 +1,19 @@
 "use strict";
 
 module.exports = {
-    "test.js": function() {
+    "test.js"() {
         module.exports = false;
     },
     "/test": {
-        "index.js": function() {
+        "index.js"() {
             module.exports = true;
         },
     },
-    "test.unit.js": function() {
+    "test.unit.js"() {
         module.exports = {
-            "test": function( __ ) {
+            "test"( __ ) {
                 __.expect( 1 );
-                __.ok( require( "./test/" ) );
+                __.ok( require( `./test/` ) );
                 __.done();
             },
         };
