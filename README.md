@@ -1,11 +1,11 @@
 # wires
 
 [![NPM][npm-image]][npm-url]
-[![Build Status][travis-image]][travis-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
 [![Dependency Status][dependency-image]][dependency-url]
 [![devDependency Status][devDependency-image]][devDependency-url]
-[![gratipay][gratipay-image]][gratipay-url]
+
+[![Build Status][travis-image]][travis-url]
+<!-- [![Coverage Status][coveralls-image]][coveralls-url] -->
 
 A simple configuration utility for npm compatible platforms (node.js, io.js, etc) featuring smart module wiring for unobtrusive dependency injection.
 
@@ -310,8 +310,6 @@ Licensed under the [MIT license](https://raw.githubusercontent.com/jaubourg/wire
 [dependency-url]: https://david-dm.org/jaubourg/wires
 [devDependency-image]: https://img.shields.io/david/dev/jaubourg/wires.svg?style=flat-square
 [devDependency-url]: https://david-dm.org/jaubourg/wires?type=dev
-[gratipay-image]: https://img.shields.io/gratipay/jaubourg.svg?style=flat-square
-[gratipay-url]: https://gratipay.com/jaubourg/
 [npm-image]: https://img.shields.io/npm/v/wires.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/wires
 [travis-image]: https://img.shields.io/travis/jaubourg/wires.svg?style=flat-square
