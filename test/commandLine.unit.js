@@ -4,7 +4,7 @@ const commandLineTest = require( `./commandLineTest` );
 const path = require( `path` );
 
 module.exports = {
-    "full_test": commandLineTest( [
+    "full test": commandLineTest( [
         process.execPath,
         path.resolve( __dirname, `../lib/wires` ),
         `(object.a=1)`,

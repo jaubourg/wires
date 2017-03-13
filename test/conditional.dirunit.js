@@ -11,7 +11,7 @@ module.exports = {
     },
     "conditional.unit.js"() {
         module.exports = {
-            "test"( __ ) {
+            test( __ ) {
                 __.expect( 10 );
                 __.strictEqual( require( `#unexisting` ), undefined );
                 __.strictEqual( require( `?unexisting` ), `` );

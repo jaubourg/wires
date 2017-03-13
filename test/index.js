@@ -33,7 +33,7 @@ const fixtureDir = path.join( __dirname, `fixture` );
 const dirUnits = {};
 const units = [];
 
-fs.readdirSync( unitDir ).forEach( basename => {
+for ( const basename of fs.readdirSync( unitDir ) ) {
     if ( options.map && !options.map[ basename ] ) {
         return;
     }
@@ -43,7 +43,7 @@ fs.readdirSync( unitDir ).forEach( basename => {
     } else if ( rDirUnit.test( filename ) ) {
         dirUnits[ `/${ path.basename( filename, `.dirunit.js` ) }` ] = require( filename );
     }
-} );
+}
 
 process.on( `exit`, () => {
     try {

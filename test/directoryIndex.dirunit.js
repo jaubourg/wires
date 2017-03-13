@@ -11,7 +11,7 @@ module.exports = {
     },
     "test.unit.js"() {
         module.exports = {
-            "test"( __ ) {
+            test( __ ) {
                 __.expect( 1 );
                 __.ok( require( `./test/` ) );
                 __.done();

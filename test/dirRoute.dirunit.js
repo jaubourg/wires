@@ -22,7 +22,7 @@ module.exports = {
     },
     "dirRoute.unit.js"() {
         module.exports = {
-            "test"( __ ) {
+            test( __ ) {
                 __.expect( 5 );
                 __.strictEqual( require( `:dir/number` ), 1 );
                 __.strictEqual( require( `:dir/two/number` ), 2 );
