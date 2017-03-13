@@ -1,6 +1,6 @@
 "use strict";
 
-const commandLineTest = require( `./helper/commandLineTest` );
+const commandLineTest = require( `./commandLineTest` );
 
 const versionString = `v${ require( `../package` ).version } (some_exe ${ process.version })\n`;
 

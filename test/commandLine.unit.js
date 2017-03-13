@@ -1,12 +1,12 @@
 "use strict";
 
-const commandLineTest = require( `./helper/commandLineTest` );
+const commandLineTest = require( `./commandLineTest` );
 const path = require( `path` );
 
 module.exports = {
     "full_test": commandLineTest( [
         process.execPath,
-        path.resolve( __dirname, `../bin/wires` ),
+        path.resolve( __dirname, `../lib/wires` ),
         `(object.a=1)`,
         `--throw-deprecation`,
         path.resolve( __dirname, `data/script.js` )
@@ -17,7 +17,7 @@ module.exports = {
             "noParent": true,
             "isMain": true,
             "argv": [
-                path.resolve( __dirname, `../bin/wires` ),
+                path.resolve( __dirname, `../lib/wires` ),
                 path.resolve( __dirname, `data/script.js` )
             ],
             "execArgv": [

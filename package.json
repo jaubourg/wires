@@ -1,7 +1,7 @@
 {
     "author": "Julian Aubourg <j@ubourg.net> (http://jaubourg.net)",
     "bin": {
-        "wires": "./bin/wires"
+        "wires": "./lib/wires"
     },
     "dependencies": {
         "lodash": "4.17.4",
@@ -9,13 +9,11 @@
     },
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
-        "coveralls": "2.12.0",
         "eslint": "3.17.1",
         "eslint-config-creative-area": "0.3.0",
         "fs-extra": "2.0.0",
         "grunt": "1.0.1",
         "grunt-shell": "2.1.0",
-        "jscoverage": "0.6.0",
         "nodeunit": "0.11.0"
     },
     "engines": {
@@ -29,7 +27,7 @@
         "url" : "http://github.com/jaubourg/wires.git"
     },
     "scripts": {
-        "test": "grunt"
+        "test": "node_modules/.bin/grunt"
     },
     "version": "0.6.0-pre"
 }
