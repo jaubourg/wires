@@ -1,20 +1,25 @@
 "use strict";
 
 const options = ( args => {
+    /* eslint-disable no-shadow */
     const rOptions = /^--([a-z]+)=(.+)$/i;
-    const actualOptions = {};
+    const params = new Map();
+    let files;
     for ( const arg of args ) {
         const test = rOptions.exec( arg );
         if ( test ) {
-            actualOptions[ test[ 1 ] ] = test[ 2 ].trim();
+            params.set( test[ 1 ], test[ 2 ].trim() );
         } else {
-            if ( !actualOptions.map ) {
-                actualOptions.map = {};
+            if ( !files ) {
+                files = new Set();
             }
-            actualOptions.map[ `${ arg }.js` ] = true;
+            files.add( `${ arg }.js` );
         }
     }
-    return actualOptions;
+    return {
+        params,
+        files,
+    };
 } )( process.argv.slice( 2 ) );
 
 const _ = require( `lodash` );
@@ -34,14 +39,13 @@ const dirUnits = {};
 const units = [];
 
 for ( const basename of fs.readdirSync( unitDir ) ) {
-    if ( options.map && !options.map[ basename ] ) {
-        return;
-    }
-    const filename = path.join( unitDir, basename );
-    if ( rUnit.test( filename ) ) {
-        units.push( filename );
-    } else if ( rDirUnit.test( filename ) ) {
-        dirUnits[ `/${ path.basename( filename, `.dirunit.js` ) }` ] = require( filename );
+    if ( !options.files || options.files.has( basename ) ) {
+        const filename = path.join( unitDir, basename );
+        if ( rUnit.test( filename ) ) {
+            units.push( filename );
+        } else if ( rDirUnit.test( filename ) ) {
+            dirUnits[ `/${ path.basename( filename, `.dirunit.js` ) }` ] = require( filename );
+        }
     }
 }
 
@@ -76,7 +80,7 @@ process.on( `exit`, () => {
 // eslint-disable-next-line no-extend-native
 Object.prototype.__MODIFIED_PROTOTYPE = true;
 
-( nodeunit.reporters[ options.reporter ] || nodeunit.reporters.default ).run( units, null, error => {
+( nodeunit.reporters[ options.params.get( `reporter` ) ] || nodeunit.reporters.default ).run( units, null, error => {
     if ( error ) {
         // eslint-disable-next-line no-console
         console.error( error );

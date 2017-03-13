@@ -15,7 +15,7 @@ module.exports = grunt => {
                 "command": command( `eslint --color -f codeframe .` ),
             },
             "test": {
-                "command": `node lib/wires test`,
+                "command": `node lib/wires test --reporter=minimal`,
             },
         },
     } );
