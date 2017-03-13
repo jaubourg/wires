@@ -7,7 +7,7 @@
 [![Build Status][travis-image]][travis-url]
 <!-- [![Coverage Status][coveralls-image]][coveralls-url] -->
 
-A simple configuration utility for npm compatible platforms (node.js, io.js, etc) featuring smart module wiring for unobtrusive dependency injection.
+A simple configuration utility for npm compatible platforms (mainly node.js) featuring smart module wiring for unobtrusive dependency injection.
 
 ## Overview
 
