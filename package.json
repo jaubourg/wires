@@ -9,9 +9,9 @@
     },
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
-        "eslint": "3.17.1",
-        "eslint-config-creative-area": "0.4.0",
-        "fs-extra": "2.0.0",
+        "eslint": "3.18.0",
+        "eslint-config-creative-area": "0.6.0",
+        "fs-extra": "2.1.2",
         "grunt": "1.0.1",
         "grunt-shell": "2.1.0",
         "nodeunit": "0.11.0"
@@ -20,10 +20,15 @@
         "node" : ">=4"
     },
     "eslintConfig": {
-        "extends": "creative-area/node/4",
+        "extends": "creative-area/es6",
+        "env": {
+            "node": true
+        },
         "rules": {
             "global-require": "off",
-            "no-sync": "off"
+            "no-sync": "off",
+            "prefer-destructuring": "off",
+            "prefer-rest-params": "off"
         }
     },
     "license": "MIT",

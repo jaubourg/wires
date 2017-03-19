@@ -10,7 +10,7 @@ module.exports = {
     "short": commandLineTest( [
         `some_exe`,
         `script.js`,
-        `-h`
+        `-h`,
     ], ( __, stdout, stderr, exitCode ) => {
         __.expect( 3 );
         __.strictEqual( stdout, helpString, `help string properly created` );
@@ -21,7 +21,7 @@ module.exports = {
     "long": commandLineTest( [
         `some_exe`,
         `script.js`,
-        `--help`
+        `--help`,
     ], ( __, stdout, stderr, exitCode ) => {
         __.expect( 3 );
         __.strictEqual( stdout, helpString, `help string properly created` );
@@ -33,7 +33,7 @@ module.exports = {
         `some_exe`,
         `script.js`,
         `-h`,
-        `someScript.js`
+        `someScript.js`,
     ], ( __, stdout, stderr, exitCode ) => {
         __.expect( 3 );
         __.strictEqual( stdout, helpString, `help string properly created` );

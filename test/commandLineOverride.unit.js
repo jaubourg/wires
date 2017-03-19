@@ -16,7 +16,7 @@ module.exports = {
             `()`,
             `--help`,
             `(object.flag2,!object.unflag2,object.string=world,object.int=3)`,
-            `end`
+            `end`,
         ] );
         __.deepEqual( tmp.argv, [
             `--arg`,
@@ -24,7 +24,7 @@ module.exports = {
             `tmp`,
             `tmp2`,
             `--help`,
-            `end`
+            `end`,
         ], `argv properly cleaned up` );
         __.deepEqual( tmp.data, {
             "flag": true,
