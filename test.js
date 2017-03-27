@@ -13,6 +13,19 @@ const runner = tasks => {
     } );
 };
 
+function merge() {
+    const object = {};
+    for ( let i = 0; i < arguments.length; i++ ) {
+        const current = arguments[ i ];
+        if ( current != null ) {
+            for ( const key of Object.keys( current ) ) {
+                object[ key ] = current[ key ];
+            }
+        }
+    }
+    return object;
+}
+
 const exec = ( spawn => ( expression, env ) => () => new Promise( ( resolve, reject ) => {
     const args = expression.split( ` ` );
     const command = args.shift().replace(
@@ -24,7 +37,7 @@ const exec = ( spawn => ( expression, env ) => () => new Promise( ( resolve, rej
         args,
         {
             "cwd": process.cwd(),
-            env,
+            "env": merge( process.env, env ),
             "stdio": `inherit`,
         }
     )
