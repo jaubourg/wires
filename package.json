@@ -12,8 +12,6 @@
         "eslint": "3.18.0",
         "eslint-config-creative-area": "0.6.0",
         "fs-extra": "2.1.2",
-        "grunt": "1.0.1",
-        "grunt-shell": "2.1.0",
         "nodeunit": "0.11.0"
     },
     "engines": {
@@ -39,7 +37,7 @@
         "url" : "http://github.com/jaubourg/wires.git"
     },
     "scripts": {
-        "test": "node_modules/.bin/grunt"
+        "test": "node test"
     },
     "version": "0.6.0-pre"
 }
