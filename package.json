@@ -1,7 +1,7 @@
 {
     "author": "Julian Aubourg <j@ubourg.net> (http://jaubourg.net)",
     "bin": {
-        "wires": "./lib/wires"
+        "wires": "./lib/bin.js"
     },
     "dependencies": {
         "lodash": "4.17.4",

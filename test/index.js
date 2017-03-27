@@ -1,7 +1,6 @@
 "use strict";
 
 const options = ( args => {
-    /* eslint-disable no-shadow */
     const rOptions = /^--([a-z]+)=(.+)$/i;
     const params = new Map();
     let files;

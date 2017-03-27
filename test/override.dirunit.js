@@ -25,13 +25,10 @@ module.exports = {
             module.exports = {
                 test( __ ) {
                     __.expect( 4 );
-                    const oldEnv = process.env.NODE_ENV;
-                    process.env.NODE_ENV = `test`;
                     __.deepEqual( require( `#array` ), [ 1, 2, 3 ] );
                     __.strictEqual( require( `#folder` ), `lib` );
                     __.strictEqual( require( `#lolfolder` ), `lollib` );
                     __.strictEqual( require( `:module` ), `in lib` );
-                    process.env.NODE_ENV = oldEnv;
                     __.done();
                 },
             };
