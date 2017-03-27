@@ -7,7 +7,10 @@ const runner = tasks => {
     for ( const task of tasks ) {
         promise = promise.then( task ).then( () => console.log() );
     }
-    return promise.catch( () => process.exit( -1 ) );
+    return promise.catch( error => {
+        console.error( `latest task failed: ${ error }` );
+        process.exit( 1 );
+    } );
 };
 
 const exec = ( spawn => ( expression, env ) => () => new Promise( ( resolve, reject ) => {
