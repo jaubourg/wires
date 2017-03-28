@@ -24,11 +24,11 @@ module.exports = {
         module.exports = {
             test( __ ) {
                 __.expect( 5 );
-                __.strictEqual( require( `:dir/number` ), 1 );
-                __.strictEqual( require( `:dir/two/number` ), 2 );
-                __.strictEqual( require( `:dir/three/number` ), 3 );
-                __.strictEqual( require( `:dir/two/sub/number` ), 4 );
-                __.strictEqual( require( `:dir/three/sub/number` ), 5 );
+                __.strictEqual( wires( `:dir/number` ), 1 );
+                __.strictEqual( wires( `:dir/two/number` ), 2 );
+                __.strictEqual( wires( `:dir/three/number` ), 3 );
+                __.strictEqual( wires( `:dir/two/sub/number` ), 4 );
+                __.strictEqual( wires( `:dir/three/sub/number` ), 5 );
                 __.done();
             },
         };

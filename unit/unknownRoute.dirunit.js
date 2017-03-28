@@ -6,7 +6,7 @@ module.exports = {
             test( __ ) {
                 __.expect( 1 );
                 __.throws( () => {
-                    require( `:xf56z` );
+                    wires( `:xf56z` );
                 }, `unknown route 'xf56z'` );
                 __.done();
             },

@@ -13,7 +13,7 @@ module.exports = {
         module.exports = {
             javascript( __ ) {
                 __.expect( 1 );
-                __.strictEqual( require( `#key` ), `value from js` );
+                __.strictEqual( wires( `#key` ), `value from js` );
                 __.done();
             },
         };

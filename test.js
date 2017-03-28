@@ -27,6 +27,7 @@ function merge() {
 }
 
 const exec = ( spawn => ( expression, env ) => () => new Promise( ( resolve, reject ) => {
+    console.log( `Executing ${ expression }\n` );
     const args = expression.split( ` ` );
     const command = args.shift().replace(
         /^@(.+)$/,
@@ -48,8 +49,16 @@ const exec = ( spawn => ( expression, env ) => () => new Promise( ( resolve, rej
 runner( [
     // lint
     exec( `@eslint --color -f codeframe .` ),
-    // test
-    exec( `node lib/bin.js unit --reporter=minimal`, {
+    // test with binary
+    exec( `node lib/bin.js unit --init=bin --reporter=minimal`, {
+        "NODE_ENV": `test`,
+    } ),
+    // test with local
+    exec( `node unit --init=local --reporter=minimal`, {
+        "NODE_ENV": `test`,
+    } ),
+    // test with local in binary
+    exec( `node lib/bin.js unit --init=local --reporter=minimal`, {
         "NODE_ENV": `test`,
     } ),
 ] );

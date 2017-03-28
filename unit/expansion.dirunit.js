@@ -16,13 +16,13 @@ module.exports = {
         module.exports = {
             data( __ ) {
                 __.expect( 2 );
-                __.strictEqual( require( `#show` ), `value_is_lib` );
-                __.strictEqual( require( `#path` ), process.env.PATH );
+                __.strictEqual( wires( `#show` ), `value_is_lib` );
+                __.strictEqual( wires( `#path` ), process.env.PATH );
                 __.done();
             },
             route( __ ) {
                 __.expect( 1 );
-                __.strictEqual( require( `:module` ), require( `./lib/test` ) );
+                __.strictEqual( wires( `:module` ), require( `./lib/test` ) );
                 __.done();
             },
         };

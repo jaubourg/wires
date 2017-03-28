@@ -11,7 +11,7 @@ module.exports = {
             test( __ ) {
                 __.expect( 1 );
                 __.throws( () => {
-                    require( `#key` );
+                    wires( `#key` );
                 } );
                 __.done();
             },

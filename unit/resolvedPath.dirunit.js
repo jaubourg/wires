@@ -13,12 +13,12 @@ module.exports = {
         module.exports = {
             test( __ ) {
                 __.expect( 5 );
-                __.strictEqual( require( `#path` ), `./lib` );
-                __.strictEqual( require( `#cmdPath` ), `>/lib` );
-                __.strictEqual( require( `:resolvedRoute` ), `lib/test` );
-                __.strictEqual( require( `:indirectResolvedRoute` ), `lib/test` );
+                __.strictEqual( wires( `#path` ), `./lib` );
+                __.strictEqual( wires( `#cmdPath` ), `>/lib` );
+                __.strictEqual( wires( `:resolvedRoute` ), `lib/test` );
+                __.strictEqual( wires( `:indirectResolvedRoute` ), `lib/test` );
                 __.throws( () => {
-                    require( `:homeRoute` );
+                    wires( `:homeRoute` );
                 }, /^Cannot find module '[^~]+--wires-does-not-exist.js'$/, `no file in home` );
                 __.done();
             },
@@ -35,11 +35,11 @@ module.exports = {
             module.exports = {
                 test( __ ) {
                     __.expect( 5 );
-                    __.strictEqual( require( `#path` ), `./lib` );
-                    __.strictEqual( require( `#cmdPath` ), `>/lib` );
-                    __.strictEqual( require( `:resolvedRoute` ), `lib/test` );
-                    __.strictEqual( require( `:backResolvedRoute` ), `lib/test` );
-                    __.strictEqual( require( `:indirectResolvedRoute` ), `lib/test` );
+                    __.strictEqual( wires( `#path` ), `./lib` );
+                    __.strictEqual( wires( `#cmdPath` ), `>/lib` );
+                    __.strictEqual( wires( `:resolvedRoute` ), `lib/test` );
+                    __.strictEqual( wires( `:backResolvedRoute` ), `lib/test` );
+                    __.strictEqual( wires( `:indirectResolvedRoute` ), `lib/test` );
                     __.done();
                 },
             };

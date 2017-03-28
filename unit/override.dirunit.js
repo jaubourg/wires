@@ -25,10 +25,10 @@ module.exports = {
             module.exports = {
                 test( __ ) {
                     __.expect( 4 );
-                    __.deepEqual( require( `#array` ), [ 1, 2, 3 ] );
-                    __.strictEqual( require( `#folder` ), `lib` );
-                    __.strictEqual( require( `#lolfolder` ), `lollib` );
-                    __.strictEqual( require( `:module` ), `in lib` );
+                    __.deepEqual( wires( `#array` ), [ 1, 2, 3 ] );
+                    __.strictEqual( wires( `#folder` ), `lib` );
+                    __.strictEqual( wires( `#lolfolder` ), `lollib` );
+                    __.strictEqual( wires( `:module` ), `in lib` );
                     __.done();
                 },
             };
@@ -46,13 +46,10 @@ module.exports = {
                     module.exports = {
                         test( __ ) {
                             __.expect( 4 );
-                            const oldEnv = process.env.NODE_ENV;
-                            process.env.NODE_ENV = `test`;
-                            __.deepEqual( require( `#array` ), [ 4, 5, 6 ] );
-                            __.strictEqual( require( `#folder` ), `src` );
-                            __.strictEqual( require( `#lolfolder` ), `lolsrc` );
-                            __.strictEqual( require( `:module` ), `in src` );
-                            process.env.NODE_ENV = oldEnv;
+                            __.deepEqual( wires( `#array` ), [ 4, 5, 6 ] );
+                            __.strictEqual( wires( `#folder` ), `src` );
+                            __.strictEqual( wires( `#lolfolder` ), `lolsrc` );
+                            __.strictEqual( wires( `:module` ), `in src` );
                             __.done();
                         },
                     };

@@ -13,16 +13,16 @@ module.exports = {
         module.exports = {
             test( __ ) {
                 __.expect( 10 );
-                __.strictEqual( require( `#unexisting` ), undefined );
-                __.strictEqual( require( `?unexisting` ), `` );
-                __.strictEqual( require( `#>UNEXISTING` ), undefined );
-                __.strictEqual( require( `?>UNEXISTING` ), `` );
-                __.strictEqual( require( `#UNEXISTING_undefined` ), `undefined` );
-                __.strictEqual( require( `#UNEXISTING_empty` ), `` );
-                __.strictEqual( require( `#unknown_undefined` ), `undefined` );
-                __.strictEqual( require( `#unknown_empty` ), `` );
-                __.strictEqual( require( `#template_#unknown` ), `template_undefined` );
-                __.strictEqual( require( `#template_?unknown` ), `template_` );
+                __.strictEqual( wires( `#unexisting` ), undefined );
+                __.strictEqual( wires( `?unexisting` ), `` );
+                __.strictEqual( wires( `#>UNEXISTING` ), undefined );
+                __.strictEqual( wires( `?>UNEXISTING` ), `` );
+                __.strictEqual( wires( `#UNEXISTING_undefined` ), `undefined` );
+                __.strictEqual( wires( `#UNEXISTING_empty` ), `` );
+                __.strictEqual( wires( `#unknown_undefined` ), `undefined` );
+                __.strictEqual( wires( `#unknown_empty` ), `` );
+                __.strictEqual( wires( `#template_#unknown` ), `template_undefined` );
+                __.strictEqual( wires( `#template_?unknown` ), `template_` );
                 __.done();
             },
         };

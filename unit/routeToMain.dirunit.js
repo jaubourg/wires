@@ -8,7 +8,7 @@ module.exports = {
         module.exports = {
             test( __ ) {
                 __.expect( 1 );
-                __.strictEqual( require( `:fs` ), require( `fs` ) );
+                __.strictEqual( wires( `:fs` ), require( `fs` ) );
                 __.done();
             },
         };

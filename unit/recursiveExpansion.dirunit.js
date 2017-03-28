@@ -12,7 +12,7 @@ module.exports = {
         module.exports = {
             test( __ ) {
                 __.expect( 1 );
-                __.deepEqual( require( `#paths` ), {
+                __.deepEqual( wires( `#paths` ), {
                     "data": `./lib/data`,
                     "tests": [ `./lib/test1`, `./lib/test2` ],
                 } );

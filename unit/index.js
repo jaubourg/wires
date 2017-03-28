@@ -79,6 +79,10 @@ process.on( `exit`, () => {
 // eslint-disable-next-line no-extend-native
 Object.prototype.__MODIFIED_PROTOTYPE = true;
 
+if ( options.params.has( `init` ) ) {
+    require( `./init/${ options.params.get( `init` ) }` );
+}
+
 ( nodeunit.reporters[ options.params.get( `reporter` ) ] || nodeunit.reporters.default ).run( units, null, error => {
     if ( error ) {
         // eslint-disable-next-line no-console

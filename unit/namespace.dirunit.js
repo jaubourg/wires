@@ -15,7 +15,7 @@ module.exports = {
             module.exports = {
                 test( __ ) {
                     __.expect( 1 );
-                    __.deepEqual( require( `#` ), {
+                    __.deepEqual( wires( `#` ), {
                         "name": `John`,
                         "age": 27,
                     } );
