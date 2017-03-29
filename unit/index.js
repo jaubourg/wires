@@ -21,7 +21,6 @@ const options = ( args => {
     };
 } )( process.argv.slice( 2 ) );
 
-const _ = require( `lodash` );
 const fs = require( `fs` );
 const fse = require( `fs-extra` );
 const nodeunit = require( `nodeunit` );
@@ -56,7 +55,8 @@ process.on( `exit`, () => {
 
 ( function generateTree( dir, tree ) {
     fs.mkdirSync( dir );
-    _.forOwn( tree, ( val, key ) => {
+    for ( const key of Object.keys( tree ) ) {
+        const val = tree[ key ];
         let filename;
         if ( key[ 0 ] === `/` ) {
             generateTree( path.join( dir, key.substr( 1 ) ), val, units );
@@ -73,7 +73,7 @@ process.on( `exit`, () => {
                 units.push( filename );
             }
         }
-    } );
+    }
 } )( fixtureDir, dirUnits );
 
 // eslint-disable-next-line no-extend-native
