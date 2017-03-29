@@ -28,7 +28,7 @@ function merge() {
 
 const exec = ( spawn => ( expression, env ) => () => new Promise( ( resolve, reject ) => {
     console.log( `Executing ${ expression }\n` );
-    const args = expression.split( ` ` );
+    const args = expression.split( /\s+/ );
     const command = args.shift().replace(
         /^@(.+)$/,
         `${ __dirname }/node_modules/.bin/$1${ process.platform === `win32` ? `.cmd` : `` }`
@@ -46,19 +46,18 @@ const exec = ( spawn => ( expression, env ) => () => new Promise( ( resolve, rej
         .on( `error`, reject );
 } ) )( require( `child_process` ).spawn );
 
+const runTests = ( bin, init ) =>
+    exec( `node ${ bin ? `lib/bin.js` : `` } unit --init=${ bin ? ( init || `bin` ) : `local` } --reporter=minimal`, {
+        "NODE_ENV": `test`,
+    } );
+
 runner( [
     // lint
     exec( `@eslint --color -f codeframe .` ),
     // test with binary
-    exec( `node lib/bin.js unit --init=bin --reporter=minimal`, {
-        "NODE_ENV": `test`,
-    } ),
+    runTests( true ),
     // test with local
-    exec( `node unit --init=local --reporter=minimal`, {
-        "NODE_ENV": `test`,
-    } ),
+    runTests(),
     // test with local in binary
-    exec( `node lib/bin.js unit --init=local --reporter=minimal`, {
-        "NODE_ENV": `test`,
-    } ),
+    runTests( true, `local` ),
 ] );
