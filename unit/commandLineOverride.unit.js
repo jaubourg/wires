@@ -1,6 +1,6 @@
 "use strict";
 
-const commandLineOverride = require( `../lib/config/commandLineOverride` );
+const commandLineOverride = require( `../lib/util/commandLineOverride` );
 
 module.exports = {
     test( __ ) {
