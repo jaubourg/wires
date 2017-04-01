@@ -1,5 +1,7 @@
 # wires
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/jaubourg/wires.svg)](https://greenkeeper.io/)
+
 [![NPM][npm-image]][npm-url]
 [![Dependency Status][dependency-image]][dependency-url]
 [![devDependency Status][devDependency-image]][devDependency-url]
