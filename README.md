@@ -1,12 +1,11 @@
 # wires
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/jaubourg/wires.svg)](https://greenkeeper.io/)
-
 [![NPM][npm-image]][npm-url]
 [![Dependency Status][dependency-image]][dependency-url]
 [![devDependency Status][devDependency-image]][devDependency-url]
 
 [![Build Status][travis-image]][travis-url]
+[![Greenkeeper badge][greenkeeper-image]][greenkeeper-url]
 <!-- [![Coverage Status][coveralls-image]][coveralls-url] -->
 
 A simple configuration utility for npm compatible platforms (mainly node.js) featuring smart module wiring for unobtrusive dependency injection.
@@ -312,6 +311,8 @@ Licensed under the [MIT license](https://raw.githubusercontent.com/jaubourg/wire
 [dependency-url]: https://david-dm.org/jaubourg/wires
 [devDependency-image]: https://img.shields.io/david/dev/jaubourg/wires.svg?style=flat-square
 [devDependency-url]: https://david-dm.org/jaubourg/wires?type=dev
+[greenkeeper-image]: https://badges.greenkeeper.io/jaubourg/wires.svg
+[greenkeeper-url]: https://greenkeeper.io/
 [npm-image]: https://img.shields.io/npm/v/wires.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/wires
 [travis-image]: https://img.shields.io/travis/jaubourg/wires.svg?style=flat-square
