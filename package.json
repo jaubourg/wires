@@ -8,6 +8,7 @@
     },
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
+        "coveralls": "2.13.0",
         "eslint": "3.19.0",
         "eslint-config-creative-area": "0.6.0",
         "fs-extra": "2.1.2",
@@ -38,6 +39,7 @@
     },
     "scripts": {
         "cover": "node test cover",
+        "coveralls": "npm run cover && cat ./coverage/lcov.info | coveralls",
         "test": "node test"
     },
     "version": "0.6.0-pre"
