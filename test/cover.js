@@ -6,11 +6,11 @@ const fse = require( `fs-extra` );
 
 const footer = ( file, foot ) => fs.writeFileSync( file, fs.readFileSync( file, `utf8` ) + foot, `utf8` );
 
-const root = `${ __dirname }/..`;
+const base = `${ __dirname }/..`;
 
-const lib = `${ root }/lib`;
-const save = `${ root }/_save`;
-const tmp = `${ root }/_tmp`;
+const lib = `${ base }/lib`;
+const save = `${ base }/_save`;
+const tmp = `${ base }/_tmp`;
 
 const instrumentSave = [
     `${ lib }/bin.js`,
@@ -19,7 +19,7 @@ const instrumentSave = [
 
 const coverageCollection = `
 process.on( "exit", () => require( "fs" ).writeFileSync(
-    ${ JSON.stringify( `${ root }/coverage.` ) } + Date.now() + ".json",
+    ${ JSON.stringify( `${ base }/coverage.` ) } + Date.now() + ".json",
     JSON.stringify( __coverage__ ),
     "utf8"
 ) );
@@ -44,10 +44,10 @@ module.exports = {
         const istanbul = require( `istanbul` );
         const collector = new istanbul.Collector();
         const reporter = new istanbul.Reporter();
-        for ( const file of fs.readdirSync( root ) ) {
+        for ( const file of fs.readdirSync( base ) ) {
             if ( rCoverage.test( file ) ) {
-                collector.add( require( `${ root }/${ file }` ) );
-                fse.removeSync( `${ root }/${ file }` );
+                collector.add( require( `${ base }/${ file }` ) );
+                fse.removeSync( `${ base }/${ file }` );
             }
         }
         reporter.addAll( [ `lcov`, `clover` ] );
