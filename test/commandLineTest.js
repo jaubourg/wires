@@ -2,7 +2,8 @@
 
 const commandLine = require( `../lib/cli` );
 
-module.exports = ( argv, callback, cwd ) => __ => {
+// eslint-disable-next-line max-statements
+module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {
     let stdout = ``;
     let stderr = ``;
     let exitMarker = {};
@@ -12,9 +13,14 @@ module.exports = ( argv, callback, cwd ) => __ => {
     };
     let childProcess;
     let previousCwd;
+    let previousNodeEnv;
     if ( cwd ) {
         previousCwd = process.cwd();
         process.chdir( cwd );
+    }
+    if ( typeof nodeEnv === `string` ) {
+        previousNodeEnv = process.env[ `NODE_ENV` ];
+        process.env[ `NODE_ENV` ] = nodeEnv;
     }
     try {
         childProcess = commandLine( {
@@ -43,6 +49,9 @@ module.exports = ( argv, callback, cwd ) => __ => {
     } finally {
         if ( cwd ) {
             process.chdir( previousCwd );
+        }
+        if ( typeof previousNodeEnv === `string` ) {
+            process.env[ `NODE_ENV` ] = previousNodeEnv;
         }
     }
     childProcess.stdio[ 1 ].on( `data`, buffer => ( stdout += buffer ) );
