@@ -1,13 +1,15 @@
 "use strict";
 
-const clone = require( `../lib/util/clone` );
 const spawn = require( `child_process` ).spawn;
 
 module.exports = ( expression, nodeEnv ) => () => new Promise( ( resolve, reject ) => {
     // eslint-disable-next-line no-console
     console.log( `Executing ${ expression }\n` );
     const args = expression.split( /\s+/ );
-    const env = clone( process.env );
+    const env = {};
+    for ( const key of Object.keys( process.env ) ) {
+        env[ key ] = process.env[ key ];
+    }
     env[ `NODE_ENV` ] = nodeEnv;
     spawn(
         args.shift().replace(
