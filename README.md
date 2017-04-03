@@ -1,6 +1,7 @@
 # wires
 
 [![NPM][npm-image]][npm-url]
+[![License][license-image]][license-url]
 [![Dependency Status][dependency-image]][dependency-url]
 [![devDependency Status][devDependency-image]][devDependency-url]
 
@@ -303,7 +304,7 @@ Command line definitions respect cascading configurations. They will override an
 ## License
 
 Copyright (c) 2012 - 2017 [Julian Aubourg](mailto:j@ubourg.net)
-Licensed under the [MIT license](https://raw.githubusercontent.com/jaubourg/wires/master/LICENSE-MIT).
+Licensed under the [MIT license][license-url].
 
 [coveralls-image]: https://img.shields.io/coveralls/jaubourg/wires.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/jaubourg/wires
@@ -313,6 +314,8 @@ Licensed under the [MIT license](https://raw.githubusercontent.com/jaubourg/wire
 [devDependency-url]: https://david-dm.org/jaubourg/wires?type=dev
 [greenkeeper-image]: https://badges.greenkeeper.io/jaubourg/wires.svg
 [greenkeeper-url]: https://greenkeeper.io/
+[license-image]: https://img.shields.io/npm/l/wires.svg?style=flat-square
+[license-url]: https://raw.githubusercontent.com/jaubourg/wires/master/LICENSE
 [npm-image]: https://img.shields.io/npm/v/wires.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/wires
 [travis-image]: https://img.shields.io/travis/jaubourg/wires.svg?style=flat-square
