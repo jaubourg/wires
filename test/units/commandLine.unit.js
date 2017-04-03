@@ -3,13 +3,15 @@
 const commandLineTest = require( `../commandLineTest` );
 const path = require( `path` );
 
+const fixtureDir = path.resolve( __dirname, `../data/commandLine` );
+
 module.exports = {
     "full test": commandLineTest( [
         process.execPath,
         path.resolve( __dirname, `../../lib/wires` ),
         `(object.a=1)`,
         `--throw-deprecation`,
-        path.resolve( __dirname, `../data/script.js` ),
+        path.resolve( fixtureDir, `script.js` ),
     ], ( __, stdout, stderr, exitCode ) => {
         __.expect( 2 );
         __.strictEqual( exitCode, 180, `correct exit code (1204)` );
@@ -18,7 +20,7 @@ module.exports = {
             "isMain": true,
             "argv": [
                 path.resolve( __dirname, `../../lib/wires` ),
-                path.resolve( __dirname, `../data/script.js` ),
+                path.resolve( fixtureDir, `script.js` ),
             ],
             "execArgv": [
                 `--throw-deprecation`,
@@ -33,7 +35,7 @@ module.exports = {
             },
         }, `everything has been properly transmitted` );
         __.done();
-    }, path.resolve( __dirname, `../data` ) ),
+    }, fixtureDir ),
     "missing script": commandLineTest( [
         process.execPath,
         path.resolve( __dirname, `../../lib/wires` ),
@@ -43,7 +45,7 @@ module.exports = {
         const errorMessage = `ERROR: path_to_script required`;
         __.strictEqual( stderr.substr( 0, errorMessage.length ), errorMessage, `correct error message` );
         __.done();
-    }, path.resolve( __dirname, `../data` ) ),
+    } ),
 };
 
 for ( const option of [ `-e`, `--eval`, `-i`, `--interactive`, `-p`, `--print` ] ) {
