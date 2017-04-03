@@ -8,6 +8,9 @@ module.exports = {
     "test.js"() {
         module.exports = {};
     },
+    "raw{#hello}.js"() {
+        module.exports = `raw`;
+    },
     "base.unit.js"() {
         module.exports = {
             data( __ ) {
@@ -28,6 +31,11 @@ module.exports = {
             route( __ ) {
                 __.expect( 1 );
                 __.strictEqual( require( `:module` ), require( `./test` ) );
+                __.done();
+            },
+            raw( __ ) {
+                __.expect( 1 );
+                __.strictEqual( require( `::./raw{#hello}` ), `raw` );
                 __.done();
             },
         };
