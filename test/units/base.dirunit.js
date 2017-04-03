@@ -24,8 +24,9 @@ module.exports = {
                 __.done();
             },
             "environment data"( __ ) {
-                __.expect( 1 );
+                __.expect( 2 );
                 __.strictEqual( require( `#>PATH` ), process.env.PATH );
+                __.strictEqual( require( `#>` ), process.env );
                 __.done();
             },
             route( __ ) {
