@@ -14,7 +14,7 @@ module.exports = {
             module.exports = {
                 test( __ ) {
                     __.expect( 1 );
-                    __.strictEqual( wires( `./{#folder}/test.js` ), `level/lib` );
+                    __.strictEqual( require( `./{#folder}/test.js` ), `level/lib` );
                     __.done();
                 },
             };

@@ -1,7 +1,4 @@
 {
-    "globals": {
-        "wires": true
-    },
     "rules": {
         "no-magic-numbers": "off"
     }

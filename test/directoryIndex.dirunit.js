@@ -13,7 +13,7 @@ module.exports = {
         module.exports = {
             test( __ ) {
                 __.expect( 1 );
-                __.ok( wires( `./test/` ) );
+                __.ok( require( `./test/` ) );
                 __.done();
             },
         };

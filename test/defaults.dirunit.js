@@ -18,14 +18,14 @@ module.exports = {
         module.exports = {
             data( __ ) {
                 __.expect( 2 );
-                __.strictEqual( wires( `#key` ), `value` );
-                __.strictEqual( wires( `#keyDefaults` ), `valueDefault` );
+                __.strictEqual( require( `#key` ), `value` );
+                __.strictEqual( require( `#keyDefaults` ), `valueDefault` );
                 __.done();
             },
             route( __ ) {
                 __.expect( 2 );
-                __.strictEqual( wires( `:module` ), require( `./test` ) );
-                __.strictEqual( wires( `:moduleDefaults` ), require( `./test` ) );
+                __.strictEqual( require( `:module` ), require( `./test` ) );
+                __.strictEqual( require( `:moduleDefaults` ), require( `./test` ) );
                 __.done();
             },
         };

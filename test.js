@@ -46,8 +46,8 @@ const exec = ( spawn => ( expression, env ) => () => new Promise( ( resolve, rej
         .on( `error`, reject );
 } ) )( require( `child_process` ).spawn );
 
-const runTests = ( bin, init ) =>
-    exec( `node ${ bin ? `lib/bin.js` : `` } unit --init=${ bin ? ( init || `bin` ) : `local` } --reporter=minimal`, {
+const runTests = bin =>
+    exec( `node ${ bin ? `lib/bin.js` : `` } test/index.js --reporter=minimal`, {
         "NODE_ENV": `test`,
     } );
 
@@ -58,6 +58,4 @@ runner( [
     runTests( true ),
     // test with local
     runTests(),
-    // test with local in binary
-    runTests( true, `local` ),
 ] );

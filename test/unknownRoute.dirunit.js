@@ -1,18 +1,13 @@
 "use strict";
 
 module.exports = {
-    "wires.json"() {
-        return {
-            "key": `value`,
-        };
-    },
-    "malformed.unit.js"() {
+    "unknown_route.unit.js"() {
         module.exports = {
             test( __ ) {
                 __.expect( 1 );
                 __.throws( () => {
-                    wires( `#key` );
-                } );
+                    require( `:xf56z` );
+                }, `unknown route 'xf56z'` );
                 __.done();
             },
         };

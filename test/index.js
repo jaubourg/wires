@@ -1,5 +1,14 @@
 "use strict";
 
+try {
+    require( `#` );
+} catch ( e ) {
+    require( `..` );
+    // eslint-disable-next-line no-console
+    console.log( `wires included\n` );
+    require( `#` );
+}
+
 const options = ( args => {
     const rOptions = /^--([a-z]+)=(.+)$/i;
     const params = new Map();
@@ -78,10 +87,6 @@ process.on( `exit`, () => {
 
 // eslint-disable-next-line no-extend-native
 Object.prototype.__MODIFIED_PROTOTYPE = true;
-
-if ( options.params.has( `init` ) ) {
-    require( `./init/${ options.params.get( `init` ) }` );
-}
 
 ( nodeunit.reporters[ options.params.get( `reporter` ) ] || nodeunit.reporters.default ).run( units, null, error => {
     if ( error ) {

@@ -12,22 +12,22 @@ module.exports = {
         module.exports = {
             data( __ ) {
                 __.expect( 1 );
-                __.strictEqual( wires( `#key` ), `value` );
+                __.strictEqual( require( `#key` ), `value` );
                 __.done();
             },
             "undefined data"( __ ) {
                 __.expect( 1 );
-                __.strictEqual( wires( `#notDefined` ), undefined );
+                __.strictEqual( require( `#notDefined` ), undefined );
                 __.done();
             },
             "environment data"( __ ) {
                 __.expect( 1 );
-                __.strictEqual( wires( `#>PATH` ), process.env.PATH );
+                __.strictEqual( require( `#>PATH` ), process.env.PATH );
                 __.done();
             },
             route( __ ) {
                 __.expect( 1 );
-                __.strictEqual( wires( `:module` ), require( `./test` ) );
+                __.strictEqual( require( `:module` ), require( `./test` ) );
                 __.done();
             },
         };
