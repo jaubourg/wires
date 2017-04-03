@@ -11,6 +11,7 @@
         "eslint": "3.19.0",
         "eslint-config-creative-area": "0.6.0",
         "fs-extra": "2.1.2",
+        "istanbul": "0.4.5",
         "nodeunit": "0.11.0"
     },
     "engines": {
@@ -36,6 +37,7 @@
         "url" : "http://github.com/jaubourg/wires.git"
     },
     "scripts": {
+        "cover": "node test cover",
         "test": "node test"
     },
     "version": "0.6.0-pre"

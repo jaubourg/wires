@@ -9,4 +9,3 @@ module.exports = ( bin, command ) => exec(
     `${ command || `node` } ${ bin ? binPath : `` } ${ unitPath } --reporter=minimal`,
     `test`
 );
-
