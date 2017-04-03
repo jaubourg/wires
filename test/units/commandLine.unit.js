@@ -34,4 +34,29 @@ module.exports = {
         }, `everything has been properly transmitted` );
         __.done();
     }, path.resolve( __dirname, `../data` ) ),
+    "missing script": commandLineTest( [
+        process.execPath,
+        path.resolve( __dirname, `../../lib/wires` ),
+    ], ( __, _, stderr, exitCode ) => {
+        __.expect( 2 );
+        __.strictEqual( exitCode, -1, `correct exit code (-1)` );
+        const errorMessage = `ERROR: path_to_script required`;
+        __.strictEqual( stderr.substr( 0, errorMessage.length ), errorMessage, `correct error message` );
+        __.done();
+    }, path.resolve( __dirname, `../data` ) ),
 };
+
+for ( const option of [ `-e`, `--eval`, `-i`, `--interactive`, `-p`, `--print` ] ) {
+    module.exports[ `forbidden option ${ option }` ] = commandLineTest( [
+        process.execPath,
+        path.resolve( __dirname, `../../lib/wires` ),
+        option,
+    ], ( __, _, stderr, exitCode ) => {
+        __.expect( 2 );
+        __.strictEqual( exitCode, -1, `correct exit code (-1)` );
+        const command = process.execPath;
+        const errorMessage = `ERROR: ${ path.basename( command, path.extname( command ) ) } option not supported`;
+        __.strictEqual( stderr.substr( 0, errorMessage.length ), errorMessage, `correct error message` );
+        __.done();
+    } );
+}
