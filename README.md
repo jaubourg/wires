@@ -6,8 +6,8 @@
 [![devDependency Status][devDependency-image]][devDependency-url]
 
 [![Build Status][travis-image]][travis-url]
+[![Coverage Status][coveralls-image]][coveralls-url]
 [![Greenkeeper badge][greenkeeper-image]][greenkeeper-url]
-<!-- [![Coverage Status][coveralls-image]][coveralls-url] -->
 
 A simple configuration utility for npm compatible platforms (mainly node.js) featuring smart module wiring for unobtrusive dependency injection.
 
