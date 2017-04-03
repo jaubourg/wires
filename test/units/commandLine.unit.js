@@ -1,15 +1,15 @@
 "use strict";
 
-const commandLineTest = require( `./commandLineTest` );
+const commandLineTest = require( `../commandLineTest` );
 const path = require( `path` );
 
 module.exports = {
     "full test": commandLineTest( [
         process.execPath,
-        path.resolve( __dirname, `../lib/wires` ),
+        path.resolve( __dirname, `../../lib/wires` ),
         `(object.a=1)`,
         `--throw-deprecation`,
-        path.resolve( __dirname, `data/script.js` ),
+        path.resolve( __dirname, `../data/script.js` ),
     ], ( __, stdout, stderr, exitCode ) => {
         __.expect( 2 );
         __.strictEqual( exitCode, 180, `correct exit code (1204)` );
@@ -17,8 +17,8 @@ module.exports = {
             "noParent": true,
             "isMain": true,
             "argv": [
-                path.resolve( __dirname, `../lib/wires` ),
-                path.resolve( __dirname, `data/script.js` ),
+                path.resolve( __dirname, `../../lib/wires` ),
+                path.resolve( __dirname, `../data/script.js` ),
             ],
             "execArgv": [
                 `--throw-deprecation`,
@@ -33,5 +33,5 @@ module.exports = {
             },
         }, `everything has been properly transmitted` );
         __.done();
-    }, path.resolve( __dirname, `data` ) ),
+    }, path.resolve( __dirname, `../data` ) ),
 };
