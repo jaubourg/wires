@@ -1,11 +1,28 @@
 "use strict";
 
-const exec = require( `./exec` );
+const path = require( `path` );
+const spawn = require( `child_process` ).spawn;
 
-const binPath = `${ __dirname }/../lib/bin.js`;
-const unitPath = `${ __dirname }/units.js`;
+const binPath = path.resolve( __dirname, `../lib/bin.js` );
+const unitPath = path.resolve( __dirname, `units.js` );
 
-module.exports = ( bin, command ) => exec(
-    `${ command || `node` } ${ bin ? binPath : `` } ${ unitPath } --reporter=minimal`,
-    `test`
-);
+module.exports = bin => () => new Promise( ( resolve, reject ) => {
+    // eslint-disable-next-line no-console
+    console.log( `running unit tests (${ bin ? `no ` : `` }binary)\n` );
+    const env = {};
+    for ( const key of Object.keys( process.env ) ) {
+        env[ key ] = process.env[ key ];
+    }
+    env[ `NODE_ENV` ] = `test`;
+    spawn(
+        process.execPath,
+        bin ? [ binPath, unitPath ] : [ unitPath ],
+        {
+            env,
+            "stdio": `inherit`,
+        }
+    )
+        .on( `close`, code => ( code ? reject( code ) : resolve() ) )
+        .on( `error`, reject );
+} );
+
