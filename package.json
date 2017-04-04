@@ -16,7 +16,7 @@
         "nodeunit": "0.11.0"
     },
     "engines": {
-        "node" : ">=6"
+        "node" : ">=4"
     },
     "eslintConfig": {
         "extends": "creative-area/es6",
