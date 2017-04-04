@@ -1,13 +1,16 @@
 # wires
 
-[![NPM][npm-image]][npm-url]
+[![NPM Version][npm-image]][npm-url]
+[![Node Version][node-image]][node-url]
 [![License][license-image]][license-url]
-[![Dependency Status][dependency-image]][dependency-url]
-[![devDependency Status][devDependency-image]][devDependency-url]
+
+[![Dependencies Status][dependency-image]][dependency-url]
+[![devDependencies Status][devDependency-image]][devDependency-url]
+[![Greenkeeper Status][greenkeeper-image]][greenkeeper-url]
 
 [![Build Status][travis-image]][travis-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
-[![Greenkeeper badge][greenkeeper-image]][greenkeeper-url]
+[![Code Style][codestyle-image]][codestyle-url]
 
 A simple configuration utility for npm compatible platforms (mainly node.js) featuring smart module wiring for unobtrusive dependency injection.
 
@@ -306,6 +309,8 @@ Command line definitions respect cascading configurations. They will override an
 Copyright (c) 2012 - 2017 [Julian Aubourg](mailto:j@ubourg.net)
 Licensed under the [MIT license][license-url].
 
+[codestyle-image]: https://img.shields.io/badge/code%20style-creative--area-brightgreen.svg?style=flat-square
+[codestyle-url]: https://github.com/creative-area/eslint-config
 [coveralls-image]: https://img.shields.io/coveralls/jaubourg/wires.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/jaubourg/wires
 [dependency-image]: https://img.shields.io/david/jaubourg/wires.svg?style=flat-square
@@ -316,6 +321,8 @@ Licensed under the [MIT license][license-url].
 [greenkeeper-url]: https://greenkeeper.io/
 [license-image]: https://img.shields.io/npm/l/wires.svg?style=flat-square
 [license-url]: https://raw.githubusercontent.com/jaubourg/wires/master/LICENSE
+[node-image]: https://img.shields.io/node/v/wires.svg?style=flat-square
+[node-url]: https://npmjs.org/package/wires
 [npm-image]: https://img.shields.io/npm/v/wires.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/wires
 [travis-image]: https://img.shields.io/travis/jaubourg/wires.svg?style=flat-square
