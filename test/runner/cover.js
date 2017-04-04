@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-
 "use strict";
 
 const fs = require( `fs` );
@@ -18,7 +16,7 @@ const recursiveChange = ( dir, changer ) => {
     } );
 };
 
-const base = path.resolve( `${ __dirname }/..` );
+const base = path.resolve( `${ __dirname }/../..` );
 
 const lib = path.join( base, `lib` );
 const save = path.join( base, `_save` );
@@ -30,7 +28,7 @@ const collectors = new Set( [
 
 const collection = `
 process.on( "exit", () => require( "fs" ).writeFileSync(
-    ${ JSON.stringify( `${ base }/coverage.` ) } + Date.now() + ".json",
+    ${ JSON.stringify( path.join( base, `coverage.` ) ) } + Date.now() + ".json",
     JSON.stringify( __coverage__ ),
     "utf8"
 ) );

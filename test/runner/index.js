@@ -1,5 +1,3 @@
-/* eslint-disable no-console, no-process-exit */
-
 "use strict";
 
 module.exports = tasks => {
@@ -11,6 +9,7 @@ module.exports = tasks => {
     }
     return promise.catch( error => {
         console.error( `latest task failed: ${ error }` );
+        // eslint-disable-next-line no-process-exit
         process.exit( 1 );
     } );
 };

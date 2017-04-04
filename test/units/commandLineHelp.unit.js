@@ -1,6 +1,6 @@
 "use strict";
 
-const commandLineTest = require( `../commandLineTest` );
+const commandLineTest = require( `../util/commandLineTest` );
 
 const helpString =
     `${ require( `fs` ).readFileSync( require( `path` ).resolve( __dirname, `../../lib/help.txt` ), `utf8` )

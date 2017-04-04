@@ -1,6 +1,6 @@
 "use strict";
 
-const commandLine = require( `../lib/cli` );
+const commandLine = require( `../../lib/cli` );
 
 // eslint-disable-next-line max-statements
 module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {

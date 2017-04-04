@@ -3,8 +3,7 @@
 try {
     require( `#` );
 } catch ( e ) {
-    require( `..` );
-    // eslint-disable-next-line no-console
+    require( `../..` );
     console.log( `wires included\n` );
     require( `#` );
 }
@@ -20,8 +19,8 @@ const rCleanFunction = /^.*\r?\n|\r?\n.*$/g;
 const rDirUnit = /\.dirunit\.js$/;
 const rUnit = /\.unit\.js$/;
 
-const unitDir = path.resolve( __dirname, `units` );
-const fixtureDir = path.resolve( __dirname, `fixture` );
+const unitDir = path.resolve( __dirname, `../units` );
+const fixtureDir = path.resolve( __dirname, `../fixture` );
 
 const dirUnits = {};
 const units = [];
@@ -71,7 +70,6 @@ Object.prototype.__MODIFIED_PROTOTYPE = true;
 
 nodeunit.reporters.minimal.run( units, null, error => {
     if ( error ) {
-        // eslint-disable-next-line no-console
         console.error( error );
         throw error;
     }

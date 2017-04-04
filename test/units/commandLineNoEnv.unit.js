@@ -1,6 +1,6 @@
 "use strict";
 
-const commandLineTest = require( `../commandLineTest` );
+const commandLineTest = require( `../util/commandLineTest` );
 const path = require( `path` );
 
 module.exports = {

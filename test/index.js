@@ -1,13 +1,13 @@
 "use strict";
 
-const execUnits = require( `./execUnits` );
+const execUnits = require( `./runner/execUnits` );
 const runner = require( `./runner` );
 
-const cover = ( process.argv[ 2 ] === `cover` ) && require( `./cover` );
+const cover = ( process.argv[ 2 ] === `cover` ) && require( `./runner/cover` );
 
 runner( [
     // lint
-    !cover && require( `./lint` ),
+    !cover && require( `./runner/lint` ),
     // instrument
     cover && cover.instrument,
     // test with binary

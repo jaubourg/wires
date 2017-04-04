@@ -3,11 +3,10 @@
 const path = require( `path` );
 const spawn = require( `child_process` ).spawn;
 
-const binPath = path.resolve( __dirname, `../lib/bin.js` );
+const binPath = path.resolve( __dirname, `../../lib/bin.js` );
 const unitPath = path.resolve( __dirname, `units.js` );
 
 module.exports = bin => () => new Promise( ( resolve, reject ) => {
-    // eslint-disable-next-line no-console
     console.log( `running unit tests (${ bin ? `no ` : `` }binary)\n` );
     const env = {};
     for ( const key of Object.keys( process.env ) ) {
