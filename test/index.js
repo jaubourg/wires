@@ -1,6 +1,5 @@
 "use strict";
 
-const exec = require( `./exec` );
 const execUnits = require( `./execUnits` );
 const runner = require( `./runner` );
 
@@ -8,7 +7,7 @@ const cover = ( process.argv[ 2 ] === `cover` ) && require( `./cover` );
 
 runner( [
     // lint
-    !cover && exec( `@eslint --color -f codeframe .` ),
+    !cover && require( `./lint` ),
     // instrument
     cover && cover.instrument,
     // test with binary
