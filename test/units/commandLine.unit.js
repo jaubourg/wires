@@ -12,6 +12,9 @@ module.exports = {
         `(object.a=1)`,
         `--throw-deprecation`,
         path.resolve( fixtureDir, `script.js` ),
+        `arg_for_script`,
+        `debug`,
+        `--throw-deprecaton`,
     ], ( __, stdout, stderr, exitCode ) => {
         __.expect( 2 );
         __.strictEqual( exitCode, 180, `correct exit code (1204)` );
@@ -21,6 +24,9 @@ module.exports = {
             "argv": [
                 path.resolve( __dirname, `../../lib/wires` ),
                 path.resolve( fixtureDir, `script.js` ),
+                `arg_for_script`,
+                `debug`,
+                `--throw-deprecaton`,
             ],
             "execArgv": [
                 `--throw-deprecation`,
