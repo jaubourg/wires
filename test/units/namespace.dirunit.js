@@ -24,4 +24,34 @@ module.exports = {
             };
         },
     },
+    "/subEmpty": {
+        "wires.json": {
+            "@namespace": `  `,
+            "age": 27,
+        },
+        "namespace.unit.js"() {
+            module.exports = {
+                "empty"( __ ) {
+                    __.expect( 1 );
+                    __.throws( () => require( `#` ) );
+                    __.done();
+                },
+            };
+        },
+    },
+    "/subWrong": {
+        "wires.json": {
+            "@namespace": true,
+            "age": 27,
+        },
+        "namespace.unit.js"() {
+            module.exports = {
+                "wrong type"( __ ) {
+                    __.expect( 1 );
+                    __.throws( () => require( `#` ) );
+                    __.done();
+                },
+            };
+        },
+    },
 };
