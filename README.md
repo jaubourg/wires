@@ -182,6 +182,34 @@ require( "#database" ) === "test3"
 
 Note that routes are impervious to namespaces.
 
+## Root Directive
+
+Sometimes, it is desirable to isolate your configuration: just set the `@root` directive to true and wires will stop climbing any further up the file hierarchy.
+
+See the following example:
+
+```js
+//parent/wires.json
+
+{
+    "parentKey": "parent value",
+    "childKey": "overidden value"
+}
+
+//parent/child/wires-defaults.json
+
+{
+    "@root": true,
+
+    "childKey": "child value"
+}
+
+//parent/child/someFile.js
+
+require( "#parentKey" ) === undefined;
+require( "#childKey" ) === "child value";
+```
+
 ## Require Syntax
 
 - usual file paths
