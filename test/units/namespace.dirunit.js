@@ -7,8 +7,8 @@ module.exports = {
         },
     },
     "/sub": {
-        "wires-namespace.json": `person`,
         "wires.json": {
+            "@namespace": `person `,
             "age": 27,
         },
         "namespace.unit.js"() {

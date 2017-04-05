@@ -61,6 +61,8 @@ require( ":models/user" ) === require ( "myAppDataModel/dbo/user" );
 require( ":models/article" ) === require ( "myAppDataModel/dbo/article" )
 ```
 
+Not that settings which keys are at-sign-lead are considered as directives and will not appear in your configuration. Currently supported directives are `@namespace` and `@root`.
+
 ## Getting started
 
 Typically,
@@ -104,7 +106,7 @@ Actual configuration depends on the position of the file requiring it in the fil
 1. start with an empty object
 2. override with `wires-defaults.json` if it exists
 3. if `NODE_ENV` is set to `"XXX"`, override with `wires-defaults.XXX.json` if it exists
-4. override with the configuration of the parent directory if it exists
+4. override with the configuration of the parent directory if it exists and if the `@root` directive isn't set to `true`
 5. override with `wires.json` if it exists
 6. if `NODE_ENV` is set to `"XXX"`, override with `wires.XXX.json` if it exists
 
@@ -143,7 +145,7 @@ require( "#mysql.database" ) === "test3"
 
 ## Namespace
 
-Dropping a file called `wires-namespace.json` that contains a single string in a directory automatically creates a namespace. The namespace isolates the directory and limits its access to the part of the parent configuration defined within the namespace.
+Adding in one of your configuration files the directive `@namespace` which value is a string creates a namespace. The namespace isolates the directory and limits its access to the part of the parent configuration defined within said namespace.
 
 Let's go back to the previous example:
 
@@ -158,13 +160,11 @@ Let's go back to the previous example:
     }
 }
 
-//root/database/wires-namespace.json
-
-"mysql"
-
 //root/database/wires-defaults.json
 
 {
+    "@namespace": "mysql",
+
     "host": "localhost",
     "port": 3306,
     "user": "",
