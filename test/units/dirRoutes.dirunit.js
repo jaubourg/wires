@@ -8,6 +8,9 @@ module.exports = {
     },
     "/dir1": {
         "number.json": 1,
+        "index.js"() {
+            module.exports = `dir1`;
+        },
     },
     "/dir2": {
         "number.json": 2,
@@ -15,9 +18,15 @@ module.exports = {
         "/sub": {
             "number.json": 4,
         },
+        "index.js"() {
+            module.exports = `dir2`;
+        },
     },
     "/dir3": {
         "number.json": 5,
+        "index.js"() {
+            module.exports = `dir3`;
+        },
     },
     "/sub": {
         "wires.json": {
@@ -26,12 +35,15 @@ module.exports = {
         "dirRoute.unit.js"() {
             module.exports = {
                 test( __ ) {
-                    __.expect( 5 );
+                    __.expect( 8 );
                     __.strictEqual( require( `:dir/number` ), 1 );
                     __.strictEqual( require( `:dir/two/number` ), 2 );
                     __.strictEqual( require( `:dir/three/number` ), 3 );
                     __.strictEqual( require( `:dir/two/sub/number` ), 4 );
                     __.strictEqual( require( `:dir/three/sub/number` ), 5 );
+                    __.strictEqual( require( `:dir` ), `dir1` );
+                    __.strictEqual( require( `:dir/two` ), `dir2` );
+                    __.strictEqual( require( `:dir/three/sub` ), `dir3` );
                     __.done();
                 },
             };
