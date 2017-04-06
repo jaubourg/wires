@@ -5,6 +5,7 @@ module.exports = {
         ":dir/": `./dir1/`,
         ":dir/two/": `./dir2/`,
         ":dir/three/sub/": `./dir3/`,
+        ":dir/four/sub/": `./dir1/`,
     },
     "/dir1": {
         "number.json": 1,
@@ -35,15 +36,18 @@ module.exports = {
         "dirRoute.unit.js"() {
             module.exports = {
                 test( __ ) {
-                    __.expect( 8 );
+                    __.expect( 11 );
                     __.strictEqual( require( `:dir/number` ), 1 );
                     __.strictEqual( require( `:dir/two/number` ), 2 );
                     __.strictEqual( require( `:dir/three/number` ), 3 );
                     __.strictEqual( require( `:dir/two/sub/number` ), 4 );
                     __.strictEqual( require( `:dir/three/sub/number` ), 5 );
+                    __.strictEqual( require( `:dir/four/sub/number` ), 1 );
+                    __.throws( () => require( `:dir/four` ) );
                     __.strictEqual( require( `:dir` ), `dir1` );
                     __.strictEqual( require( `:dir/two` ), `dir2` );
                     __.strictEqual( require( `:dir/three/sub` ), `dir3` );
+                    __.strictEqual( require( `:dir/four/sub` ), `dir1` );
                     __.done();
                 },
             };
