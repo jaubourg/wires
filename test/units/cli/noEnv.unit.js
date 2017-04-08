@@ -1,12 +1,12 @@
 "use strict";
 
-const cliTest = require( `../util/cliTest` );
+const cliTest = require( `../../util/cliTest` );
 const path = require( `path` );
 
 module.exports = {
     "env config was not used": cliTest( [
         process.execPath,
-        path.resolve( __dirname, `../../lib/wires` ),
+        path.resolve( __dirname, `../../../lib/wires` ),
         path.resolve( __dirname, `../data/commandLineNoEnv/script.js` ),
     ], ( __, stdout ) => {
         __.expect( 1 );

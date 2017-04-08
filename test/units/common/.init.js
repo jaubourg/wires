@@ -3,7 +3,7 @@
 try {
     require( `#` );
 } catch ( e ) {
-    require( `../..` );
+    require( `../../..` );
     console.log( `wires included\n` );
     require( `#` );
 }

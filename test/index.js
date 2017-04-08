@@ -11,11 +11,11 @@ runner( [
     // instrument
     cover && cover.instrument,
     // test command line
-    execUnits( `cliUnits` ),
+    execUnits( `cli` ),
     // test with binary
-    execUnits( `units`, true ),
+    execUnits( `common`, true ),
     // test with local
-    execUnits( `units` ),
+    execUnits( `common` ),
     // report cover
     cover && cover.report,
 ] );

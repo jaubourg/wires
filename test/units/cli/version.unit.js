@@ -1,19 +1,17 @@
 "use strict";
 
-const cliTest = require( `../util/cliTest` );
+const cliTest = require( `../../util/cliTest` );
 
-const helpString =
-    `${ require( `fs` ).readFileSync( require( `path` ).resolve( __dirname, `../../lib/help.txt` ), `utf8` )
-        .replace( /ENGINE/g, `some_exe` ) }\n`;
+const versionString = `v${ require( `../../../package` ).version } (some_exe ${ process.version })\n`;
 
 module.exports = {
     "short": cliTest( [
         `some_exe`,
         `script.js`,
-        `-h`,
+        `-v`,
     ], ( __, stdout, stderr, exitCode ) => {
         __.expect( 3 );
-        __.strictEqual( stdout, helpString, `help string properly created` );
+        __.strictEqual( stdout, versionString, `version string properly created` );
         __.strictEqual( stderr, ``, `nothing on stderr` );
         __.strictEqual( exitCode, 0, `exit code is 0` );
         __.done();
@@ -21,10 +19,10 @@ module.exports = {
     "long": cliTest( [
         `some_exe`,
         `script.js`,
-        `--help`,
+        `--version`,
     ], ( __, stdout, stderr, exitCode ) => {
         __.expect( 3 );
-        __.strictEqual( stdout, helpString, `help string properly created` );
+        __.strictEqual( stdout, versionString, `version string properly created` );
         __.strictEqual( stderr, ``, `nothing on stderr` );
         __.strictEqual( exitCode, 0, `exit code is 0` );
         __.done();
@@ -32,11 +30,11 @@ module.exports = {
     "short circuit": cliTest( [
         `some_exe`,
         `script.js`,
-        `-h`,
+        `-v`,
         `someScript.js`,
     ], ( __, stdout, stderr, exitCode ) => {
         __.expect( 3 );
-        __.strictEqual( stdout, helpString, `help string properly created` );
+        __.strictEqual( stdout, versionString, `version string properly created` );
         __.strictEqual( stderr, ``, `nothing on stderr` );
         __.strictEqual( exitCode, 0, `exit code is 0` );
         __.done();

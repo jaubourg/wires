@@ -1,7 +1,7 @@
 "use strict";
 
-const binPath = require.resolve( `../../lib/bin` );
-const spawnPath = require.resolve( `../util/spawn` );
+const binPath = require.resolve( `../../../lib/bin` );
+const spawnPath = require.resolve( `../../util/spawn` );
 
 for ( const version of [
     `0.2.0`,

@@ -10,7 +10,7 @@ const rDirUnit = /\.dirunit\.js$/;
 const rUnit = /\.unit\.js$/;
 
 const fixtureDir = path.resolve( __dirname, `../fixture` );
-const unitDir = path.resolve( __dirname, `../${ process.argv[ 2 ] }` );
+const unitDir = path.resolve( __dirname, `../units/${ process.argv[ 2 ] }` );
 
 const files = new Set( process.argv.slice( 3 ) );
 
