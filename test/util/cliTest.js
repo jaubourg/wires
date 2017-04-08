@@ -1,6 +1,6 @@
 "use strict";
 
-const commandLine = require( `../../lib/cli` );
+const cli = require( `../../lib/cli` );
 
 // eslint-disable-next-line max-statements
 module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {
@@ -23,7 +23,7 @@ module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {
         process.env[ `NODE_ENV` ] = nodeEnv;
     }
     try {
-        childProcess = commandLine( {
+        childProcess = cli( {
             argv,
             "stdio": `pipe`,
             log( message ) {

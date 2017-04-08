@@ -22,19 +22,27 @@ const lib = path.join( base, `lib` );
 const save = path.join( base, `_save` );
 
 const collectors = new Set( [
+    path.join( lib, `bin.js` ),
     path.join( lib, `cli.js` ),
     path.join( lib, `index.js` ),
 ] );
 
 const collection = `
-process.on( "exit", () => require( "fs" ).writeFileSync(
-    ${ JSON.stringify( path.join( base, `coverage.` ) ) } + Date.now() + ".json",
-    JSON.stringify( __coverage__ ),
-    "utf8"
-) );
+process.on( "exit", () => {
+    if ( global.__coverage_saved__ ) {
+        return;
+    }
+    global.__coverage_saved__ = true;
+    require( "fs" ).writeFileSync(
+        ${ JSON.stringify( path.join( base, `coverage.` ) ) } + Date.now() + ".json",
+        JSON.stringify( __coverage__ ),
+        "utf8"
+    );
+} );
 `;
 
 const rCoverage = /^coverage\.[0-9]+\.json$/;
+const rStart = /^("use strict";)?/;
 
 module.exports = {
     "instrument": () => {
@@ -43,7 +51,10 @@ module.exports = {
         const instr = new istanbul.Instrumenter();
         recursiveChange(
             lib,
-            ( content, file ) => instr.instrumentSync( content, file ) + ( collectors.has( file ) ? collection : `` )
+            ( content, file ) => {
+                const tmp = instr.instrumentSync( content, file );
+                return collectors.has( file ) ? tmp.replace( rStart, `$1${ collection }` ) : tmp;
+            }
         );
         console.log( `instrumented in ${ Date.now() - now }ms` );
     },

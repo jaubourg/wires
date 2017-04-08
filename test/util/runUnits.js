@@ -37,6 +37,8 @@ process.on( `exit`, () => {
     } catch ( e ) {}
 } );
 
+const npmInstall = [];
+
 ( function generateTree( dir, tree ) {
     fs.mkdirSync( dir );
     for ( const key of Object.keys( tree ) ) {
@@ -45,6 +47,9 @@ process.on( `exit`, () => {
         if ( key[ 0 ] === `/` ) {
             generateTree( path.join( dir, key.substr( 1 ) ), val, units );
         } else {
+            if ( key === `package.json` ) {
+                npmInstall.push( dir );
+            }
             filename = path.join( dir, key );
             fs.writeFileSync(
                 filename,
@@ -63,10 +68,26 @@ process.on( `exit`, () => {
 // eslint-disable-next-line no-extend-native
 Object.prototype.__MODIFIED_PROTOTYPE = true;
 
-nodeunit.reporters.minimal.run( units, null, error => {
+const run = () => nodeunit.reporters.minimal.run( units, null, error => {
     if ( error ) {
         // eslint-disable-next-line no-console
         console.error( error );
         throw error;
     }
 } );
+
+if ( npmInstall.length ) {
+    const spawn = require( `./spawn` );
+    const install = dir => spawn( {
+        "args": [ process.env[ `npm_execpath` ], `install` ],
+        "cwd": dir,
+        "stdio": `ignore`,
+    } );
+    Promise.all( npmInstall.map( install ) )
+        .then( run )
+        .catch( e => setTimeout( () => {
+            throw e;
+        } ) );
+} else {
+    run();
+}
