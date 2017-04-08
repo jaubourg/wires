@@ -10,10 +10,12 @@ runner( [
     !cover && require( `./runner/lint` ),
     // instrument
     cover && cover.instrument,
+    // test command line
+    execUnits( `commandLineUnits` ),
     // test with binary
-    execUnits( true ),
+    execUnits( `units`, true ),
     // test with local
-    execUnits(),
+    execUnits( `units` ),
     // report cover
     cover && cover.report,
 ] );

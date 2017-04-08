@@ -1,15 +1,5 @@
 "use strict";
 
-try {
-    require( `#` );
-} catch ( e ) {
-    require( `../..` );
-    console.log( `wires included\n` );
-    require( `#` );
-}
-
-const files = new Set( process.argv.slice( 2 ) );
-
 const fs = require( `fs` );
 const fse = require( `fs-extra` );
 const nodeunit = require( `nodeunit` );
@@ -19,13 +9,18 @@ const rCleanFunction = /^.*\r?\n|\r?\n.*$/g;
 const rDirUnit = /\.dirunit\.js$/;
 const rUnit = /\.unit\.js$/;
 
-const unitDir = path.resolve( __dirname, `../units` );
 const fixtureDir = path.resolve( __dirname, `../fixture` );
+const unitDir = path.resolve( __dirname, `../${ process.argv[ 2 ] }` );
+
+const files = new Set( process.argv.slice( 3 ) );
 
 const dirUnits = {};
 const units = [];
 
 for ( const basename of fs.readdirSync( unitDir ) ) {
+    if ( basename === `.init.js` ) {
+        require( `${ unitDir }/.init.js` );
+    }
     if ( !files.size || files.has( basename ) ) {
         const filename = path.join( unitDir, basename );
         if ( rUnit.test( filename ) ) {
@@ -70,6 +65,7 @@ Object.prototype.__MODIFIED_PROTOTYPE = true;
 
 nodeunit.reporters.minimal.run( units, null, error => {
     if ( error ) {
+        // eslint-disable-next-line no-console
         console.error( error );
         throw error;
     }

@@ -22,7 +22,7 @@ const lib = path.join( base, `lib` );
 const save = path.join( base, `_save` );
 
 const collectors = new Set( [
-    path.join( lib, `bin.js` ),
+    path.join( lib, `cli.js` ),
     path.join( lib, `index.js` ),
 ] );
 

@@ -4,10 +4,10 @@ const path = require( `path` );
 const spawn = require( `child_process` ).spawn;
 
 const binPath = path.resolve( __dirname, `../../lib/bin.js` );
-const unitPath = path.resolve( __dirname, `units.js` );
+const unitPath = path.resolve( __dirname, `../util/units.js` );
 
-module.exports = bin => () => new Promise( ( resolve, reject ) => {
-    console.log( `running unit tests (${ bin ? `no ` : `` }binary)\n` );
+module.exports = ( type, bin ) => () => new Promise( ( resolve, reject ) => {
+    console.log( `running tests for ${ type } (${ bin ? `` : `no ` }binary)\n` );
     const env = {};
     for ( const key of Object.keys( process.env ) ) {
         env[ key ] = process.env[ key ];
@@ -15,7 +15,7 @@ module.exports = bin => () => new Promise( ( resolve, reject ) => {
     env[ `NODE_ENV` ] = `test`;
     spawn(
         process.execPath,
-        bin ? [ binPath, unitPath ] : [ unitPath ],
+        bin ? [ binPath, unitPath, type ] : [ unitPath, type ],
         {
             env,
             "stdio": `inherit`,
