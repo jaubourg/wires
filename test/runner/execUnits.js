@@ -4,7 +4,7 @@ const path = require( `path` );
 const spawn = require( `child_process` ).spawn;
 
 const binPath = path.resolve( __dirname, `../../lib/bin.js` );
-const unitPath = path.resolve( __dirname, `../util/units.js` );
+const unitPath = path.resolve( __dirname, `../util/runUnits.js` );
 
 module.exports = ( type, bin ) => () => new Promise( ( resolve, reject ) => {
     console.log( `running tests for ${ type } (${ bin ? `` : `no ` }binary)\n` );

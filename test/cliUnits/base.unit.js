@@ -1,12 +1,12 @@
 "use strict";
 
-const commandLineTest = require( `../util/commandLineTest` );
+const cliTest = require( `../util/cliTest` );
 const path = require( `path` );
 
 const fixtureDir = path.resolve( __dirname, `../data/commandLine` );
 
 module.exports = {
-    "full test": commandLineTest( [
+    "full test": cliTest( [
         process.execPath,
         path.resolve( __dirname, `../../lib/wires` ),
         `(object.a=1)`,
@@ -42,7 +42,7 @@ module.exports = {
         }, `everything has been properly transmitted` );
         __.done();
     }, fixtureDir ),
-    "missing script": commandLineTest( [
+    "missing script": cliTest( [
         process.execPath,
         path.resolve( __dirname, `../../lib/wires` ),
     ], ( __, _, stderr, exitCode ) => {
@@ -55,7 +55,7 @@ module.exports = {
 };
 
 for ( const option of [ `-e`, `--eval`, `-i`, `--interactive`, `-p`, `--print` ] ) {
-    module.exports[ `forbidden option ${ option }` ] = commandLineTest( [
+    module.exports[ `forbidden option ${ option }` ] = cliTest( [
         process.execPath,
         path.resolve( __dirname, `../../lib/wires` ),
         option,

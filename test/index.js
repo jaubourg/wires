@@ -11,7 +11,7 @@ runner( [
     // instrument
     cover && cover.instrument,
     // test command line
-    execUnits( `commandLineUnits` ),
+    execUnits( `cliUnits` ),
     // test with binary
     execUnits( `units`, true ),
     // test with local
