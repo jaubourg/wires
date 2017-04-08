@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 "use strict";
 
 const fs = require( `fs` );
@@ -70,7 +72,6 @@ Object.prototype.__MODIFIED_PROTOTYPE = true;
 
 const run = () => nodeunit.reporters.minimal.run( units, null, error => {
     if ( error ) {
-        // eslint-disable-next-line no-console
         console.error( error );
         throw error;
     }
@@ -78,13 +79,18 @@ const run = () => nodeunit.reporters.minimal.run( units, null, error => {
 
 if ( npmInstall.length ) {
     const spawn = require( `./spawn` );
+    console.log( `npm install for fixtures...` );
+    const now = Date.now();
     const install = dir => spawn( {
         "args": [ process.env[ `npm_execpath` ], `install` ],
         "cwd": dir,
         "stdio": `ignore`,
     } );
     Promise.all( npmInstall.map( install ) )
-        .then( run )
+        .then( () => {
+            console.log( `install done in ${ Date.now() - now }ms\n` );
+            run();
+        } )
         .catch( e => setTimeout( () => {
             throw e;
         } ) );
