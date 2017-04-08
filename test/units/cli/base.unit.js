@@ -3,7 +3,7 @@
 const cliTest = require( `../../util/cliTest` );
 const path = require( `path` );
 
-const fixtureDir = path.resolve( __dirname, `../data/commandLine` );
+const fixtureDir = path.resolve( __dirname, `../fixture/commandLine` );
 const libDir = path.resolve( __dirname, `../../../lib` );
 
 module.exports = {
