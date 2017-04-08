@@ -44,6 +44,11 @@ module.exports = {
             "@root": true,
             "age": 27,
         },
+        "wires-defaults.json": {
+            "@namespace": ` bob `,
+            "@root": false,
+            "age": 14,
+        },
         "root.unit.js"() {
             module.exports = {
                 "with namespace"( __ ) {
