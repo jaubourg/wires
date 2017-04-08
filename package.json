@@ -3,9 +3,6 @@
     "bin": {
         "wires": "./lib/bin.js"
     },
-    "dependencies": {
-        "resolve": "1.3.2"
-    },
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
         "coveralls": "2.13.0",
