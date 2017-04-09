@@ -78,16 +78,21 @@ const run = () => nodeunit.reporters.minimal.run( units, null, error => {
 } );
 
 if ( npmInstall.length ) {
-    const spawn = require( `./spawn` );
+    const exec = require( `child_process` ).exec;
     console.log( `npm install for fixtures...` );
     const now = Date.now();
-    const install = dir => spawn( {
-        "args": [ `install` ],
-        "command": `npm`,
-        "cwd": dir,
-        "stdio": `ignore`,
-    } );
-    Promise.all( npmInstall.map( install ) )
+    Promise.all(
+        npmInstall.map(
+            cwd => new Promise( ( resolve, reject ) => exec(
+                `npm install`,
+                {
+                    cwd,
+                    "env": process.env,
+                },
+                error => ( error ? reject( error ) : resolve() ) )
+            )
+        )
+    )
         .then( () => {
             console.log( `install done in ${ Date.now() - now }ms\n` );
             run();

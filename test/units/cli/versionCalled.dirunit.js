@@ -1,19 +1,17 @@
 "use strict";
 
-const binPath = require.resolve( `../../../lib/bin` );
-const spawnPath = require.resolve( `../../util/spawn` );
+const execSync = require( `child_process` ).execSync;
 
-for ( const version of [
-    `0.2.0`,
-    `0.3.0`,
-    `0.3.1`,
-    `0.4.0`,
-    `0.5.0`,
-    `0.5.1`,
-    `1.0.0`,
-    `1.1.0`,
-    `1.1.1`,
-] ) {
+const binPath = require.resolve( `../../../lib/bin` );
+
+const versions = JSON.parse( execSync( `npm view wires versions --json`, {
+    "env": process.env,
+} ) ).filter( version => {
+    const split = version.split( `.` );
+    return ( Number( split[ 0 ] ) > 0 ) || ( Number( split[ 1 ] ) >= 2 );
+} );
+
+for ( const version of versions ) {
     module.exports[ `/${ version }` ] = {
         "package.json": {
             "name": `test-wires`,
@@ -23,29 +21,24 @@ for ( const version of [
         },
         "data.json": {
             "bin": binPath,
-            "spawn": spawnPath,
             version,
         },
         [ `${ version }.unit.js` ]() {
             const data = require( `./data` );
-            const spawn = require( data.spawn );
+            const exec = require( `child_process` ).exec;
             const basename = require( `path` ).basename;
             module.exports[ `command line for ${ data.version }` ] = __ => {
                 __.expect( 1 );
-                spawn( {
-                    "args": [ data.bin, `--version` ],
+                exec( `node ${ data.bin } --version`, {
                     "cwd": __dirname,
-                    "stdio": `string`,
-                } )
-                    .then(
-                        output => __.strictEqual(
-                            output,
-                            `v${ data.version } (${ basename( process.execPath, `.exe` ) } ${ process.version })\n`
-                        ),
-                        // eslint-disable-next-line no-console
-                        error => console.log( error.stack )
-                    )
-                    .then( () => __.done() );
+                    "env": process.env,
+                }, ( _, stdout ) => {
+                    __.strictEqual(
+                        stdout,
+                        `v${ data.version } (${ basename( process.execPath, `.exe` ) } ${ process.version })\n`
+                    );
+                    __.done();
+                } );
             };
         },
     };
