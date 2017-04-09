@@ -82,7 +82,8 @@ if ( npmInstall.length ) {
     console.log( `npm install for fixtures...` );
     const now = Date.now();
     const install = dir => spawn( {
-        "args": [ process.env[ `npm_execpath` ], `install` ],
+        "args": [ `install` ],
+        "command": `npm`,
         "cwd": dir,
         "stdio": `ignore`,
     } );
