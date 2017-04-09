@@ -5,7 +5,7 @@ const commandLineOverride = require( `../../../lib/util/commandLineOverride` );
 module.exports = {
     test( __ ) {
         __.expect( 2 );
-        const tmp = commandLineOverride( [
+        const argv = commandLineOverride( [
             `--arg`,
             `(flag)`,
             `hello`,
@@ -19,7 +19,7 @@ module.exports = {
             `(object.flag2,!object.unflag2,object.string=world,object.int=3)`,
             `end`,
         ] );
-        __.deepEqual( tmp.argv, [
+        __.deepEqual( argv, [
             `--arg`,
             `hello`,
             `tmp`,
@@ -27,7 +27,7 @@ module.exports = {
             `--help`,
             `end`,
         ], `argv properly cleaned up` );
-        __.deepEqual( tmp.data, {
+        __.deepEqual( commandLineOverride.data, {
             "flag": true,
             "unflag": false,
             "bool": true,
