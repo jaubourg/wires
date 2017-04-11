@@ -72,8 +72,12 @@ Object.prototype.__MODIFIED_PROTOTYPE = true;
 
 const run = () => nodeunit.reporters.minimal.run( units, null, error => {
     if ( error ) {
-        console.error( error );
+        if ( error.message === `We have got test failures.` ) {
+            // eslint-disable-next-line no-process-exit
+            process.exit( 1 );
+        }
         throw error;
+
     }
 } );
 

@@ -17,6 +17,6 @@ module.exports = ( type, bin ) => () => new Promise( ( resolve, reject ) => {
         env,
         "stdio": `inherit`,
     } )
-        .on( `close`, code => ( code ? reject( new Error( `bad code ${ code }` ) ) : resolve() ) )
+        .on( `close`, code => ( code ? reject( code ) : resolve() ) )
         .on( `error`, reject );
 } );
