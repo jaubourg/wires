@@ -274,9 +274,7 @@ require( "#env" ) === ( process.env.SOME_VAR || "" );
 
 ## Fallbacks
 
-As of version 2, every object property which name ends with a question mark in your configuration files is a fallback.
-
-Fallbacks are useful in situations where a setting may be _falsy_ (`false`, `""`, `0`, `null`, etc) yet you still need a default value for it.
+As of version 2, every object property which name ends with a question mark in your configuration files is a fallback. Fallbacks are useful in situations where a setting may be _falsy_ (`false`, `""`, `0`, `null`, etc) yet you still need a default value for it.
 
 Let's take the following situation as an example:
 
