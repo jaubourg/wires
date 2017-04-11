@@ -272,6 +272,109 @@ require( "#object.templateString" ) === "boolean is false";
 require( "#env" ) === ( process.env.SOME_VAR || "" );
 ```
 
+## Fallbacks
+
+As of version 2, every object property which name ends with a question mark in your configuration files is a fallback.
+
+Fallbacks are useful in situations where a setting may be _falsy_ (`false`, `""`, `0`, `null`, etc) yet you still need a default value for it.
+
+Let's take the following situation as an example:
+
+```js
+//myApp/wires.json
+
+{
+    "mysql_user": "{?>SQL_USER}"
+}
+
+//myApp/mysql/wires-defaults.json
+
+{
+    "mysql_user": "root"
+}
+
+//myApp/mysql/index.js
+
+require( "#mysql_user" ) === ( process.env.SQL_USER || "" );
+```
+
+The environment variable `SQL_USER` may not be set and so the setting `mysql_user` may end up as an empty string. Yet, it is still _set_ and the default value defined in `wires-defaults.json` will never be used.
+
+The problem can easily be worked around using a fallback:
+
+```js
+//myApp/wires.json
+
+{
+    "mysql_user": "{?>SQL_USER}"
+}
+
+//myApp/mysql/wires-defaults.json
+
+{
+    "mysql_user?": "root"
+}
+
+//myApp/mysql/index.js
+
+require( "#mysql_user" ) === ( process.env.SQL_USER || "root" );
+```
+
+Fallbacks act like any other setting and can be overriden using the cascading nature of configurations. They can also be recovered programmatically if and when needed.
+
+Coming back to the previous example, if we redefine the fallback in the parent configuration then this new setting will be used in place of `root` as the "fallback value":
+
+```js
+//myApp/wires.json
+
+{
+    "mysql_user": "{?>SQL_USER}",
+    "mysql_user?": "admin"
+}
+
+//myApp/mysql/wires-defaults.json
+
+{
+    "mysql_user?": "root"
+}
+
+//myApp/mysql/index.js
+
+require( "#mysql_user" ) === ( process.env.SQL_USER || "admin" );
+require( "#mysql_user?" ) === "admin";
+```
+
+Fallbacks also work within settings that are objects themselves. They just disapear when you require the object in its entirety:
+
+```js
+//myApp/wires.json
+
+{
+    "mysql": {
+        "user": "{?>SQL_USER}"
+    }
+}
+
+//myApp/mysql/wires-defaults.json
+
+{
+    "mysql": {
+        "user?": "root"
+    }
+}
+
+//myApp/mysql/index.js
+
+require( "#mysql.user" ) === ( process.env.SQL_USER || "root" );
+require( "#mysql.user?" ) === "root";
+assert.deepEqual(
+    require( "#mysql" ),
+    {
+        "user": process.env.SQL_USER || "root"
+    }
+);
+```
+
 ## Routes
 
 In your configuration files, every object property which name is colon-lead and does not end with a slash defines a route.
@@ -292,15 +395,15 @@ File paths may refer to a file:
 	":dbRequest": "mysql/request",
 	":cacheFactory": "./lib/util/cacheFactory",
 	":data": ">/data.json"
-	":jshint": "~/.jshint.json"
+	":eslint": "~/.eslintrc.json"
 }
 
-//directory/index.js
+//myApp/some/path/inside/index.js
 
 require( ":dbRequest" ) === require( "mysql/request" );
 require( ":cacheFactory" ) === require( "/myApp/lib/util/cacheFactory" );
 require( ":data" ) === require( "/current/working/directory/data.json" );
-require( ":jshint" ) === require( "/path/to/home/directory/.jshint.json" );
+require( ":eslint" ) === require( "/path/to/home/directory/.eslintrc.json" );
 ```
 
 ## Generic Routes
