@@ -3,6 +3,7 @@
 module.exports = {
     "wires.json": {
         "key": `value`,
+        "false": false,
         ":module": `./test.js`,
     },
     "test.js"() {
@@ -14,8 +15,9 @@ module.exports = {
     "base.unit.js"() {
         module.exports = {
             data( __ ) {
-                __.expect( 1 );
+                __.expect( 2 );
                 __.strictEqual( require( `#key` ), `value` );
+                __.strictEqual( require( `#false` ), false );
                 __.done();
             },
             "undefined data"( __ ) {
