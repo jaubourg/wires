@@ -25,6 +25,11 @@ module.exports = {
             },
         },
         "wires.json": {
+            "computedWithFallback": `{?computedValue}`,
+            "computedWithFallback?": `computed fallback`,
+            "computedWithNullFallback": `{?computedValue}`,
+            "computedWithNullFallback?": null,
+            "computedWithoutFallback": `{?computedValue}`,
             "definedInDefaults?": `fallback definedInDefaults`,
             "definedInMain": `definedInMain`,
             "fallbackInDefaults": ``,
@@ -41,7 +46,12 @@ module.exports = {
                     "trueish?": `fallback path.in.trueish`,
                 },
                 "in?": {
-                    "more": `more`,
+                    "more": `path.in.more`,
+                },
+            },
+            "path?": {
+                "in": {
+                    "vicious": `path.in.vicious`,
                 },
             },
         },
@@ -54,11 +64,29 @@ module.exports = {
                         `fallbackInDefaults`, `fallbackInMain`,
                         `fallbackOverride`,
                         `nonExistingInDefaults`, `nonExistingInMain`,
-                        `path.in.defaults`, `path.in.falsy`, `path.in.main`, `path.in.trueish`,
+                        `path.in.defaults`, `path.in.falsy`, `path.in.main`,
+                        `path.in.more`, `path.in.trueish`, `path.in.vicious`,
                     ];
                     __.expect( testStrings.length );
                     for ( const testString of testStrings ) {
                         __.strictEqual( require( `#${ testString }` ), testString, `require( "#${ testString }" )` );
+                    }
+                    __.done();
+                },
+                "computed values"( __ ) {
+                    const expected = {
+                        "computedWithFallback": `computed fallback`,
+                        "computedWithNullFallback": null,
+                        "computedWithoutFallback": ``,
+                    };
+                    const testStrings = Object.keys( expected );
+                    __.expect( testStrings.length );
+                    for ( const testString of testStrings ) {
+                        __.strictEqual(
+                            require( `#${ testString }` ),
+                            expected[ testString ],
+                            `require( "#${ testString }" )`
+                        );
                     }
                     __.done();
                 },
