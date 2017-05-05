@@ -8,7 +8,7 @@
         "coveralls": "2.13.1",
         "eslint": "3.19.0",
         "eslint-config-creative-area": "0.6.0",
-        "fs-extra": "3.0.0",
+        "fs-extra": "3.0.1",
         "istanbul": "0.4.5",
         "nodeunit": "0.11.0"
     },
