@@ -29,9 +29,7 @@ module.exports = {
                 `debug`,
                 `--throw-deprecaton`,
             ],
-            "execArgv": [
-                `--throw-deprecation`,
-            ],
+            "execArgv": [ `--throw-deprecation` ],
             "config": {
                 "string": `value`,
                 "object": {
