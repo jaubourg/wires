@@ -25,20 +25,18 @@ for ( const version of versions ) {
         },
         [ `${ version }.unit.js` ]() {
             const data = require( `./data` );
-            const exec = require( `child_process` ).exec;
+            const exec = require( `child_process` ).execSync;
             const basename = require( `path` ).basename;
             module.exports[ `command line for ${ data.version }` ] = __ => {
                 __.expect( 1 );
-                exec( `node ${ data.bin } --version`, {
-                    "cwd": __dirname,
-                    "env": process.env,
-                }, ( _, stdout ) => {
-                    __.strictEqual(
-                        stdout,
-                        `v${ data.version } (${ basename( process.execPath, `.exe` ) } ${ process.version })\n`
-                    );
-                    __.done();
-                } );
+                __.strictEqual(
+                    exec( `node ${ data.bin } --version`, {
+                        "cwd": __dirname,
+                        "env": process.env,
+                    } ).toString(),
+                    `v${ data.version } (${ basename( process.execPath, `.exe` ) } ${ process.version })\n`
+                );
+                __.done();
             };
         },
     };
