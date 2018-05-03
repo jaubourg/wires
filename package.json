@@ -5,7 +5,7 @@
     },
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
-        "coveralls": "3.0.0",
+        "coveralls": "3.0.1",
         "eslint": "4.9.0",
         "eslint-config-creative-area": "0.8.0",
         "fs-extra": "6.0.0",
