@@ -10,7 +10,7 @@
         "eslint-config-creative-area": "0.8.0",
         "fs-extra": "6.0.0",
         "nodeunit": "0.11.2",
-        "nyc": "11.7.1"
+        "nyc": "12.0.2"
     },
     "engines": {
         "node" : ">=6"
