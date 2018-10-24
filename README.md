@@ -419,9 +419,38 @@ Like normal routes, they must be strings, they do accept the templated syntax an
 
 //myApp/mvc/controllers/mainPage.js
 
-require( ":dbo/client" ) ===  require( "/myApp/db/models/model-client" );
-require( ":dbo/product" ) ===  require( "/myApp/db/models/model-product" );
+require( ":dbo/client" ) === require( "/myApp/db/models/model-client" );
+require( ":dbo/product" ) === require( "/myApp/db/models/model-product" );
 ```
+
+## Computed Routes
+
+In your configuration files, every object property which name is colon-lead and ends with a slash followed by an opening then a closing parenthesis defines a computed route.
+
+They are very similar to generic routes except there is no automatic concatenation performed by wires. Rather, the value must be a string pointing to a module that exports a function. This function will be called by wires with the path segments as arguments and is expected to return the resulting path.
+
+This sounds quite complicated but let's re-implement the generic route example from the previous section with a computed route:
+
+```js
+//myApp/wires.json
+
+{
+    ":dbo/()": "./helpers/dbo.js",
+}
+
+//myApp/helpers/dbo.js
+
+module.exports = ( ...pathSegments ) => "../db/models/model-" + pathSegments.join( `/` );
+
+//myApp/mvc/controllers/mainPage.js
+
+require( ":dbo/client" ) === require( "/myApp/db/models/model-client" );
+require( ":dbo/product" ) === require( "/myApp/db/models/model-product" );
+```
+
+Please note that paths returned by the function are resolved relatively to the location of the file where the function is defined.
+
+Computed routes can be used to implement pretty much any path transformation logic.
 
 ## Command Line Definitions
 
