@@ -425,7 +425,7 @@ require( ":dbo/product" ) === require( "/myApp/db/models/model-product" );
 
 ## Computed Routes
 
-In your configuration files, every object property which name is colon-lead and ends with a slash followed by an opening then a closing parenthesis defines a computed route.
+As of version 2.1, in your configuration files, every object property which name is colon-lead and ends with a slash followed by an opening then a closing parenthesis defines a computed route.
 
 They are very similar to generic routes except there is no automatic concatenation performed by wires. Rather, the value must be a string pointing to a module that exports a function. This function will be called by wires with the path segments as arguments and is expected to return the resulting path.
 
