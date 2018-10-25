@@ -10,6 +10,8 @@ runner( [
     execUnits( `cli` ),
     // test with binary
     execUnits( `common`, true ),
+    // test with binary, no env
+    execUnits( `common`, true, `` ),
     // test with local
     execUnits( `common` ),
 ] );

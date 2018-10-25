@@ -26,7 +26,6 @@ for ( const version of versions ) {
         [ `${ version }.unit.js` ]() {
             const data = require( `./data` );
             const exec = require( `child_process` ).execSync;
-            const basename = require( `path` ).basename;
             module.exports[ `command line for ${ data.version }` ] = __ => {
                 __.expect( 1 );
                 __.strictEqual(
@@ -34,7 +33,7 @@ for ( const version of versions ) {
                         "cwd": __dirname,
                         "env": process.env,
                     } ).toString(),
-                    `v${ data.version } (${ basename( process.execPath, `.exe` ) } ${ process.version })\n`
+                    `v${ data.version } (node ${ process.version })\n`
                 );
                 __.done();
             };

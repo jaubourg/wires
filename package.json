@@ -5,12 +5,12 @@
     },
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
-        "coveralls": "3.0.1",
-        "eslint": "5.0.1",
+        "coveralls": "3.0.2",
+        "eslint": "5.7.0",
         "eslint-config-creative-area": "0.8.0",
         "fs-extra": "7.0.0",
         "nodeunit": "0.11.3",
-        "nyc": "12.0.2"
+        "nyc": "13.1.0"
     },
     "engines": {
         "node" : ">=6"
