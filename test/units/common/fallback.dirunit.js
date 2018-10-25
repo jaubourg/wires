@@ -5,24 +5,28 @@ module.exports = {
         "parent?": `parent`,
     },
     "/sub": {
-        "wires-defaults.json": {
-            "defaults": false,
-            "defaults?": `defaults`,
-            "definedInDefaults": `definedInDefaults`,
-            "definedInMain?": `fallback definedInMain`,
-            "fallbackInDefaults?": `fallbackInDefaults`,
-            "fallbackInMain?": ``,
-            "fallbackOverride?": `fallback fallbackOverride`,
-            "nonExistingInDefaults?": `nonExistingInDefaults`,
-            "parent?": `defaults`,
-            "path": {
-                "in": {
-                    "defaults?": `path.in.defaults`,
-                    "falsy": false,
-                    "falsy?": `path.in.falsy`,
-                    "value": `path.in.value`,
+        "wires-defaults.js"() {
+            module.exports = {
+                "defaultIsUndefined": `defaultIsUndefined`,
+                "defaultIsUndefined?": undefined,
+                "defaults": false,
+                "defaults?": `defaults`,
+                "definedInDefaults": `definedInDefaults`,
+                "definedInMain?": `fallback definedInMain`,
+                "fallbackInDefaults?": `fallbackInDefaults`,
+                "fallbackInMain?": ``,
+                "fallbackOverride?": `fallback fallbackOverride`,
+                "nonExistingInDefaults?": `nonExistingInDefaults`,
+                "parent?": `defaults`,
+                "path": {
+                    "in": {
+                        "defaults?": `path.in.defaults`,
+                        "falsy": false,
+                        "falsy?": `path.in.falsy`,
+                        "value": `path.in.value`,
+                    },
                 },
-            },
+            };
         },
         "wires.json": {
             "computedWithFallback": `{?computedValue}`,
@@ -59,6 +63,7 @@ module.exports = {
             module.exports = {
                 "base"( __ ) {
                     const testStrings = [
+                        `defaultIsUndefined`,
                         `defaults`, `main`, `parent`,
                         `definedInDefaults`, `definedInMain`,
                         `fallbackInDefaults`, `fallbackInMain`,
