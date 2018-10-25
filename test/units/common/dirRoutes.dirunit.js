@@ -48,7 +48,7 @@ module.exports = {
         "dirRoute.unit.js"() {
             module.exports = {
                 test( __ ) {
-                    __.expect( 46 );
+                    __.expect( 49 );
                     for ( const pre of [ `:`, `:dyn/`, `:dyn-conf1/`, `:dyn-conf2/` ] ) {
                         __.strictEqual( require( `${ pre }dir/number` ), 1 );
                         __.strictEqual( require( `${ pre }dir/two/number` ), 2 );
@@ -61,6 +61,9 @@ module.exports = {
                         __.strictEqual( require( `${ pre }dir/two` ), `dir2` );
                         __.strictEqual( require( `${ pre }dir/three/sub` ), `dir3` );
                         __.strictEqual( require( `${ pre }dir/four/sub` ), `dir1` );
+                        if ( /^:dyn/.test( pre ) ) {
+                            __.strictEqual( require( `${ pre }` ), require( `../dir3/number` ) );
+                        }
                     }
                     __.throws( () => require( `:bad-dyn1/try` ) );
                     __.throws( () => require( `:bad-dyn2/try` ) );
