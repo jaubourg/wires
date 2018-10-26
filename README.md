@@ -377,7 +377,7 @@ assert.deepEqual(
 
 In your configuration files, every object property which name is colon-lead and does not end with a slash defines a route.
 
-Routes can only be strings. Like settings, they accept the templated syntax. The final string must be a path to a file that actually exists.
+Routes must be strings. Like settings, they do accept the templated syntax. The final string must be a path to a file that actually exists.
 
 File paths may refer to a file:
 
@@ -404,6 +404,20 @@ require( ":data" ) === require( "/current/working/directory/data.json" );
 require( ":eslint" ) === require( "/path/to/home/directory/.eslintrc.json" );
 ```
 
+As of version 2.1, it is possible to set a route to `null` : requiring such a route would result in `null`.
+
+```js
+//myApp/wires.json
+
+{
+	":not-implemented-yet": null
+}
+
+//myApp/some/path/inside/index.js
+
+require( ":not-implemented-yet" ) === null;
+```
+
 ## Generic Routes
 
 In your configuration files, every object property which name is colon-lead and ends with a slash defines a generic route.
@@ -420,7 +434,22 @@ Like normal routes, they must be strings, they do accept the templated syntax an
 //myApp/mvc/controllers/mainPage.js
 
 require( ":dbo/client" ) === require( "/myApp/db/models/model-client" );
-require( ":dbo/product" ) === require( "/myApp/db/models/model-product" );
+require( ":dbo/product/electronics" ) === require( "/myApp/db/models/model-product/electronics" );
+```
+
+As of version 2.1, it is possible to set a route to `null` : requiring such a route and it's children would result in `null`.
+
+```js
+//myApp/wires.json
+
+{
+    ":to-do/": null,
+}
+
+//myApp/mvc/controllers/mainPage.js
+
+require( ":to-do/child" ) === null;
+require( ":to-do/other/path" ) === null;
 ```
 
 ## Computed Routes
@@ -445,12 +474,29 @@ module.exports = ( ...pathSegments ) => "../db/models/model-" + pathSegments.joi
 //myApp/mvc/controllers/mainPage.js
 
 require( ":dbo/client" ) === require( "/myApp/db/models/model-client" );
-require( ":dbo/product" ) === require( "/myApp/db/models/model-product" );
+require( ":dbo/product/electronics" ) === require( "/myApp/db/models/model-product/electronics" );
 ```
 
 Please note that paths returned by the function are resolved relatively to the location of the file where the function is defined.
 
-Computed routes can be used to implement pretty much any path transformation logic.
+It is possible for a computed route function to return `null` : requiring such a route and it's children would result in `null`.
+
+```js
+//myApp/wires.json
+
+{
+    ":dbo/()": "./helpers/dbo.js",
+}
+
+//myApp/helpers/dbo.js
+
+module.exports = () => null; // not implemented yet
+
+//myApp/mvc/controllers/mainPage.js
+
+require( ":dbo/client" ) === null;
+require( ":dbo/product" ) === null;
+```
 
 ## Command Line Definitions
 
