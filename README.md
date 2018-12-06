@@ -68,7 +68,7 @@ Not that settings which keys are at-sign-lead are considered as directives and w
 Typically,
 
 1. install wires globally: `npm -g install wires`
-2. use `wires` in lieu of `node` or `iojs`.
+2. use `wires` in lieu of `node`.
 
 So, `node --harmony path/to/myScript.js scriptArg`
 becomes `wires --harmony path/to/myScript.js scriptArg`.
@@ -88,7 +88,7 @@ wires@0.2.0 node_modules\wires
 v0.2.0 (node v0.12.2)
 ```
 
-This behaviour is compatible with version 0.2.0 and up.
+This behavior is compatible with version 0.2.0 and up.
 
 Alternatively, if you cannot, or don't want to, use the command, you may simply require wires in your main source file. Note that you only need to require it once for the entire code base.
 
@@ -245,7 +245,7 @@ This is especially handy for environment variables that may or may not be set. W
 
 In your configuration files, every object property which name is not colon-lead is a setting.
 
-A setting can be of any type, including an object. When the value of a setting is a string, it accepts the templated syntax seen in the previous section.
+A setting can be of any type, including an object. When the value of a setting is a string, it accepts the template syntax seen in the previous section.
 
 ```js
 // wires.json
@@ -318,7 +318,7 @@ The problem can easily be worked around using a fallback:
 require( "#mysql_user" ) === ( process.env.SQL_USER || "root" );
 ```
 
-Fallbacks act like any other setting and can be overriden using the cascading nature of configurations. They can also be recovered programmatically if and when needed.
+Fallbacks act like any other setting and can be overridden using the cascading nature of configurations. They can also be recovered programmatically if and when needed.
 
 Coming back to the previous example, if we redefine the fallback in the parent configuration then this new setting will be used in place of `root` as the "fallback value":
 
@@ -342,7 +342,7 @@ require( "#mysql_user" ) === ( process.env.SQL_USER || "admin" );
 require( "#mysql_user?" ) === "admin";
 ```
 
-Fallbacks also work within settings that are objects themselves. They just disapear when you require the object in its entirety:
+Fallbacks also work within settings that are objects themselves. They just disappear when you require the object in its entirety:
 
 ```js
 //myApp/wires.json
@@ -377,7 +377,7 @@ assert.deepEqual(
 
 In your configuration files, every object property which name is colon-lead and does not end with a slash defines a route.
 
-Routes must be strings. Like settings, they do accept the templated syntax. The final string must be a path to a file that actually exists.
+Routes must be strings. Like settings, they do accept the template syntax. The final string must be a path to a file that actually exists.
 
 File paths may refer to a file:
 
