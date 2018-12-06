@@ -19,8 +19,8 @@ module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {
         process.chdir( cwd );
     }
     if ( typeof nodeEnv === `string` ) {
-        previousNodeEnv = process.env[ `NODE_ENV` ];
-        process.env[ `NODE_ENV` ] = nodeEnv;
+        previousNodeEnv = process.env[ `WIRES_ENV` ];
+        process.env[ `WIRES_ENV` ] = nodeEnv;
     }
     try {
         childProcess = cli( {
@@ -51,7 +51,7 @@ module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {
             process.chdir( previousCwd );
         }
         if ( typeof previousNodeEnv === `string` ) {
-            process.env[ `NODE_ENV` ] = previousNodeEnv;
+            process.env[ `WIRES_ENV` ] = previousNodeEnv;
         }
     }
     childProcess.stdio[ 1 ].on( `data`, buffer => ( stdout += buffer ) );

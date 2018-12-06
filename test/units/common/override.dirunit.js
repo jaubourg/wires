@@ -27,7 +27,7 @@ module.exports = {
                     __.expect( 4 );
                     __.deepEqual(
                         require( `#array` ),
-                        process.env.NODE_ENV === `test` ? [ 1, 2, 3 ] : [ `a`, `b`, `c` ]
+                        process.env.WIRES_ENV === `test` ? [ 1, 2, 3 ] : [ `a`, `b`, `c` ]
                     );
                     __.strictEqual( require( `#folder` ), `lib` );
                     __.strictEqual( require( `#lolfolder` ), `lollib` );
@@ -46,7 +46,7 @@ module.exports = {
             },
             "/level2": {
                 "override_level2.unit.js"() {
-                    const isTest = process.env.NODE_ENV === `test`;
+                    const isTest = process.env.WIRES_ENV === `test`;
                     module.exports = {
                         test( __ ) {
                             __.expect( 4 );

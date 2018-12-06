@@ -12,7 +12,7 @@ module.exports = ( type, bin, nodeEnv = `test` ) => () => new Promise( ( resolve
     for ( const key of Object.keys( process.env ) ) {
         env[ key ] = process.env[ key ];
     }
-    env[ `NODE_ENV` ] = nodeEnv;
+    env[ `WIRES_ENV` ] = nodeEnv;
     spawn( process.execPath, bin ? [ binPath, unitPath, type ] : [ unitPath, type ], {
         env,
         "stdio": `inherit`,

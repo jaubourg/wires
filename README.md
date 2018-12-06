@@ -97,18 +97,20 @@ Alternatively, if you cannot, or don't want to, use the command, you may simply 
 wires uses 4 types of configuration file:
 
 - `wires-defaults.json` contains default settings
-- `wires-defaults.XXX.json` contains default settings specific to when the `NODE_ENV` environment variable is set to `"XXX"`
+- `wires-defaults.XXX.json` contains default settings specific to when the `WIRES_ENV` environment variable is set to `"XXX"`
 - `wires.json` contains actual settings
-- `wires.XXX.json` contains default settings specific to when the `NODE_ENV` environment variable is set to `"XXX"`
+- `wires.XXX.json` contains default settings specific to when the `WIRES_ENV` environment variable is set to `"XXX"`
+
+__Prior to version 3.0, wires did use the `NODE_ENV` environment variable rather than `WIRES_ENV`. Please adjust your projects accordingly when upgrading to 3.0 and higher.__
 
 Actual configuration depends on the position of the file requiring it in the filesystem hierarchy. Each directory gets its own configuration which is computed as follows:
 
 1. start with an empty object
 2. override with `wires-defaults.json` if it exists
-3. if `NODE_ENV` is set to `"XXX"`, override with `wires-defaults.XXX.json` if it exists
+3. if `WIRES_ENV` is set to `"XXX"`, override with `wires-defaults.XXX.json` if it exists
 4. override with the configuration of the parent directory if it exists and if the `@root` directive isn't set to `true`
 5. override with `wires.json` if it exists
-6. if `NODE_ENV` is set to `"XXX"`, override with `wires.XXX.json` if it exists
+6. if `WIRES_ENV` is set to `"XXX"`, override with `wires.XXX.json` if it exists
 
 In practice, you'll rarely use all files at once. Typically, parts of your application will define default values in their respective directories while the main app will set actual settings in the root directory, as in the following example:
 
@@ -224,7 +226,7 @@ require( "#childKey" ) === "child value";
     + `require( "#server.db.host" )`
 - hash-then-chevron-lead, to recover environment variables
     + `require( "#>PATH" )`
-    + `require( "#>NODE_ENV" )`
+    + `require( "#>WIRES_ENV" )`
 - colon-lead, to inject route-based modules
     + `require( ":model/person.js" )`
     + `require( ":cacheFactory" )`
