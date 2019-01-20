@@ -1,3 +1,8 @@
+<img
+    align="right"
+    height="200"
+    src="logo.png">
+
 # wires
 
 [![NPM Version][npm-image]][npm-url]
