@@ -47,7 +47,7 @@ const npmInstall = [];
         const val = tree[ key ];
         let filename;
         if ( key[ 0 ] === `/` ) {
-            generateTree( path.join( dir, key.substr( 1 ) ), val, units );
+            generateTree( path.join( dir, key.substr( 1 ) ), val );
         } else {
             if ( key === `package.json` ) {
                 npmInstall.push( dir );
