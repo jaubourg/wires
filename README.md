@@ -4,15 +4,15 @@
 [![Node Version][node-image]][node-url]
 [![License][license-image]][license-url]
 
-[![Dependencies Status][dependency-image]][dependency-url]
-[![devDependencies Status][devDependency-image]][devDependency-url]
-[![Greenkeeper Status][greenkeeper-image]][greenkeeper-url]
-
 [![Build Status][travis-image]][travis-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
-[![Code Style][codestyle-image]][codestyle-url]
+[![Greenkeeper Status][greenkeeper-image]][greenkeeper-url]
+
+[![Dependencies Status][dependency-image]][dependency-url]
+[![devDependencies Status][devDependency-image]][devDependency-url]
 
 [![Code quality][quality-image]][quality-url]
+[![Code Style][codestyle-image]][codestyle-url]
 
 A simple configuration utility for npm compatible platforms (mainly node.js) featuring smart module wiring for unobtrusive dependency injection.
 
