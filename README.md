@@ -514,7 +514,7 @@ Command line definitions respect cascading configurations. They will override an
 
 ## License
 
-Copyright © 2012-2019 [Julian Aubourg](mailto:j@ubourg.net) – licensed under the [MIT license][license-url].
+© [Julian Aubourg](mailto:j@ubourg.net), 2012-2019 – licensed under the [MIT license][license-url].
 
 [codestyle-image]: https://img.shields.io/badge/code%20style-creative--area-brightgreen.svg?style=flat-square
 [codestyle-url]: https://github.com/creative-area/eslint-config
