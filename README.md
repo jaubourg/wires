@@ -525,7 +525,7 @@ Licensed under the [MIT license][license-url].
 [dependency-url]: https://david-dm.org/jaubourg/wires
 [devDependency-image]: https://img.shields.io/david/dev/jaubourg/wires.svg?style=flat-square
 [devDependency-url]: https://david-dm.org/jaubourg/wires?type=dev
-[greenkeeper-image]: https://badges.greenkeeper.io/jaubourg/wires.svg
+[greenkeeper-image]: https://badges.greenkeeper.io/jaubourg/wires.svg?style=flat-square
 [greenkeeper-url]: https://greenkeeper.io/
 [license-image]: https://img.shields.io/npm/l/wires.svg?style=flat-square
 [license-url]: https://raw.githubusercontent.com/jaubourg/wires/master/LICENSE
