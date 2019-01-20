@@ -12,6 +12,8 @@
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![Code Style][codestyle-image]][codestyle-url]
 
+[![Code quality][quality-image]][quality-url]
+
 A simple configuration utility for npm compatible platforms (mainly node.js) featuring smart module wiring for unobtrusive dependency injection.
 
 ## Overview
@@ -531,5 +533,7 @@ Licensed under the [MIT license][license-url].
 [node-url]: https://npmjs.org/package/wires
 [npm-image]: https://img.shields.io/npm/v/wires.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/wires
+[quality-image]: https://img.shields.io/lgtm/grade/javascript/g/jaubourg/wires.svg?style=flat-square&logo=lgtm&logoWidth=18
+[quality-url]: https://lgtm.com/projects/g/jaubourg/wires/context:javascript
 [travis-image]: https://img.shields.io/travis/jaubourg/wires.svg?style=flat-square
 [travis-url]: https://travis-ci.org/jaubourg/wires
