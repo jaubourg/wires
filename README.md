@@ -1,7 +1,7 @@
 <img
     align="right"
     height="200"
-    src="logo.png">
+    src="logo.svg">
 
 # wires
 
