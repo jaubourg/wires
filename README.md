@@ -1,7 +1,4 @@
-<img
-    align="right"
-    width="25%"
-    src="logo.svg">
+<img align="right" width="25%" src="logo.svg">
 
 # wires
 
