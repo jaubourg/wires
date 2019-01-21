@@ -15,6 +15,20 @@ module.exports = {
             };
         },
     },
+    "/null_computed": {
+        "wires.json": {
+            ":null/()": null,
+        },
+        "nonStringRoute.unit.js"() {
+            module.exports = {
+                "non string route"( __ ) {
+                    __.expect( 1 );
+                    __.throws( () => require( `:null/something` ) );
+                    __.done();
+                },
+            };
+        },
+    },
     "/empty": {
         "wires.json": {
             ":empty": ``,
