@@ -1,6 +1,6 @@
 <img
     align="right"
-    height="200"
+    width="25%"
     src="logo.svg">
 
 # wires
