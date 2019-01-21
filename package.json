@@ -39,8 +39,8 @@
         "url" : "http://github.com/jaubourg/wires.git"
     },
     "scripts": {
-        "coverage": "nyc node test && nyc report --reporter=html",
-        "coveralls": "nyc node test && nyc report --reporter=text-lcov | coveralls",
+        "coverage": "nyc --eager node test && nyc report --reporter=html",
+        "coveralls": "nyc --eager node test && nyc report --reporter=text-lcov | coveralls",
         "test": "node test"
     },
     "version": "3.0.1-pre"
