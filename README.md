@@ -339,14 +339,14 @@ require( "#number" ) === 1204;
 isNaN( require( "#NaN" ) );
 ```
 
-You can have arbitrary spaces after the opening parenthesis and before & after the closing parenthesis. So the following expressions are all valid and strictly equivalent:
+You can put an arbitrary number of spaces after the opening parenthesis and around the closing parenthesis. So the following expressions are all valid and strictly equivalent:
 
 ```js
 "(bool)true"
+"(bool) true"
 "( bool)true"
 "(bool )true"
 "( bool )true"
-"(bool) true"
 "( bool) true"
 "(bool ) true"
 "( bool ) true"
