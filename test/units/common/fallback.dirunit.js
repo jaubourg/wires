@@ -9,7 +9,7 @@ module.exports = {
             module.exports = {
                 "defaultIsUndefined": `defaultIsUndefined`,
                 "defaultIsUndefined?": undefined,
-                "defaults": false,
+                "defaults": NaN,
                 "defaults?": `defaults`,
                 "definedInDefaults": `definedInDefaults`,
                 "definedInMain?": `fallback definedInMain`,
@@ -21,7 +21,7 @@ module.exports = {
                 "path": {
                     "in": {
                         "defaults?": `path.in.defaults`,
-                        "falsy": false,
+                        "falsy": undefined,
                         "falsy?": `path.in.falsy`,
                         "value": `path.in.value`,
                     },
@@ -39,10 +39,10 @@ module.exports = {
             "fallbackInDefaults": ``,
             "fallbackInMain?": `fallbackInMain`,
             "fallbackOverride?": `fallbackOverride`,
-            "main": null,
+            "main": ``,
             "main?": `main`,
             "nonExistingInMain?": `nonExistingInMain`,
-            "parent": 0,
+            "parent": null,
             "path": {
                 "in": {
                     "main?": `path.in.main`,

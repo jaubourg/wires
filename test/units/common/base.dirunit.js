@@ -13,6 +13,26 @@ module.exports = {
                 "subField": `subValue`,
             },
         },
+        "cast": [
+            `(bool)  true`,
+            `(bool)true`,
+            `(boolean)  true`,
+            `(boolean)true`,
+            `(bool) false`,
+            `(bool) woops`,
+            `(bool) TRUE`,
+            `(num) 16`,
+            `(num)16`,
+            `(number) 16`,
+            `(number)16`,
+            `(num) anything`,
+        ],
+        "cast_bool_fallback1": `(bool) wrong`,
+        "cast_bool_fallback1?": true,
+        "cast_bool_fallback2": `(bool) false`,
+        "cast_bool_fallback2?": true,
+        "cast_number_fallback": `(num) not an number`,
+        "cast_number_fallback?": 16,
     },
     "test.js"() {
         module.exports = {};
@@ -54,6 +74,27 @@ module.exports = {
                 __.expect( 2 );
                 __.strictEqual( require( `#>PATH` ), process.env.PATH );
                 __.strictEqual( require( `#>` ), process.env );
+                __.done();
+            },
+            "casts"( __ ) {
+                __.expect( 15 );
+                const cast = require( `#cast` );
+                let i = 0;
+                __.strictEqual( cast[ i++ ], true );
+                __.strictEqual( cast[ i++ ], true );
+                __.strictEqual( cast[ i++ ], true );
+                __.strictEqual( cast[ i++ ], true );
+                __.strictEqual( cast[ i++ ], false );
+                __.strictEqual( cast[ i++ ], null );
+                __.strictEqual( cast[ i++ ], null );
+                __.strictEqual( cast[ i++ ], 16 );
+                __.strictEqual( cast[ i++ ], 16 );
+                __.strictEqual( cast[ i++ ], 16 );
+                __.strictEqual( cast[ i++ ], 16 );
+                __.ok( isNaN( cast[ i++ ] ) );
+                __.strictEqual( require( `#cast_bool_fallback1` ), true );
+                __.strictEqual( require( `#cast_bool_fallback2` ), false );
+                __.strictEqual( require( `#cast_number_fallback` ), 16 );
                 __.done();
             },
             route( __ ) {

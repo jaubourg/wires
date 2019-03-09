@@ -278,9 +278,85 @@ require( "#object.templateString" ) === "boolean is false";
 require( "#env" ) === ( process.env.SOME_VAR || "" );
 ```
 
+## Casting
+
+As of version 4.0, it is possible to cast string values into booleans or numbers in configuration files:
+
+```js
+// wires.json
+
+{
+    "bool": "(boolean) true",
+    "number": "(number) 1204"
+}
+
+// file.js
+
+require( "#bool" ) === true;
+require( "#number" ) === 1204;
+```
+
+It is especially useful when dealing with environment variables:
+
+```js
+// wires.json
+
+{
+    "size": "(number){?>SIZE}"
+}
+
+// file.js
+
+const size = ( process.env.SIZE || "" ).trim();
+require( "#size" ) === ( size ? Number( size ) : NaN );
+```
+
+Casting follows the following rules:
+
+- For booleans (cast using `(bool)` or `(boolean)`):
+    - `"true"` becomes `true`,
+    - `"false"` becomes `false`,
+    - any other string becomes `null`.
+- For numbers (cast using `(num)` or `(number)`), any string that cannot be parsed as a number will give `NaN` as a result.
+
+```js
+// wires.json
+
+{
+    "true": "(bool) true",
+    "false": "(bool) false",
+    "null": "(bool) not a boolean",
+    "number": "(num) 1204",
+    "NaN": "(num) not a number",
+}
+
+// file.js
+
+require( "#true" ) === true;
+require( "#false" ) === false;
+require( "#null" ) === true;
+require( "#number" ) === 1204;
+isNaN( require( "#NaN" ) );
+```
+
+You can have arbitrary spaces after the opening parenthesis and before & after the closing parenthesis. So the following expressions are all valid and strictly equivalent:
+
+```js
+"(bool)true"
+"( bool)true"
+"(bool )true"
+"( bool )true"
+"(bool) true"
+"( bool) true"
+"(bool ) true"
+"( bool ) true"
+```
+
 ## Fallbacks
 
-As of version 2, every object property which name ends with a question mark in your configuration files is a fallback. Fallbacks are useful in situations where a setting may be _falsy_ (`false`, `""`, `0`, `null`, etc) yet you still need a default value for it.
+As of version 2, every object property which name ends with a question mark in your configuration files is a fallback. Fallbacks are useful in situations where a setting may be _empty_ (`""`, `NaN`, `null` or `undefined`) yet you still need a default value for it.
+
+__Prior to version 4.0, wires did consider any _falsy_ value as _empty_ (`0`, `false`, etc). This was changed in order to accommodate casting as introduced in the very same version.__
 
 Let's take the following situation as an example:
 
