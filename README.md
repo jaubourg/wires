@@ -1,4 +1,4 @@
-<img align="right" width="25%" src="logo.svg">
+<img align="right" width="25%" src="https://raw.githubusercontent.com/jaubourg/wires/master/logo.svg?sanitize=true">
 
 # wires
 
