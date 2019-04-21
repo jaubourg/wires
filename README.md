@@ -334,7 +334,7 @@ Casting follows the following rules:
 
 require( "#true" ) === true;
 require( "#false" ) === false;
-require( "#null" ) === true;
+require( "#null" ) === null;
 require( "#number" ) === 1204;
 isNaN( require( "#NaN" ) );
 ```
