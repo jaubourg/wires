@@ -17,9 +17,12 @@ module.exports = {
                 __.strictEqual( require( `#cmdPath` ), `>/lib` );
                 __.strictEqual( require( `:resolvedRoute` ), `lib/test` );
                 __.strictEqual( require( `:indirectResolvedRoute` ), `lib/test` );
-                __.throws( () => {
+                try {
                     require( `:homeRoute` );
-                }, /^Cannot find module '[^~]+--wires-does-not-exist.js'$/, `no file in home` );
+                    __.ok( false, `no file in home` );
+                } catch ( e ) {
+                    __.strictEqual( e.code, `MODULE_NOT_FOUND`, `no file in home` );
+                }
                 __.done();
             },
         };
