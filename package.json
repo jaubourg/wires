@@ -13,7 +13,7 @@
         "nyc": "14.0.0"
     },
     "engines": {
-        "node" : ">=6"
+        "node" : ">=8"
     },
     "eslintConfig": {
         "extends": "creative-area/es6",
