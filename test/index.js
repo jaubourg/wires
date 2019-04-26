@@ -1,5 +1,8 @@
 "use strict";
 
+// build parser
+require( `../build` );
+
 const execUnits = require( `./runner/execUnits` );
 const runner = require( `./runner` );
 
