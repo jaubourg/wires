@@ -36,7 +36,7 @@
     "name": "wires",
     "nyc": {
         "cache": true,
-        "exclude": [ "lib/config/parse" ],
+        "exclude": [ "lib/config/parse/index.js" ],
         "include": [ "lib" ]
     },
     "repository" : {
