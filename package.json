@@ -47,5 +47,5 @@
         "prepublishOnly": "node build",
         "test": "node test"
     },
-    "version": "4.0.1-pre"
+    "version": "4.1.0-rc1-pre"
 }
