@@ -1,4 +1,8 @@
 /.nyc_output
+/build
 /coverage
+/lib/config/parse/grammar.pegjs
+/logo.svg
 /test
+/yarn.lock
 /.*

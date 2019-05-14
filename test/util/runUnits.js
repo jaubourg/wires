@@ -14,7 +14,9 @@ const rUnit = /\.unit\.js$/;
 const fixtureDir = path.resolve( __dirname, `../fixture` );
 const unitDir = path.resolve( __dirname, `../units/${ process.argv[ 2 ] }` );
 
-const files = new Set( process.argv.slice( 3 ) );
+const trace = JSON.parse( process.argv[ 3 ] );
+
+const files = new Set( process.argv.slice( 4 ) );
 
 const dirUnits = {};
 const units = [];
@@ -70,19 +72,27 @@ const npmInstall = [];
 // eslint-disable-next-line no-extend-native
 Object.prototype.__MODIFIED_PROTOTYPE = true;
 
-const run = () => nodeunit.reporters.minimal.run( units, null, error => {
-    if ( error ) {
-        if ( error.message === `We have got test failures.` ) {
-            // eslint-disable-next-line no-process-exit
-            process.exit( 1 );
-        }
-        throw error;
-
+const run = () => {
+    const wires = trace && require( `../..` );
+    if ( wires ) {
+        wires.startTrace();
     }
-} );
+    nodeunit.reporters.minimal.run( units, null, error => {
+        if ( wires ) {
+            wires.stopTrace();
+        }
+        if ( error ) {
+            if ( error.message === `We have got test failures.` ) {
+                // eslint-disable-next-line no-process-exit
+                process.exit( 1 );
+            }
+            throw error;
+        }
+    } );
+};
 
 if ( npmInstall.length ) {
-    const exec = require( `child_process` ).exec;
+    const { exec } = require( `child_process` );
     console.log( `npm install for fixtures...` );
     const now = Date.now();
     Promise.all(

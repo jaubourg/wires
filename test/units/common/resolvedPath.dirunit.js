@@ -4,17 +4,20 @@ module.exports = {
     "wires.json": {
         "path": `./lib`,
         "cmdPath": `>/lib`,
+        ":cmdPath": `>/lib`,
         ":resolvedRoute": `./lib/test`,
         "indirectResolvedRoute": `./lib/test`,
         ":indirectResolvedRoute": `{#indirectResolvedRoute}`,
         ":homeRoute": `~/--wires-does-not-exist.js`,
     },
     "resolved_path.unit.js"() {
+        const { resolve } = require( `path` );
         module.exports = {
             test( __ ) {
-                __.expect( 5 );
+                __.expect( 6 );
                 __.strictEqual( require( `#path` ), `./lib` );
                 __.strictEqual( require( `#cmdPath` ), `>/lib` );
+                __.strictEqual( require.resolve( `:cmdPath` ), resolve( process.cwd(), `lib/index.js` ) );
                 __.strictEqual( require( `:resolvedRoute` ), `lib/test` );
                 __.strictEqual( require( `:indirectResolvedRoute` ), `lib/test` );
                 try {
@@ -35,11 +38,13 @@ module.exports = {
             module.exports = `lib/test`;
         },
         "resolved_path_sub.unit.js"() {
+            const { resolve } = require( `path` );
             module.exports = {
                 test( __ ) {
-                    __.expect( 5 );
+                    __.expect( 6 );
                     __.strictEqual( require( `#path` ), `./lib` );
                     __.strictEqual( require( `#cmdPath` ), `>/lib` );
+                    __.strictEqual( require.resolve( `:cmdPath` ), resolve( process.cwd(), `lib/index.js` ) );
                     __.strictEqual( require( `:resolvedRoute` ), `lib/test` );
                     __.strictEqual( require( `:backResolvedRoute` ), `lib/test` );
                     __.strictEqual( require( `:indirectResolvedRoute` ), `lib/test` );

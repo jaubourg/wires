@@ -26,6 +26,8 @@ module.exports = {
                         "value": `path.in.value`,
                     },
                 },
+                "NaN": `(number)  `,
+                "NaN?": `fallback`,
             };
         },
         "wires.json": {
@@ -135,6 +137,11 @@ module.exports = {
                             `require( "#${ testString }" )`
                         );
                     }
+                    __.done();
+                },
+                "NaN is bad"( __ ) {
+                    __.expect( 1 );
+                    __.strictEqual( require( `#NaN` ), `fallback` );
                     __.done();
                 },
             };
