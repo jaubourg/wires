@@ -46,6 +46,7 @@
     "scripts": {
         "coverage": "nyc --eager node test && nyc report --reporter=html",
         "coveralls": "nyc --eager node test && nyc report --reporter=text-lcov | coveralls",
+        "prepublishOnly": "node build",
         "test": "node test"
     },
     "version": "4.0.1-pre"
