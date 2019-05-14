@@ -92,7 +92,7 @@ const run = () => {
 };
 
 if ( npmInstall.length ) {
-    const exec = require( `child_process` ).exec;
+    const { exec } = require( `child_process` );
     console.log( `npm install for fixtures...` );
     const now = Date.now();
     Promise.all(

@@ -26,9 +26,7 @@
         },
         "rules": {
             "global-require": "off",
-            "no-sync": "off",
-            "prefer-destructuring": "off",
-            "prefer-rest-params": "off"
+            "no-sync": "off"
         }
     },
     "license": "MIT",
