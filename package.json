@@ -4,7 +4,7 @@
         "wires": "./lib/bin.js"
     },
     "dependencies": {
-        "serialize-javascript": "2.1.2"
+        "serialize-javascript": "3.1.0"
     },
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
