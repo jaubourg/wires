@@ -4,7 +4,7 @@
         "wires": "./lib/bin.js"
     },
     "dependencies": {
-        "serialize-javascript": "3.1.0"
+        "serialize-javascript": "5.0.1"
     },
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
@@ -17,7 +17,7 @@
         "pegjs": "0.10.0"
     },
     "engines": {
-        "node" : ">=8"
+        "node" : ">=12"
     },
     "eslintConfig": {
         "extends": "creative-area/es6",

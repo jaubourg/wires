@@ -8,7 +8,7 @@ const versions = JSON.parse( execSync( `npm view wires versions --json`, {
     "env": process.env,
 } ) ).filter( version => {
     const split = version.split( `.` );
-    return ( Number( split[ 0 ] ) > 0 ) || ( Number( split[ 1 ] ) >= 2 );
+    return ( Number( split[ 0 ] ) > 0 ) || ( Number( split[ 1 ] ) >= 3 );
 } );
 
 for ( const version of versions ) {
