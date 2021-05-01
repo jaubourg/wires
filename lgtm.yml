@@ -1,2 +1,8 @@
-queries:
-    - exclude: build/prepend.js
+path_classifiers:
+    build:
+        - build
+        - exclude: build/prepend.js
+    lib:
+        - lib
+    test:
+        - test
