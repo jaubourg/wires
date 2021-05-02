@@ -4,5 +4,6 @@ path_classifiers:
         - exclude: build/prepend.js
     lib:
         - lib
+        - exclude: lib/config/parse/index.js
     test:
         - test
