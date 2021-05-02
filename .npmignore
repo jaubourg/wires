@@ -1,7 +1,7 @@
 /.nyc_output
-/build
+/build.js
 /coverage
-/lib/config/parse/grammar.pegjs
+/lib/config/parse/grammar.peggy
 /logo.svg
 /test
 /yarn.lock
