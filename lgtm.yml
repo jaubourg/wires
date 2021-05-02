@@ -1,7 +1,6 @@
 path_classifiers:
     build:
         - build
-        - exclude: build/prepend.js
     lib:
         - lib
         - exclude: lib/config/parse/index.js
