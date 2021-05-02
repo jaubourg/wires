@@ -103,8 +103,8 @@ if ( npmInstall.length ) {
                     cwd,
                     "env": process.env,
                 },
-                error => ( error ? reject( error ) : resolve() ) )
-            )
+                error => ( error ? reject( error ) : resolve() )
+            ) )
         )
     )
         .then( () => {
