@@ -24,4 +24,4 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm install
     - run: npm test
-    - run: '[[ $(node --version) == v16.* ]] && npm run coveralls'
+    - run: if [[ $(node --version) == v16.* ]]; then npm run coveralls; fi
