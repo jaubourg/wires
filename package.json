@@ -4,17 +4,17 @@
         "wires": "./lib/bin.js"
     },
     "dependencies": {
-        "serialize-javascript": "5.0.1"
+        "serialize-javascript": "6.0.0"
     },
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
-        "coveralls": "3.1.0",
-        "eslint": "7.25.0",
+        "coveralls": "3.1.1",
+        "eslint": "8.12.0",
         "eslint-config-creative-area": "0.11.1",
-        "fs-extra": "9.1.0",
+        "fs-extra": "10.0.1",
         "nodeunit": "0.11.3",
         "nyc": "15.1.0",
-        "peggy": "1.1.0"
+        "peggy": "1.2.0"
     },
     "engines": {
         "node" : ">=12"
@@ -24,6 +24,13 @@
         "env": {
             "node": true
         },
+        "overrides": [ {
+            "extends": "creative-area/es2018/module",
+            "files": "**/*.mjs",
+            "rules": {
+                "prefer-named-capture-group": "off"
+            }
+        } ],
         "rules": {
             "global-require": "off",
             "no-sync": "off",

@@ -1,11 +1,11 @@
 "use strict";
 
-const ESLint = require( `eslint` ).CLIEngine;
+const { ESLint } = require( `eslint` );
 const linter = new ESLint();
 
 module.exports = () => {
     console.log( `linting` );
-    const report = linter.executeOnFiles( [ `${ __dirname }/../..` ] );
+    const report = linter.lintFiles( `${ __dirname }/../..` );
     if ( report.errorCount || report.warningCount ) {
         console.log( linter.getFormatter( `codeframe` )( report.results ) );
         if ( report.errorCount ) {

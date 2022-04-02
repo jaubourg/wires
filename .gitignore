@@ -2,3 +2,5 @@
 /coverage
 /lib/config/parse/index.js
 /node_modules
+/package-lock.json
+/yarn.lock

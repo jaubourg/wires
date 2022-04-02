@@ -29,7 +29,11 @@ module.exports = {
                 `debug`,
                 `--throw-deprecaton`,
             ],
-            "execArgv": [ `--throw-deprecation` ],
+            "execArgv": [
+                `--throw-deprecation`,
+                `--loader`,
+                path.resolve( libDir, `loader.mjs` ),
+            ],
             "config": {
                 "string": `value`,
                 "object": {
