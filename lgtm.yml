@@ -1,7 +1,0 @@
-path_classifiers:
-    build:
-        - build.js
-    lib:
-        - lib
-    test:
-        - test
