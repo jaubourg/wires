@@ -604,7 +604,7 @@ Command line definitions respect cascading configurations. They will override an
 [dependency-url]: https://david-dm.org/jaubourg/wires
 [devDependency-image]: https://img.shields.io/david/dev/jaubourg/wires.svg?style=flat-square
 [devDependency-url]: https://david-dm.org/jaubourg/wires?type=dev
-[github-action-image]: https://github.com/jaubourg/wires/actions/workflows/main.yml/badge.svg
+[github-action-image]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fjaubourg%2Fwires%2Fbadge&style=flat-square
 [github-action-url]: https://github.com/jaubourg/wires
 [greenkeeper-image]: https://badges.greenkeeper.io/jaubourg/wires.svg?style=flat-square
 [greenkeeper-url]: https://greenkeeper.io/
