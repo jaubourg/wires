@@ -6,7 +6,7 @@
 [![Node Version][node-image]][node-url]
 [![License][license-image]][license-url]
 
-[![Build Status][travis-image]][travis-url]
+[![Build Status][github-action-image]][github-action-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
 [![Greenkeeper Status][greenkeeper-image]][greenkeeper-url]
 
@@ -604,6 +604,8 @@ Command line definitions respect cascading configurations. They will override an
 [dependency-url]: https://david-dm.org/jaubourg/wires
 [devDependency-image]: https://img.shields.io/david/dev/jaubourg/wires.svg?style=flat-square
 [devDependency-url]: https://david-dm.org/jaubourg/wires?type=dev
+[github-action-image]: https://github.com/jaubourg/wires/actions/workflows/main.yml/badge.svg
+[github-action-url]: https://github.com/jaubourg/wires
 [greenkeeper-image]: https://badges.greenkeeper.io/jaubourg/wires.svg?style=flat-square
 [greenkeeper-url]: https://greenkeeper.io/
 [license-image]: https://img.shields.io/npm/l/wires.svg?style=flat-square
@@ -614,5 +616,3 @@ Command line definitions respect cascading configurations. They will override an
 [npm-url]: https://npmjs.org/package/wires
 [quality-image]: https://img.shields.io/lgtm/grade/javascript/g/jaubourg/wires.svg?style=flat-square&logo=lgtm&logoWidth=18
 [quality-url]: https://lgtm.com/projects/g/jaubourg/wires/context:javascript
-[travis-image]: https://img.shields.io/travis/jaubourg/wires.svg?style=flat-square
-[travis-url]: https://travis-ci.org/jaubourg/wires
