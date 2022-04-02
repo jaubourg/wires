@@ -5,6 +5,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      COVERALLS_GIT_BRANCH: ${GITHUB_REF##*/}
+      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+      COVERALLS_SERVICE_NAME: Github Actions
     strategy:
       matrix:
         node-version:
@@ -17,10 +21,6 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-      env:
-        COVERALLS_GIT_BRANCH: ${GITHUB_REF##*/}
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
-        COVERALLS_SERVICE_NAME: Github Actions
     - run: npm install
     - run: npm test
     - run: npm run coveralls
