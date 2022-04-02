@@ -6,11 +6,10 @@
 [![Node Version][node-image]][node-url]
 [![License][license-image]][license-url]
 
+[![Dependencies Status][dependency-image]][dependency-url]
+
 [![Build Status][github-action-image]][github-action-url]
 [![Coverage Status][coveralls-image]][coveralls-url]
-
-[![Dependencies Status][dependency-image]][dependency-url]
-[![devDependencies Status][devDependency-image]][devDependency-url]
 
 [![Code quality][quality-image]][quality-url]
 [![Code Style][codestyle-image]][codestyle-url]
@@ -593,16 +592,14 @@ Command line definitions respect cascading configurations. They will override an
 
 ## License
 
-© [Julian Aubourg](mailto:j@ubourg.net), 2012-2019 – licensed under the [MIT license][license-url].
+© [Julian Aubourg](mailto:j@ubourg.net), 2012-2022 – licensed under the [MIT license][license-url].
 
 [codestyle-image]: https://img.shields.io/badge/code%20style-creative--area-brightgreen.svg?style=flat-square
 [codestyle-url]: https://github.com/creative-area/eslint-config
 [coveralls-image]: https://img.shields.io/coveralls/jaubourg/wires.svg?style=flat-square
 [coveralls-url]: https://coveralls.io/r/jaubourg/wires
-[dependency-image]: https://img.shields.io/david/jaubourg/wires.svg?style=flat-square
-[dependency-url]: https://david-dm.org/jaubourg/wires
-[devDependency-image]: https://img.shields.io/david/dev/jaubourg/wires.svg?style=flat-square
-[devDependency-url]: https://david-dm.org/jaubourg/wires?type=dev
+[dependency-image]: https://img.shields.io/librariesio/github/jaubourg/wires?style=flat-square
+[dependency-url]: https://libraries.io/github/jaubourg/wires
 [github-action-image]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fjaubourg%2Fwires%2Fbadge&style=flat-square
 [github-action-url]: https://github.com/jaubourg/wires/actions
 [license-image]: https://img.shields.io/npm/l/wires.svg?style=flat-square
