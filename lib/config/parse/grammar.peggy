@@ -14,7 +14,7 @@
         needsFallback,
     } = require( `./util` );
     const isObject = require( `../../isObject` );
-    const nullModulePath = require.resolve( `../util/null` );
+    const nullModulePath = require.resolve( `./null` );
 
     const output = ( type, value ) => ( {
         type,
