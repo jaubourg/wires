@@ -8,8 +8,6 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
     strategy:
       matrix:
         node-version:
@@ -25,3 +23,5 @@ jobs:
     - run: npm install
     - run: npm test
     - run: if [[ $(node --version) == v16.* ]]; then npm run coveralls; fi
+      env:
+        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
