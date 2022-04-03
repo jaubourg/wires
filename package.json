@@ -20,17 +20,23 @@
         "node" : ">=12"
     },
     "eslintConfig": {
-        "extends": "creative-area/es2018/script",
+        "extends": "creative-area/es2021/script",
         "env": {
             "node": true
         },
         "overrides": [ {
-            "extends": "creative-area/es2018/module",
+            "extends": "creative-area/es2021/module",
             "files": "**/*.mjs",
+            "parserOptions": {
+                "ecmaVersion": 2022
+            },
             "rules": {
                 "prefer-named-capture-group": "off"
             }
         } ],
+        "parserOptions": {
+            "ecmaVersion": 2022
+        },
         "rules": {
             "global-require": "off",
             "no-sync": "off",

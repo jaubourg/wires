@@ -13,7 +13,7 @@
         join,
         needsFallback,
     } = require( `./util` );
-    const isObject = require( `../util/isObject` );
+    const isObject = require( `../../isObject` );
     const nullModulePath = require.resolve( `../util/null` );
 
     const output = ( type, value ) => ( {
@@ -108,7 +108,7 @@ path
         if ( isCode( result ) ) {
             throw new Error( `cannot get route from code` );
         }
-        const route = config._routes.get( result ) || config._dirRoutes.get( result );
+        const route = config.getRoute( result );
         if ( !route ) {
             throw new Error( `Unknown route '${ result }'` );
         }
@@ -141,7 +141,7 @@ value
             if ( isCode( result ) ) {
                 throw new Error( `cannot get value from code` );
             }
-            const potential = config._data.getPath( result ).map( parseFactory( options ) );
+            const potential = config.getPath( result ).map( parseFactory( options ) );
             let first = true;
             while ( potential.length ) {
                 value = first ? potential.pop() : empty( potential.pop(), value );
