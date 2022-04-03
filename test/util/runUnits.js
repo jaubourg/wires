@@ -14,17 +14,12 @@ const rUnit = /\.unit\.js$/;
 const fixtureDir = path.resolve( __dirname, `../fixture` );
 const unitDir = path.resolve( __dirname, `../units/${ process.argv[ 2 ] }` );
 
-const trace = JSON.parse( process.argv[ 3 ] );
-
-const files = new Set( process.argv.slice( 4 ) );
+const files = new Set( process.argv.slice( 3 ) );
 
 const dirUnits = {};
 const units = [];
 
 for ( const basename of fs.readdirSync( unitDir ) ) {
-    if ( basename === `.init.js` ) {
-        require( `${ unitDir }/.init.js` );
-    }
     if ( !files.size || files.has( basename ) ) {
         const filename = path.join( unitDir, basename );
         if ( rUnit.test( filename ) ) {
@@ -73,14 +68,7 @@ const npmInstall = [];
 Object.prototype.__MODIFIED_PROTOTYPE = true;
 
 const run = () => {
-    const wires = trace && require( `../..` );
-    if ( wires ) {
-        wires.startTrace();
-    }
     nodeunit.reporters.minimal.run( units, null, error => {
-        if ( wires ) {
-            wires.stopTrace();
-        }
         if ( error ) {
             if ( error.message === `We have got test failures.` ) {
                 // eslint-disable-next-line no-process-exit

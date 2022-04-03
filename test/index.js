@@ -15,25 +15,11 @@ runner( [
     execUnits( `common`, {
         "bin": true,
     } ),
-    // test with binary and trace
-    execUnits( `common`, {
-        "bin": true,
-        "trace": true,
-    } ),
     // test with binary, no env
     execUnits( `common`, {
         "bin": true,
         "wiresEnv": ``,
     } ),
-    // test with binary and trace, no env
-    execUnits( `common`, {
-        "bin": true,
-        "wiresEnv": ``,
-    } ),
-    // test with local
+    // test with --require and --loader command lines
     execUnits( `common` ),
-    // test with local and trace
-    execUnits( `common`, {
-        "trace": true,
-    } ),
 ] );
