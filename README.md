@@ -8,8 +8,8 @@
 
 [![Dependencies Status][dependency-image]][dependency-url]
 
-[![Build Status][github-action-image]][github-action-url]
-[![Coverage Status][coveralls-image]][coveralls-url]
+[![Build Status][build-image]][build-url]
+[![Coverage Status][coverage-image]][coverage-url]
 
 [![Code quality][quality-image]][quality-url]
 [![Code Style][codestyle-image]][codestyle-url]
@@ -586,12 +586,12 @@ require( ":dbo/product" ) === null;
 
 [codestyle-image]: https://img.shields.io/badge/code%20style-creative--area-brightgreen.svg?style=flat-square
 [codestyle-url]: https://github.com/creative-area/eslint-config
-[coveralls-image]: https://img.shields.io/coveralls/jaubourg/wires.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/jaubourg/wires
-[dependency-image]: https://img.shields.io/librariesio/github/jaubourg/wires?style=flat-square
-[dependency-url]: https://libraries.io/github/jaubourg/wires
-[github-action-image]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fjaubourg%2Fwires%2Fbadge&style=flat-square
-[github-action-url]: https://github.com/jaubourg/wires/actions
+[coverage-image]: https://img.shields.io/coveralls/jaubourg/wires.svg?style=flat-square
+[coverage-url]: https://coveralls.io/r/jaubourg/wires
+[dependency-image]: https://img.shields.io/librariesio/release/npm/wires?style=flat-square
+[dependency-url]: https://libraries.io/npm/wires
+[build-image]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fjaubourg%2Fwires%2Fbadge&style=flat-square
+[build-url]: https://github.com/jaubourg/wires/actions
 [license-image]: https://img.shields.io/npm/l/wires.svg?style=flat-square
 [license-url]: https://raw.githubusercontent.com/jaubourg/wires/master/LICENSE
 [node-image]: https://img.shields.io/node/v/wires.svg?style=flat-square

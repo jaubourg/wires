@@ -3,6 +3,7 @@
     "bin": {
         "wires": "./bin.js"
     },
+    "bugs": "https://github.com/jaubourg/wires",
     "dependencies": {
         "serialize-javascript": "6.0.0"
     },
@@ -58,15 +59,13 @@
         "exclude": [ "lib/config/parse/index.js" ],
         "include": [ "lib" ]
     },
-    "repository" : {
-        "type" : "git",
-        "url" : "http://github.com/jaubourg/wires.git"
-    },
+    "private": true,
+    "removePublish": [ "devDependencies", "eslintConfig", "nyc", "scripts" ],
+    "repository" : "jaubourg/wires",
     "scripts": {
         "coverage": "nyc --eager node test && nyc report --reporter=html",
         "coveralls": "nyc --eager node test && nyc report --reporter=text-lcov | coveralls",
-        "prepublishOnly": "node scripts/build",
         "test": "node test"
     },
-    "version": "4.1.0-rc3-pre"
+    "version": "5.0.0-pre"
 }

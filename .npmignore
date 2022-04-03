@@ -4,4 +4,5 @@
 /test
 /lib/config/parse/grammar.peggy
 /logo.svg
+/package-lock.json
 /yarn.lock
