@@ -4,13 +4,14 @@ const cliTest = require( `../../util/cliTest` );
 const path = require( `path` );
 
 const fixtureDir = path.resolve( __dirname, `../fixture/commandLine` );
-const libDir = path.resolve( __dirname, `../../../lib` );
+const rootDir = path.resolve( __dirname, `../../..` );
+
+const rWarningLines = /^\(.+$/gm;
 
 module.exports = {
     "full test": cliTest( [
         process.execPath,
-        path.resolve( libDir, `wires` ),
-        `(object.a=1)`,
+        `executable-name`,
         `--throw-deprecation`,
         path.resolve( fixtureDir, `script.js` ),
         `arg_for_script`,
@@ -19,25 +20,25 @@ module.exports = {
     ], ( __, stdout, stderr, exitCode ) => {
         __.expect( 2 );
         __.strictEqual( exitCode, 180, `correct exit code (1204)` );
-        __.deepEqual( JSON.parse( stderr ), {
-            "noParent": true,
+        __.deepEqual( JSON.parse( stderr.replace( rWarningLines, `` ) ), {
+            "noParent": false,
             "isMain": true,
             "argv": [
-                path.resolve( libDir, `wires` ),
+                process.execPath,
                 path.resolve( fixtureDir, `script.js` ),
                 `arg_for_script`,
                 `debug`,
                 `--throw-deprecaton`,
             ],
             "execArgv": [
+                `--require=${ path.resolve( rootDir, `index.js` ) }`,
                 `--throw-deprecation`,
-                `--loader`,
-                path.resolve( libDir, `loader.mjs` ),
+                `--loader=${ path.resolve( rootDir, `loader.mjs` ) }`,
             ],
             "config": {
                 "string": `value`,
                 "object": {
-                    "a": 1,
+                    "a": `a`,
                     "b": `b`,
                     "c": `c`,
                 },
@@ -47,7 +48,7 @@ module.exports = {
     }, fixtureDir ),
     "missing script": cliTest( [
         process.execPath,
-        path.resolve( libDir, `wires` ),
+        `executable-name`,
     ], ( __, _, stderr, exitCode ) => {
         __.expect( 2 );
         __.strictEqual( exitCode, -1, `correct exit code (-1)` );
@@ -60,7 +61,7 @@ module.exports = {
 for ( const option of [ `-e`, `--eval`, `-i`, `--interactive`, `-p`, `--print` ] ) {
     module.exports[ `forbidden option ${ option }` ] = cliTest( [
         process.execPath,
-        path.resolve( libDir, `wires` ),
+        `executable-name`,
         option,
     ], ( __, _, stderr, exitCode ) => {
         __.expect( 2 );

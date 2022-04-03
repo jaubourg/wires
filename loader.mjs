@@ -1,9 +1,9 @@
 /* eslint-disable no-magic-numbers */
 import "./index.js";
 
-import Config from "./config/Config.js";
-import generateModule from "./generateModule.js";
-import nodeVersion from "./nodeVersion.js";
+import Config from "./lib/config/Config.js";
+import generateModule from "./lib/generateModule.js";
+import nodeVersion from "./lib/nodeVersion.js";
 
 const getItem = ( dir, expression, isPath ) => Config.cache( dir ).get( expression, isPath, false ).value;
 

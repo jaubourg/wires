@@ -1,6 +1,6 @@
 /.nyc_output
 /coverage
-/lib/config/parse/index.js
 /node_modules
+/lib/config/parse/index.js
 /package-lock.json
 /yarn.lock

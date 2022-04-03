@@ -580,16 +580,6 @@ require( ":dbo/client" ) === null;
 require( ":dbo/product" ) === null;
 ```
 
-## Command Line Definitions
-
-It's possible to add definitions on-the-fly using command line arguments. wires regards any parenthesis-enclosed argument as such. Definitions are comma-separated assignments. For instance: `wires (path=80,debug=true) script.js` will set the `path` setting to `80` and the `debug` setting to `true`.
-
-It's perfectly possible to define settings within objects using point-based paths, like `(path.to.my.setting=value)`.
-
-If the value provided is not proper JSON, the value will be used as is `(setting=80)` will assign the integer `80` while `(setting=80s)` will assign the string `"80s"`. If you wish to force a value to be a string, just enclose it in simple or double quotes. For instance, `(setting='80')` will assign the string `"80"`.
-
-Command line definitions respect cascading configurations. They will override any setting coming from the current working directory and its ancestors but will not override settings explicitly set (i.e, not in a `-defaults` file) in its children.
-
 ## License
 
 © [Julian Aubourg](mailto:j@ubourg.net), 2012-2022 – licensed under the [MIT license][license-url].

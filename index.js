@@ -1,7 +1,7 @@
 "use strict";
 
 const assert = require( `assert` ).ok;
-const Config = require( `./config/Config` );
+const Config = require( `./lib/config/Config` );
 const { dirname } = require( `path` );
 
 const CONFIG = Symbol( `wires-config` );

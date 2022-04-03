@@ -1,7 +1,7 @@
 {
     "author": "Julian Aubourg <j@ubourg.net> (http://jaubourg.net)",
     "bin": {
-        "wires": "./lib/bin.js"
+        "wires": "./bin.js"
     },
     "dependencies": {
         "serialize-javascript": "6.0.0"
@@ -37,8 +37,15 @@
             "prefer-named-capture-group": "off"
         }
     },
+    "exports": {
+        ".": {
+            "import": "./loader.mjs",
+            "require": "./index.js"
+        },
+        "./lib/cli.js": "./lib/cli.js"
+    },
     "license": "MIT",
-    "main": "./lib/index.js",
+    "main": "./index.js",
     "name": "wires",
     "nyc": {
         "cache": true,
@@ -52,7 +59,7 @@
     "scripts": {
         "coverage": "nyc --eager node test && nyc report --reporter=html",
         "coveralls": "nyc --eager node test && nyc report --reporter=text-lcov | coveralls",
-        "prepublishOnly": "node build",
+        "prepublishOnly": "node scripts/build",
         "test": "node test"
     },
     "version": "4.1.0-rc3-pre"

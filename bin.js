@@ -6,7 +6,7 @@
 
 const Module = module.constructor;
 
-require( Module._findPath( `wires/lib/cli.js`, Module._nodeModulePaths( `.` ) ) || `./cli.js` )( {
+require( Module._findPath( `wires/lib/cli.js`, Module._nodeModulePaths( `.` ) ) || `./lib/cli.js` )( {
     "argv": process.argv,
     "error": console.error,
     "exit": process.exit,

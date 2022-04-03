@@ -6,17 +6,10 @@ Options:
   -h, --help     print help
   -v, --version  print version
 
-Overrides:
-  (<key>)               <key>: true
-  (!<key>)              <key>: false
-  (<key>=<value>)       <key>: JSON.stringify(<value>) | "<value>"
-  (<key>='<value>')     <key>: "<value>"
-  (<expr>,<expr>,...)   for multiple overrides
-
 Examples:
-  wires (port=80) server/start.js
-  wires compile src/myFile.xrt (debug,!optimize)
+  wires server/start.js
+  wires compile src/myFile.xrt
 
-Documentation can be found at https://github.com/jaubourg/wires/
+Documentation can be found at https://github.com/jaubourg/wires
 
 For more information regarding ENGINE, type 'ENGINE -h'

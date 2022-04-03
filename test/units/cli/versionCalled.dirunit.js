@@ -2,7 +2,7 @@
 
 const { execSync } = require( `child_process` );
 
-const binPath = require.resolve( `../../../lib/bin` );
+const binPath = require.resolve( `../../../bin` );
 
 const versions = JSON.parse( execSync( `npm view wires versions --json`, {
     "env": process.env,

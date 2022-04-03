@@ -3,7 +3,7 @@
 const path = require( `path` );
 const { spawn } = require( `child_process` );
 
-const binPath = path.resolve( __dirname, `../../lib/bin.js` );
+const binPath = path.resolve( __dirname, `../../bin.js` );
 const unitPath = path.resolve( __dirname, `../util/runUnits.js` );
 
 module.exports = ( type, { bin, trace, wiresEnv = `test` } = {} ) => () => new Promise( ( resolve, reject ) => {
