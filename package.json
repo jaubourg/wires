@@ -4,9 +4,6 @@
         "wires": "./bin.js"
     },
     "bugs": "https://github.com/jaubourg/wires",
-    "dependencies": {
-        "serialize-javascript": "6.0.0"
-    },
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
         "coveralls": "3.1.1",

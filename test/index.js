@@ -11,6 +11,8 @@ runner( [
     require( `./runner/lint` ),
     // test command line
     execUnits( `cli` ),
+    // test serialize javascript
+    execUnits( `serialize-javascript` ),
     // test with binary
     execUnits( `common`, {
         "bin": true,

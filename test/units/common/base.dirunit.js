@@ -121,8 +121,7 @@ module.exports = {
                 __.strictEqual( cast[ i++ ], 16 );
                 __.strictEqual( castM[ i ], 16 );
                 __.strictEqual( cast[ i++ ], 16 );
-                // todo: FIX serialize_javascript
-                __.strictEqual( castM[ i ], null );
+                __.ok( isNaN( castM[ i ] ) );
                 __.ok( isNaN( cast[ i ] ) );
                 __.strictEqual( require( `#cast_bool_fallback1` ), true );
                 __.strictEqual( ( await import( `#cast_bool_fallback1` ) ).default, true );
