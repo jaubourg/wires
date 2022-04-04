@@ -15,9 +15,9 @@ module.exports = {
     "test.unit.js"() {
         module.exports = {
             test( __ ) {
-                __.expect( 1 );
+                __.plan( 1 );
                 __.strictEqual( require( `:test` ), true );
-                __.done();
+                __.end();
             },
         };
     },

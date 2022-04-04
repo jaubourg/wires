@@ -9,11 +9,11 @@ module.exports = {
     "malformed.unit.js"() {
         module.exports = {
             test( __ ) {
-                __.expect( 1 );
+                __.plan( 1 );
                 __.throws( () => {
                     require( `#key` );
                 } );
-                __.done();
+                __.end();
             },
         };
     },

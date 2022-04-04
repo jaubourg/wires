@@ -13,9 +13,9 @@ module.exports = {
         "inline_expansion.unit.js"() {
             module.exports = {
                 test( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.strictEqual( require( `./{#folder}/test.js` ), `level/lib` );
-                    __.done();
+                    __.end();
                 },
             };
         },

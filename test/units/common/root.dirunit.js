@@ -14,11 +14,11 @@ module.exports = {
         "root.unit.js"() {
             module.exports = {
                 test( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.deepEqual( require( `#` ), {
                         "age": 27,
                     } );
-                    __.done();
+                    __.end();
                 },
             };
         },
@@ -31,9 +31,9 @@ module.exports = {
         "root.unit.js"() {
             module.exports = {
                 "wrong type"( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.throws( () => require( `#` ) );
-                    __.done();
+                    __.end();
                 },
             };
         },
@@ -52,11 +52,11 @@ module.exports = {
         "root.unit.js"() {
             module.exports = {
                 "with namespace"( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.deepEqual( require( `#` ), {
                         "age": 27,
                     } );
-                    __.done();
+                    __.end();
                 },
             };
         },

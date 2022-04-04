@@ -15,15 +15,15 @@ module.exports = {
     "expansion.unit.js"() {
         module.exports = {
             data( __ ) {
-                __.expect( 2 );
+                __.plan( 2 );
                 __.strictEqual( require( `#show` ), `value_is_lib` );
                 __.strictEqual( require( `#path` ), process.env.PATH );
-                __.done();
+                __.end();
             },
             route( __ ) {
-                __.expect( 1 );
+                __.plan( 1 );
                 __.strictEqual( require( `:module` ), require( `./lib/test` ) );
-                __.done();
+                __.end();
             },
         };
     },

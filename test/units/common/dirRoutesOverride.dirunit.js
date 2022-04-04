@@ -23,9 +23,9 @@ module.exports = {
         "dirRouteOverride.unit.js"() {
             module.exports = {
                 "dir route override"( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.strictEqual( require( `:path/test` ), `child` );
-                    __.done();
+                    __.end();
                 },
             };
         },

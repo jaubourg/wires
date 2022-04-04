@@ -2,10 +2,11 @@
 
 "use strict";
 
+const createReporter = require( `tap-diff` );
 const fs = require( `fs` );
 const fse = require( `fs-extra` );
-const nodeunit = require( `nodeunit` );
 const path = require( `path` );
+const tape = require( `tape` );
 
 const rCleanFunction = /^.*\r?\n|\r?\n.*$/g;
 const rDirUnit = /\.dirunit\.js$/;
@@ -23,7 +24,10 @@ for ( const basename of fs.readdirSync( unitDir ) ) {
     if ( !files.size || files.has( basename ) ) {
         const filename = path.join( unitDir, basename );
         if ( rUnit.test( filename ) ) {
-            units.push( filename );
+            units.push( {
+                filename,
+                "label": basename,
+            } );
         } else if ( rDirUnit.test( filename ) ) {
             dirUnits[ `/${ path.basename( filename, `.dirunit.js` ) }` ] = require( filename );
         }
@@ -44,7 +48,7 @@ const npmInstall = [];
         const val = tree[ key ];
         let filename;
         if ( key[ 0 ] === `/` ) {
-            generateTree( path.join( dir, key.substr( 1 ) ), val );
+            generateTree( path.join( dir, key.slice( 1 ) ), val );
         } else {
             if ( key === `package.json` ) {
                 npmInstall.push( dir );
@@ -58,7 +62,10 @@ const npmInstall = [];
                 `utf8`
             );
             if ( rUnit.test( filename ) ) {
-                units.push( filename );
+                units.push( {
+                    filename,
+                    "label": path.relative( fixtureDir, filename ),
+                } );
             }
         }
     }
@@ -68,15 +75,12 @@ const npmInstall = [];
 Object.prototype.__MODIFIED_PROTOTYPE = true;
 
 const run = () => {
-    nodeunit.reporters.minimal.run( units, null, error => {
-        if ( error ) {
-            if ( error.message === `We have got test failures.` ) {
-                // eslint-disable-next-line no-process-exit
-                process.exit( 1 );
-            }
-            throw error;
+    tape.createStream().pipe( createReporter() ).pipe( process.stdout );
+    for ( const { filename, label } of units ) {
+        for ( const [ name, fn ] of Object.entries( require( filename ) ) ) {
+            tape.test( `${ label }: ${ JSON.stringify( name ) }`, fn );
         }
-    } );
+    }
 };
 
 if ( npmInstall.length ) {

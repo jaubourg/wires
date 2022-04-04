@@ -11,12 +11,12 @@ module.exports = {
     "recursive_expansion.unit.js"() {
         module.exports = {
             test( __ ) {
-                __.expect( 1 );
+                __.plan( 1 );
                 __.deepEqual( require( `#paths` ), {
                     "data": `./lib/data`,
                     "tests": [ `./lib/test1`, `./lib/test2` ],
                 } );
-                __.done();
+                __.end();
             },
         };
     },

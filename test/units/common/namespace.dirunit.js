@@ -14,12 +14,12 @@ module.exports = {
         "namespace.unit.js"() {
             module.exports = {
                 test( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.deepEqual( require( `#` ), {
                         "name": `John`,
                         "age": 27,
                     } );
-                    __.done();
+                    __.end();
                 },
             };
         },
@@ -32,9 +32,9 @@ module.exports = {
         "namespace.unit.js"() {
             module.exports = {
                 "empty"( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.throws( () => require( `#` ) );
-                    __.done();
+                    __.end();
                 },
             };
         },
@@ -47,9 +47,9 @@ module.exports = {
         "namespace.unit.js"() {
             module.exports = {
                 "wrong type"( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.throws( () => require( `#` ) );
-                    __.done();
+                    __.end();
                 },
             };
         },

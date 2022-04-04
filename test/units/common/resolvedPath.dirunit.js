@@ -14,7 +14,7 @@ module.exports = {
         const { resolve } = require( `path` );
         module.exports = {
             test( __ ) {
-                __.expect( 6 );
+                __.plan( 6 );
                 __.strictEqual( require( `#path` ), `./lib` );
                 __.strictEqual( require( `#cmdPath` ), `>/lib` );
                 __.strictEqual( require.resolve( `:cmdPath` ), resolve( process.cwd(), `lib/nodeVersion.js` ) );
@@ -26,7 +26,7 @@ module.exports = {
                 } catch ( e ) {
                     __.strictEqual( e.code, `MODULE_NOT_FOUND`, `no file in home` );
                 }
-                __.done();
+                __.end();
             },
         };
     },
@@ -41,14 +41,14 @@ module.exports = {
             const { resolve } = require( `path` );
             module.exports = {
                 test( __ ) {
-                    __.expect( 6 );
+                    __.plan( 6 );
                     __.strictEqual( require( `#path` ), `./lib` );
                     __.strictEqual( require( `#cmdPath` ), `>/lib` );
                     __.strictEqual( require.resolve( `:cmdPath` ), resolve( process.cwd(), `lib/nodeVersion.js` ) );
                     __.strictEqual( require( `:resolvedRoute` ), `lib/test` );
                     __.strictEqual( require( `:backResolvedRoute` ), `lib/test` );
                     __.strictEqual( require( `:indirectResolvedRoute` ), `lib/test` );
-                    __.done();
+                    __.end();
                 },
             };
         },

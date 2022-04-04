@@ -8,9 +8,9 @@ module.exports = {
         "nonStringRoute.unit.js"() {
             module.exports = {
                 "non string route"( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.throws( () => require( `:boolean` ) );
-                    __.done();
+                    __.end();
                 },
             };
         },
@@ -22,9 +22,9 @@ module.exports = {
         "nonStringRoute.unit.js"() {
             module.exports = {
                 "non string route"( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.throws( () => require( `:null/something` ) );
-                    __.done();
+                    __.end();
                 },
             };
         },
@@ -36,9 +36,9 @@ module.exports = {
         "emptyRoute.unit.js"() {
             module.exports = {
                 "empty route"( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.throws( () => require( `:empty` ) );
-                    __.done();
+                    __.end();
                 },
             };
         },

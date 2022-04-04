@@ -27,7 +27,7 @@ for ( const version of versions ) {
             const data = require( `./data` );
             const exec = require( `child_process` ).execSync;
             module.exports[ `command line for ${ data.version }` ] = __ => {
-                __.expect( 1 );
+                __.plan( 1 );
                 __.strictEqual(
                     exec( `node ${ data.bin } --version`, {
                         "cwd": __dirname,
@@ -35,7 +35,7 @@ for ( const version of versions ) {
                     } ).toString(),
                     `v${ data.version } (node ${ process.version })\n`
                 );
-                __.done();
+                __.end();
             };
         },
     };

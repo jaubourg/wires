@@ -12,9 +12,9 @@ module.exports = {
     "javascript.unit.js"() {
         module.exports = {
             javascript( __ ) {
-                __.expect( 1 );
+                __.plan( 1 );
                 __.strictEqual( require( `#key` ), `value from js` );
-                __.done();
+                __.end();
             },
         };
     },

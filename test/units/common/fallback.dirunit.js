@@ -74,11 +74,11 @@ module.exports = {
                         `path.in.defaults`, `path.in.falsy`, `path.in.main`,
                         `path.in.more`, `path.in.trueish`, `path.in.vicious`,
                     ];
-                    __.expect( testStrings.length );
+                    __.plan( testStrings.length );
                     for ( const testString of testStrings ) {
                         __.strictEqual( require( `#${ testString }` ), testString, `require( "#${ testString }" )` );
                     }
-                    __.done();
+                    __.end();
                 },
                 "computed values"( __ ) {
                     const expected = {
@@ -87,7 +87,7 @@ module.exports = {
                         "computedWithoutFallback": ``,
                     };
                     const testStrings = Object.keys( expected );
-                    __.expect( testStrings.length );
+                    __.plan( testStrings.length );
                     for ( const testString of testStrings ) {
                         __.strictEqual(
                             require( `#${ testString }` ),
@@ -95,10 +95,10 @@ module.exports = {
                             `require( "#${ testString }" )`
                         );
                     }
-                    __.done();
+                    __.end();
                 },
                 "recursive replace"( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.deepEqual( require( `#path` ), {
                         "in": {
                             "defaults": `path.in.defaults`,
@@ -108,7 +108,7 @@ module.exports = {
                             "value": `path.in.value`,
                         },
                     }, `fallbacks are recursively replaced` );
-                    __.done();
+                    __.end();
                 },
                 "get defaults"( __ ) {
                     const expected = {
@@ -129,7 +129,7 @@ module.exports = {
                         "path.in.value?": undefined,
                     };
                     const testStrings = Object.keys( expected );
-                    __.expect( testStrings.length );
+                    __.plan( testStrings.length );
                     for ( const testString of testStrings ) {
                         __.strictEqual(
                             require( `#${ testString }` ),
@@ -137,12 +137,12 @@ module.exports = {
                             `require( "#${ testString }" )`
                         );
                     }
-                    __.done();
+                    __.end();
                 },
                 "NaN is bad"( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.strictEqual( require( `#NaN` ), `fallback` );
-                    __.done();
+                    __.end();
                 },
             };
         },

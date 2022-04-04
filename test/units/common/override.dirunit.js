@@ -24,7 +24,7 @@ module.exports = {
         "override_level1.unit.js"() {
             module.exports = {
                 test( __ ) {
-                    __.expect( 4 );
+                    __.plan( 4 );
                     __.deepEqual(
                         require( `#array` ),
                         process.env.WIRES_ENV === `test` ? [ 1, 2, 3 ] : [ `a`, `b`, `c` ]
@@ -32,7 +32,7 @@ module.exports = {
                     __.strictEqual( require( `#folder` ), `lib` );
                     __.strictEqual( require( `#lolfolder` ), `lollib` );
                     __.strictEqual( require( `:module` ), `in lib` );
-                    __.done();
+                    __.end();
                 },
             };
         },
@@ -49,7 +49,7 @@ module.exports = {
                     const isTest = process.env.WIRES_ENV === `test`;
                     module.exports = {
                         test( __ ) {
-                            __.expect( 4 );
+                            __.plan( 4 );
                             __.deepEqual( require( `#array` ), [ 4, 5, 6 ] );
                             __.strictEqual( require( `#folder` ), isTest ? `src` : `none` );
                             __.strictEqual( require( `#lolfolder` ), isTest ? `lolsrc` : `lolnone` );
@@ -58,7 +58,7 @@ module.exports = {
                             } else {
                                 __.throws( () => require( `:module` ) );
                             }
-                            __.done();
+                            __.end();
                         },
                     };
                 },

@@ -12,7 +12,7 @@ module.exports = {
     "conditional.unit.js"() {
         module.exports = {
             test( __ ) {
-                __.expect( 10 );
+                __.plan( 10 );
                 __.strictEqual( require( `#unexisting` ), undefined );
                 __.strictEqual( require( `?unexisting` ), `` );
                 __.strictEqual( require( `#>UNEXISTING` ), undefined );
@@ -23,7 +23,7 @@ module.exports = {
                 __.strictEqual( require( `#unknown_empty` ), `` );
                 __.strictEqual( require( `#template_#unknown` ), `template_undefined` );
                 __.strictEqual( require( `#template_?unknown` ), `template_` );
-                __.done();
+                __.end();
             },
         };
     },

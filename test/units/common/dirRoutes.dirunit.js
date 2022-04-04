@@ -48,7 +48,7 @@ module.exports = {
         "dirRoute.unit.js"() {
             module.exports = {
                 test( __ ) {
-                    __.expect( 49 );
+                    __.plan( 49 );
                     for ( const pre of [ `:`, `:dyn/`, `:dyn-conf1/`, `:dyn-conf2/` ] ) {
                         __.strictEqual( require( `${ pre }dir/number` ), 1 );
                         __.strictEqual( require( `${ pre }dir/two/number` ), 2 );
@@ -67,7 +67,7 @@ module.exports = {
                     }
                     __.throws( () => require( `:bad-dyn1/try` ) );
                     __.throws( () => require( `:bad-dyn2/try` ) );
-                    __.done();
+                    __.end();
                 },
             };
         },
@@ -79,9 +79,9 @@ module.exports = {
         "dirRoute.fail-dyn.unit.js"() {
             module.exports = {
                 test( __ ) {
-                    __.expect( 1 );
+                    __.plan( 1 );
                     __.throws( require( `../dir3/number` ) );
-                    __.done();
+                    __.end();
                 },
             };
         },

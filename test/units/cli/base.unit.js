@@ -18,7 +18,7 @@ module.exports = {
         `debug`,
         `--throw-deprecaton`,
     ], ( __, _, stderr, exitCode ) => {
-        __.expect( 2 );
+        __.plan( 2 );
         __.strictEqual( exitCode, 180, `correct exit code (1204)` );
         __.deepEqual( JSON.parse( stderr.replace( rWarningLines, `` ) ), {
             "noParent": false,
@@ -44,17 +44,17 @@ module.exports = {
                 },
             },
         }, `everything has been properly transmitted` );
-        __.done();
+        __.end();
     }, fixtureDir ),
     "missing script": cliTest( [
         process.execPath,
         `executable-name`,
     ], ( __, _, stderr, exitCode ) => {
-        __.expect( 2 );
+        __.plan( 2 );
         __.strictEqual( exitCode, -1, `correct exit code (-1)` );
         const errorMessage = `ERROR: path_to_script required`;
         __.strictEqual( stderr.substr( 0, errorMessage.length ), errorMessage, `correct error message` );
-        __.done();
+        __.end();
     } ),
 };
 
@@ -64,11 +64,11 @@ for ( const option of [ `-e`, `--eval`, `-i`, `--interactive`, `-p`, `--print` ]
         `executable-name`,
         option,
     ], ( __, _, stderr, exitCode ) => {
-        __.expect( 2 );
+        __.plan( 2 );
         __.strictEqual( exitCode, -1, `correct exit code (-1)` );
         const command = process.execPath;
         const errorMessage = `ERROR: ${ path.basename( command, path.extname( command ) ) } option not supported`;
         __.strictEqual( stderr.substr( 0, errorMessage.length ), errorMessage, `correct error message` );
-        __.done();
+        __.end();
     } );
 }

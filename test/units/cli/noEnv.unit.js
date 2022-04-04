@@ -9,8 +9,8 @@ module.exports = {
         path.resolve( __dirname, `../../../lib/wires` ),
         path.resolve( __dirname, `../fixture/commandLineNoEnv/script.js` ),
     ], ( __, stdout ) => {
-        __.expect( 1 );
+        __.plan( 1 );
         __.strictEqual( JSON.parse( stdout ), true );
-        __.done();
+        __.end();
     }, null, `` ),
 };

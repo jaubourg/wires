@@ -18,12 +18,12 @@ module.exports = {
 
         module.exports = {
             test( __ ) {
-                __.expect( 4 );
+                __.plan( 4 );
                 __.strictEqual( require.resolve( `:dir/index` ), index );
                 __.strictEqual( require.resolve( `:indirect` ), index );
                 __.strictEqual( require.resolve( `:route` ), index );
                 __.strictEqual( require.resolve( `::./lib` ), index );
-                __.done();
+                __.end();
             },
         };
     },

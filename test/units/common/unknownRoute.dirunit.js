@@ -4,11 +4,11 @@ module.exports = {
     "unknown_route_no_config.unit.js"() {
         module.exports = {
             test( __ ) {
-                __.expect( 1 );
+                __.plan( 1 );
                 __.throws( () => {
                     require( `:xf56z` );
                 }, `unknown route 'xf56z'` );
-                __.done();
+                __.end();
             },
         };
     },
@@ -23,7 +23,7 @@ module.exports = {
         "unknown_route.unit.js"() {
             module.exports = {
                 test( __ ) {
-                    __.expect( 6 );
+                    __.plan( 6 );
                     __.strictEqual( require( `:null` ), null );
                     __.strictEqual( require( `:null-computed` ), null );
                     __.strictEqual( require( `:null-generic` ), null );
@@ -32,7 +32,7 @@ module.exports = {
                     __.throws( () => {
                         require( `:xf56z` );
                     }, `unknown route 'xf56z'` );
-                    __.done();
+                    __.end();
                 },
             };
         },
