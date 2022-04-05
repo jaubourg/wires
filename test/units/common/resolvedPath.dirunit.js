@@ -4,7 +4,7 @@ module.exports = {
     "wires.json": {
         "path": `./lib`,
         "cmdPath": `>/lib`,
-        ":cmdPath": `>/lib/nodeVersion`,
+        ":cmdPath": `>/lib/nodeVersion.js`,
         ":resolvedRoute": `./lib/test.js`,
         "indirectResolvedRoute": `./lib/test.js`,
         ":indirectResolvedRoute": `{#indirectResolvedRoute}`,
@@ -14,9 +14,9 @@ module.exports = {
         const { resolve } = require( `path` );
         module.exports = {
             async test( __ ) {
-                __.plan( 11 );
-                __.strictEqual( require.resolve( `:cmdPath` ), resolve( process.cwd(), `lib/nodeVersion.js` ) );
+                __.plan( 12 );
                 await Promise.allSettled( [
+                    importAndRequire( `:cmdPath` ).sameAs( resolve( process.cwd(), `lib/nodeVersion.js` ) ),
                     importAndRequire.all( [
                         [ `#path`, `./lib` ],
                         [ `#cmdPath`, `>/lib` ],
@@ -39,9 +39,9 @@ module.exports = {
             const { resolve } = require( `path` );
             module.exports = {
                 async test( __ ) {
-                    __.plan( 13 );
-                    __.strictEqual( require.resolve( `:cmdPath` ), resolve( process.cwd(), `lib/nodeVersion.js` ) );
+                    __.plan( 14 );
                     await Promise.allSettled( [
+                        importAndRequire( `:cmdPath` ).sameAs( resolve( process.cwd(), `lib/nodeVersion.js` ) ),
                         importAndRequire.all( [
                             [ `#path`, `./lib` ],
                             [ `#cmdPath`, `>/lib` ],
