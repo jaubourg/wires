@@ -10,15 +10,27 @@ module.exports = {
     },
     "/dir1": {
         "number.json": 1,
+        "numberES.js"() {
+            module.exports = 1;
+        },
         "index.js"() {
             module.exports = `dir1`;
         },
     },
     "/dir2": {
         "number.json": 2,
+        "numberES.js"() {
+            module.exports = 2;
+        },
         "three-number.json": 3,
+        "three-numberES.js"() {
+            module.exports = 3;
+        },
         "/sub": {
             "number.json": 4,
+            "numberES.js"() {
+                module.exports = 4;
+            },
         },
         "index.js"() {
             module.exports = `dir2`;
@@ -26,13 +38,16 @@ module.exports = {
     },
     "/dir3": {
         "number.json": 5,
+        "numberES.js"() {
+            module.exports = 5;
+        },
         "index.js"() {
             module.exports = `dir3`;
         },
     },
     "/sub": {
         "dyn.js": () => {
-            module.exports = ( ...parts ) => ( parts.length ? `:${ parts.join( `/` ) }` : `../dir3/number` );
+            module.exports = ( ...parts ) => ( parts.length ? `:${ parts.join( `/` ) }` : `../dir3/numberES.js` );
         },
         "wires.json": {
             ":dir/three/": `../dir2/three-`,
@@ -40,34 +55,43 @@ module.exports = {
         "wires-defaults.js"() {
             module.exports = {
                 ":bad-dyn1/()": `../does/not/exist`,
-                ":bad-dyn2/()": `../dir3/number`,
+                ":bad-dyn2/()": `../dir3/numberES.js`,
                 ":dyn-conf1/()": require( `./dyn.js` ),
                 ":dyn-conf2/": require( `./dyn.js` ),
             };
         },
         "dirRoute.unit.js"() {
             module.exports = {
-                test( __ ) {
-                    __.plan( 49 );
-                    for ( const pre of [ `:`, `:dyn/`, `:dyn-conf1/`, `:dyn-conf2/` ] ) {
-                        __.strictEqual( require( `${ pre }dir/number` ), 1 );
-                        __.strictEqual( require( `${ pre }dir/two/number` ), 2 );
-                        __.strictEqual( require( `${ pre }dir/three/number` ), 3 );
-                        __.strictEqual( require( `${ pre }dir/two/sub/number` ), 4 );
-                        __.strictEqual( require( `${ pre }dir/three/sub/number` ), 5 );
-                        __.strictEqual( require( `${ pre }dir/four/sub/number` ), 1 );
-                        __.throws( () => require( `${ pre }dir/four` ) );
-                        __.strictEqual( require( `${ pre }dir` ), `dir1` );
-                        __.strictEqual( require( `${ pre }dir/two` ), `dir2` );
-                        __.strictEqual( require( `${ pre }dir/three/sub` ), `dir3` );
-                        __.strictEqual( require( `${ pre }dir/four/sub` ), `dir1` );
-                        if ( /^:dyn/.test( pre ) ) {
-                            __.strictEqual( require( `${ pre }` ), require( `../dir3/number` ) );
-                        }
-                    }
-                    __.throws( () => require( `:bad-dyn1/try` ) );
-                    __.throws( () => require( `:bad-dyn2/try` ) );
-                    __.end();
+                async test( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    __.plan( 98 );
+                    await Promise.allSettled( [ `:`, `:dyn/`, `:dyn-conf1/`, `:dyn-conf2/` ].flatMap( pre => [
+                        ...[
+                            [ `${ pre }dir/number`, 1 ],
+                            [ `${ pre }dir/two/number`, 2 ],
+                            [ `${ pre }dir/three/number`, 3 ],
+                            [ `${ pre }dir/two/sub/number`, 4 ],
+                            [ `${ pre }dir/three/sub/number`, 5 ],
+                            [ `${ pre }dir/four/sub/number`, 1 ],
+                            [ `${ pre }dir`, `dir1` ],
+                            [ `${ pre }dir/two`, `dir2` ],
+                            [ `${ pre }dir/three/sub`, `dir3` ],
+                            [ `${ pre }dir/four/sub`, `dir1` ],
+                        ].map(
+                            async ( [ expression, expected ] ) => {
+                                await importAndRequire(
+                                    `${ expression }${ /\/number$/.test( expression ) ? `ES.js` : `/index.js` }`
+                                ).strictImportEqual( expected );
+                                importAndRequire( expression ).strictRequireEqual( expected );
+                            }
+                        ),
+                        importAndRequire( `${ pre }dir/four` ).throws(),
+                        /^:dyn/.test( pre ) && importAndRequire( pre ).sameAs( `../dir3/numberES.js` ),
+                    ] ).concat(
+                        [ `:bad-dyn1/try`, `:bad-dyn2/try` ].map(
+                            expression => importAndRequire( expression ).throws()
+                        )
+                    ) );
                 },
             };
         },
@@ -78,9 +102,10 @@ module.exports = {
         },
         "dirRoute.fail-dyn.unit.js"() {
             module.exports = {
-                test( __ ) {
-                    __.plan( 1 );
-                    __.throws( require( `../dir3/number` ) );
+                async test( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    __.plan( 2 );
+                    await importAndRequire( `:bad-dyn/hello` ).throws();
                     __.end();
                 },
             };

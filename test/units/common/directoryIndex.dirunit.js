@@ -3,6 +3,7 @@
 module.exports = {
     "wires.json": {
         ":test": `./test/`,
+        ":test-esm": `./test/index.js`,
     },
     "test.js"() {
         module.exports = false;
@@ -14,9 +15,13 @@ module.exports = {
     },
     "test.unit.js"() {
         module.exports = {
-            test( __ ) {
-                __.plan( 1 );
-                __.strictEqual( require( `:test` ), true );
+            async test( __ ) {
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                __.plan( 4 );
+                const tmp = importAndRequire( `:test` );
+                tmp.strictRequireEqual( true );
+                await tmp.throwsImport();
+                await importAndRequire( `:test-esm` ).strictEqual( true );
                 __.end();
             },
         };

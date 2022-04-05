@@ -11,19 +11,21 @@ module.exports = {
     },
     "conditional.unit.js"() {
         module.exports = {
-            test( __ ) {
-                __.plan( 10 );
-                __.strictEqual( require( `#unexisting` ), undefined );
-                __.strictEqual( require( `?unexisting` ), `` );
-                __.strictEqual( require( `#>UNEXISTING` ), undefined );
-                __.strictEqual( require( `?>UNEXISTING` ), `` );
-                __.strictEqual( require( `#UNEXISTING_undefined` ), `undefined` );
-                __.strictEqual( require( `#UNEXISTING_empty` ), `` );
-                __.strictEqual( require( `#unknown_undefined` ), `undefined` );
-                __.strictEqual( require( `#unknown_empty` ), `` );
-                __.strictEqual( require( `#template_#unknown` ), `template_undefined` );
-                __.strictEqual( require( `#template_?unknown` ), `template_` );
-                __.end();
+            async test( __ ) {
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                __.plan( 20 );
+                await importAndRequire.all( [
+                    [ `#unexisting`, undefined ],
+                    [ `?unexisting`, `` ],
+                    [ `#>UNEXISTING`, undefined ],
+                    [ `?>UNEXISTING`, `` ],
+                    [ `#UNEXISTING_undefined`, `undefined` ],
+                    [ `#UNEXISTING_empty`, `` ],
+                    [ `#unknown_undefined`, `undefined` ],
+                    [ `#unknown_empty`, `` ],
+                    [ `#template_#unknown`, `template_undefined` ],
+                    [ `#template_?unknown`, `template_` ],
+                ] ).strictEqual();
             },
         };
     },

@@ -2,11 +2,10 @@
 
 "use strict";
 
-const createReporter = require( `tap-diff` );
 const fs = require( `fs` );
 const fse = require( `fs-extra` );
 const path = require( `path` );
-const tape = require( `tape` );
+const run = require( `./run` );
 
 const rCleanFunction = /^.*\r?\n|\r?\n.*$/g;
 const rDirUnit = /\.dirunit\.js$/;
@@ -74,15 +73,6 @@ const npmInstall = [];
 // eslint-disable-next-line no-extend-native
 Object.prototype.__MODIFIED_PROTOTYPE = true;
 
-const run = () => {
-    tape.createStream().pipe( createReporter() ).pipe( process.stdout );
-    for ( const { filename, label } of units ) {
-        for ( const [ name, fn ] of Object.entries( require( filename ) ) ) {
-            tape.test( `${ label }: ${ JSON.stringify( name ) }`, fn );
-        }
-    }
-};
-
 if ( npmInstall.length ) {
     const { exec } = require( `child_process` );
     console.log( `npm install for fixtures...` );
@@ -101,11 +91,11 @@ if ( npmInstall.length ) {
     )
         .then( () => {
             console.log( `install done in ${ Date.now() - now }ms\n` );
-            run();
+            run( units );
         } )
         .catch( e => setTimeout( () => {
             throw e;
         } ) );
 } else {
-    run();
+    run( units );
 }

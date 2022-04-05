@@ -16,17 +16,21 @@ module.exports = {
     },
     "defaults.unit.js"() {
         module.exports = {
-            data( __ ) {
-                __.plan( 2 );
-                __.strictEqual( require( `#key` ), `value` );
-                __.strictEqual( require( `#keyDefaults` ), `valueDefault` );
-                __.end();
+            async data( __ ) {
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                __.plan( 4 );
+                await importAndRequire.all( [
+                    [ `#key`, `value` ],
+                    [ `#keyDefaults`, `valueDefault` ],
+                ] ).strictEqual();
             },
-            route( __ ) {
-                __.plan( 2 );
-                __.strictEqual( require( `:module` ), require( `./test` ) );
-                __.strictEqual( require( `:moduleDefaults` ), require( `./test` ) );
-                __.end();
+            async route( __ ) {
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                __.plan( 4 );
+                await importAndRequire.all( [
+                    [ `:module`, `./test.js` ],
+                    [ `:moduleDefaults`, `./test.js` ],
+                ] ).sameAs();
             },
         };
     },
