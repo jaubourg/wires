@@ -22,10 +22,10 @@ module.exports = {
         },
         "dirRouteOverride.unit.js"() {
             module.exports = {
-                "dir route override"( __ ) {
-                    __.plan( 1 );
-                    __.strictEqual( require( `:path/test` ), `child` );
-                    __.end();
+                async "dir route override"( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    __.plan( 2 );
+                    await importAndRequire( `:path/test.js` ).strictEqual( `child` );
                 },
             };
         },

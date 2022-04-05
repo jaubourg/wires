@@ -11,10 +11,10 @@ module.exports = {
     },
     "javascript.unit.js"() {
         module.exports = {
-            javascript( __ ) {
-                __.plan( 1 );
-                __.strictEqual( require( `#key` ), `value from js` );
-                __.end();
+            async javascript( __ ) {
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                __.plan( 2 );
+                await importAndRequire( `#key` ).strictEqual( `value from js` );
             },
         };
     },

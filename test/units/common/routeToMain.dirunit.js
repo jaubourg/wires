@@ -6,10 +6,10 @@ module.exports = {
     },
     "route_to_main.unit.js"() {
         module.exports = {
-            test( __ ) {
-                __.plan( 1 );
-                __.strictEqual( require( `:fs` ), require( `fs` ) );
-                __.end();
+            async test( __ ) {
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                __.plan( 2 );
+                await importAndRequire( `:fs` ).sameAs( `fs` );
             },
         };
     },

@@ -13,13 +13,13 @@ module.exports = {
         },
         "namespace.unit.js"() {
             module.exports = {
-                test( __ ) {
-                    __.plan( 1 );
-                    __.deepEqual( require( `#` ), {
+                async test( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    __.plan( 2 );
+                    await importAndRequire( `#` ).deepEqual( {
                         "name": `John`,
                         "age": 27,
                     } );
-                    __.end();
                 },
             };
         },
@@ -31,10 +31,10 @@ module.exports = {
         },
         "namespace.unit.js"() {
             module.exports = {
-                "empty"( __ ) {
-                    __.plan( 1 );
-                    __.throws( () => require( `#` ) );
-                    __.end();
+                async "empty"( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    __.plan( 2 );
+                    await importAndRequire( `#` ).throws();
                 },
             };
         },
@@ -46,10 +46,10 @@ module.exports = {
         },
         "namespace.unit.js"() {
             module.exports = {
-                "wrong type"( __ ) {
-                    __.plan( 1 );
-                    __.throws( () => require( `#` ) );
-                    __.end();
+                async "wrong type"( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    __.plan( 2 );
+                    await importAndRequire( `#` ).throws();
                 },
             };
         },

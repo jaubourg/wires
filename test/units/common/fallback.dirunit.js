@@ -63,8 +63,9 @@ module.exports = {
         },
         "fallback.unit.js"() {
             module.exports = {
-                "base"( __ ) {
-                    const testStrings = [
+                async "base"( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    const list = [
                         `defaultIsUndefined`,
                         `defaults`, `main`, `parent`,
                         `definedInDefaults`, `definedInMain`,
@@ -73,33 +74,24 @@ module.exports = {
                         `nonExistingInDefaults`, `nonExistingInMain`,
                         `path.in.defaults`, `path.in.falsy`, `path.in.main`,
                         `path.in.more`, `path.in.trueish`, `path.in.vicious`,
+                    ].map( s => [ `#${ s }`, s ] );
+                    __.plan( list.length * 2 );
+                    await importAndRequire.all( list ).strictEqual();
+                },
+                async "computed values"( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    const list = [
+                        [ `#computedWithFallback`, `computed fallback` ],
+                        [ `#computedWithNullFallback`, null ],
+                        [ `#computedWithoutFallback`, `` ],
                     ];
-                    __.plan( testStrings.length );
-                    for ( const testString of testStrings ) {
-                        __.strictEqual( require( `#${ testString }` ), testString, `require( "#${ testString }" )` );
-                    }
-                    __.end();
+                    __.plan( list.length * 2 );
+                    await importAndRequire.all( list ).strictEqual();
                 },
-                "computed values"( __ ) {
-                    const expected = {
-                        "computedWithFallback": `computed fallback`,
-                        "computedWithNullFallback": null,
-                        "computedWithoutFallback": ``,
-                    };
-                    const testStrings = Object.keys( expected );
-                    __.plan( testStrings.length );
-                    for ( const testString of testStrings ) {
-                        __.strictEqual(
-                            require( `#${ testString }` ),
-                            expected[ testString ],
-                            `require( "#${ testString }" )`
-                        );
-                    }
-                    __.end();
-                },
-                "recursive replace"( __ ) {
-                    __.plan( 1 );
-                    __.deepEqual( require( `#path` ), {
+                async "recursive replace"( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    __.plan( 2 );
+                    await importAndRequire( `#path` ).deepEqual( {
                         "in": {
                             "defaults": `path.in.defaults`,
                             "falsy": `path.in.falsy`,
@@ -108,41 +100,33 @@ module.exports = {
                             "value": `path.in.value`,
                         },
                     }, `fallbacks are recursively replaced` );
-                    __.end();
                 },
-                "get defaults"( __ ) {
-                    const expected = {
-                        "defaults?": `defaults`,
-                        "definedInDefaults?": `fallback definedInDefaults`,
-                        "definedInMain?": `fallback definedInMain`,
-                        "fallbackInDefaults?": `fallbackInDefaults`,
-                        "fallbackInMain?": `fallbackInMain`,
-                        "fallbackOverride?": `fallbackOverride`,
-                        "main?": `main`,
-                        "nonExistingInDefaults?": `nonExistingInDefaults`,
-                        "nonExistingInMain?": `nonExistingInMain`,
-                        "parent?": `parent`,
-                        "path.in.defaults?": `path.in.defaults`,
-                        "path.in.falsy?": `path.in.falsy`,
-                        "path.in.main?": `path.in.main`,
-                        "path.in.trueish?": `fallback path.in.trueish`,
-                        "path.in.value?": undefined,
-                    };
-                    const testStrings = Object.keys( expected );
-                    __.plan( testStrings.length );
-                    for ( const testString of testStrings ) {
-                        __.strictEqual(
-                            require( `#${ testString }` ),
-                            expected[ testString ],
-                            `require( "#${ testString }" )`
-                        );
-                    }
-                    __.end();
+                async "get defaults"( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    const list = [
+                        [ `#defaults?`, `defaults` ],
+                        [ `#definedInDefaults?`, `fallback definedInDefaults` ],
+                        [ `#definedInMain?`, `fallback definedInMain` ],
+                        [ `#fallbackInDefaults?`, `fallbackInDefaults` ],
+                        [ `#fallbackInMain?`, `fallbackInMain` ],
+                        [ `#fallbackOverride?`, `fallbackOverride` ],
+                        [ `#main?`, `main` ],
+                        [ `#nonExistingInDefaults?`, `nonExistingInDefaults` ],
+                        [ `#nonExistingInMain?`, `nonExistingInMain` ],
+                        [ `#parent?`, `parent` ],
+                        [ `#path.in.defaults?`, `path.in.defaults` ],
+                        [ `#path.in.falsy?`, `path.in.falsy` ],
+                        [ `#path.in.main?`, `path.in.main` ],
+                        [ `#path.in.trueish?`, `fallback path.in.trueish` ],
+                        [ `#path.in.value?`, undefined ],
+                    ];
+                    __.plan( list.length * 2 );
+                    await importAndRequire.all( list ).strictEqual();
                 },
-                "NaN is bad"( __ ) {
-                    __.plan( 1 );
-                    __.strictEqual( require( `#NaN` ), `fallback` );
-                    __.end();
+                async "NaN is bad"( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    __.plan( 2 );
+                    await importAndRequire( `#NaN` ).strictEqual( `fallback` );
                 },
             };
         },

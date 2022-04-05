@@ -8,12 +8,10 @@ module.exports = {
     },
     "malformed.unit.js"() {
         module.exports = {
-            test( __ ) {
-                __.plan( 1 );
-                __.throws( () => {
-                    require( `#key` );
-                } );
-                __.end();
+            async test( __ ) {
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                __.plan( 2 );
+                await importAndRequire( `#key` ).throws();
             },
         };
     },

@@ -23,16 +23,19 @@ module.exports = {
     "/level1": {
         "override_level1.unit.js"() {
             module.exports = {
-                test( __ ) {
-                    __.plan( 4 );
-                    __.deepEqual(
-                        require( `#array` ),
-                        process.env.WIRES_ENV === `test` ? [ 1, 2, 3 ] : [ `a`, `b`, `c` ]
-                    );
-                    __.strictEqual( require( `#folder` ), `lib` );
-                    __.strictEqual( require( `#lolfolder` ), `lollib` );
-                    __.strictEqual( require( `:module` ), `in lib` );
-                    __.end();
+                async test( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    __.plan( 8 );
+                    await Promise.allSettled( [
+                        importAndRequire( `#array` ).deepEqual(
+                            process.env.WIRES_ENV === `test` ? [ 1, 2, 3 ] : [ `a`, `b`, `c` ]
+                        ),
+                        importAndRequire.all( [
+                            [ `#folder`, `lib` ],
+                            [ `#lolfolder`, `lollib` ],
+                            [ `:module`, `in lib` ],
+                        ] ).strictEqual(),
+                    ] );
                 },
             };
         },
@@ -48,17 +51,21 @@ module.exports = {
                 "override_level2.unit.js"() {
                     const isTest = process.env.WIRES_ENV === `test`;
                     module.exports = {
-                        test( __ ) {
-                            __.plan( 4 );
-                            __.deepEqual( require( `#array` ), [ 4, 5, 6 ] );
-                            __.strictEqual( require( `#folder` ), isTest ? `src` : `none` );
-                            __.strictEqual( require( `#lolfolder` ), isTest ? `lolsrc` : `lolnone` );
-                            if ( isTest ) {
-                                __.strictEqual( require( `:module` ), `in src` );
-                            } else {
-                                __.throws( () => require( `:module` ) );
-                            }
-                            __.end();
+                        async test( __ ) {
+                            const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                            __.plan( 8 );
+                            await Promise.allSettled( [
+                                importAndRequire( `#array` ).deepEqual( [ 4, 5, 6 ] ),
+                                importAndRequire.all( [
+                                    [ `#folder`, isTest ? `src` : `none` ],
+                                    [ `#lolfolder`, isTest ? `lolsrc` : `lolnone` ],
+                                ] ).strictEqual(),
+                                (
+                                    isTest ?
+                                        importAndRequire( `:module` ).strictEqual( `in src` ) :
+                                        importAndRequire( `:module` ).throws()
+                                ),
+                            ] );
                         },
                     };
                 },

@@ -14,16 +14,18 @@ module.exports = {
     },
     "expansion.unit.js"() {
         module.exports = {
-            data( __ ) {
-                __.plan( 2 );
-                __.strictEqual( require( `#show` ), `value_is_lib` );
-                __.strictEqual( require( `#path` ), process.env.PATH );
-                __.end();
+            async data( __ ) {
+                __.plan( 4 );
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                await importAndRequire.all( [
+                    [ `#show`, `value_is_lib` ],
+                    [ `#path`, process.env.PATH ],
+                ] ).strictEqual();
             },
-            route( __ ) {
-                __.plan( 1 );
-                __.strictEqual( require( `:module` ), require( `./lib/test` ) );
-                __.end();
+            async route( __ ) {
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                __.plan( 2 );
+                await importAndRequire( `:module` ).sameAs( `./lib/test.js` );
             },
         };
     },

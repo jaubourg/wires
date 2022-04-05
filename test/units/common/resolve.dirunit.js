@@ -2,11 +2,11 @@
 
 module.exports = {
     "wires.json": {
-        "lib": `lib`,
+        "lib": `lib/index.js`,
 
         ":dir/": `./lib/`,
         ":indirect": `./{#lib}`,
-        ":route": `./lib`,
+        ":route": `./lib/index.js`,
     },
     "/lib": {
         "index.js"() {
@@ -17,13 +17,17 @@ module.exports = {
         const index = require( `path` ).resolve( __dirname, `lib`, `index.js` );
 
         module.exports = {
-            test( __ ) {
-                __.plan( 4 );
-                __.strictEqual( require.resolve( `:dir/index` ), index );
-                __.strictEqual( require.resolve( `:indirect` ), index );
-                __.strictEqual( require.resolve( `:route` ), index );
-                __.strictEqual( require.resolve( `::./lib` ), index );
-                __.end();
+            async test( __ ) {
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                const list = [
+                    `:dir/index.js`,
+                    `:indirect`,
+                    `:route`,
+                    `::./lib/index.js`,
+                ];
+                __.plan( list.length * 3 );
+                list.forEach( expression => __.strictEqual( require.resolve( expression ), index ) );
+                await importAndRequire.all( list.map( e => [ e, index ] ) ).sameAs();
             },
         };
     },

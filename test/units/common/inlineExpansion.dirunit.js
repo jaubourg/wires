@@ -12,10 +12,10 @@ module.exports = {
     "/level": {
         "inline_expansion.unit.js"() {
             module.exports = {
-                test( __ ) {
-                    __.plan( 1 );
-                    __.strictEqual( require( `./{#folder}/test.js` ), `level/lib` );
-                    __.end();
+                async test( __ ) {
+                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                    __.plan( 2 );
+                    await importAndRequire( `./{#folder}/test.js` ).strictEqual( `level/lib` );
                 },
             };
         },

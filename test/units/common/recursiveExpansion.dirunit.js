@@ -10,13 +10,13 @@ module.exports = {
     },
     "recursive_expansion.unit.js"() {
         module.exports = {
-            test( __ ) {
-                __.plan( 1 );
-                __.deepEqual( require( `#paths` ), {
+            async test( __ ) {
+                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
+                __.plan( 2 );
+                await importAndRequire( `#paths` ).deepEqual( {
                     "data": `./lib/data`,
                     "tests": [ `./lib/test1`, `./lib/test2` ],
                 } );
-                __.end();
             },
         };
     },
