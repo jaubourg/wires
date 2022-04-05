@@ -63,7 +63,6 @@ module.exports = {
         "dirRoute.unit.js"() {
             module.exports = {
                 async test( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 98 );
                     await Promise.allSettled( [ `:`, `:dyn/`, `:dyn-conf1/`, `:dyn-conf2/` ].flatMap( pre => [
                         ...[
@@ -103,7 +102,6 @@ module.exports = {
         "dirRoute.fail-dyn.unit.js"() {
             module.exports = {
                 async test( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 2 );
                     await importAndRequire( `:bad-dyn/hello` ).throws();
                     __.end();

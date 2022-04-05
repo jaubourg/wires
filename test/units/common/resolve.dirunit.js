@@ -18,7 +18,6 @@ module.exports = {
 
         module.exports = {
             async test( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 const list = [
                     `:dir/index.js`,
                     `:indirect`,

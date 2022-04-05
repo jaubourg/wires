@@ -23,7 +23,6 @@ module.exports = {
         "dirRouteOverride.unit.js"() {
             module.exports = {
                 async "dir route override"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 2 );
                     await importAndRequire( `:path/test.js` ).strictEqual( `child` );
                 },

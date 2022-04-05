@@ -17,7 +17,6 @@ module.exports = {
     "defaults.unit.js"() {
         module.exports = {
             async data( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 4 );
                 await importAndRequire.all( [
                     [ `#key`, `value` ],
@@ -25,7 +24,6 @@ module.exports = {
                 ] ).strictEqual();
             },
             async route( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 4 );
                 await importAndRequire.all( [
                     [ `:module`, `./test.js` ],

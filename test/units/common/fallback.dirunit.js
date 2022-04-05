@@ -64,7 +64,6 @@ module.exports = {
         "fallback.unit.js"() {
             module.exports = {
                 async "base"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     const list = [
                         `defaultIsUndefined`,
                         `defaults`, `main`, `parent`,
@@ -79,7 +78,6 @@ module.exports = {
                     await importAndRequire.all( list ).strictEqual();
                 },
                 async "computed values"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     const list = [
                         [ `#computedWithFallback`, `computed fallback` ],
                         [ `#computedWithNullFallback`, null ],
@@ -89,7 +87,6 @@ module.exports = {
                     await importAndRequire.all( list ).strictEqual();
                 },
                 async "recursive replace"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 2 );
                     await importAndRequire( `#path` ).deepEqual( {
                         "in": {
@@ -102,7 +99,6 @@ module.exports = {
                     }, `fallbacks are recursively replaced` );
                 },
                 async "get defaults"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     const list = [
                         [ `#defaults?`, `defaults` ],
                         [ `#definedInDefaults?`, `fallback definedInDefaults` ],
@@ -124,7 +120,6 @@ module.exports = {
                     await importAndRequire.all( list ).strictEqual();
                 },
                 async "NaN is bad"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 2 );
                     await importAndRequire( `#NaN` ).strictEqual( `fallback` );
                 },

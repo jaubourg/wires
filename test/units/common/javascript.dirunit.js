@@ -12,7 +12,6 @@ module.exports = {
     "javascript.unit.js"() {
         module.exports = {
             async javascript( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 2 );
                 await importAndRequire( `#key` ).strictEqual( `value from js` );
             },

@@ -24,7 +24,6 @@ module.exports = {
         "override_level1.unit.js"() {
             module.exports = {
                 async test( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 8 );
                     await Promise.allSettled( [
                         importAndRequire( `#array` ).deepEqual(
@@ -52,7 +51,6 @@ module.exports = {
                     const isTest = process.env.WIRES_ENV === `test`;
                     module.exports = {
                         async test( __ ) {
-                            const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                             __.plan( 8 );
                             await Promise.allSettled( [
                                 importAndRequire( `#array` ).deepEqual( [ 4, 5, 6 ] ),

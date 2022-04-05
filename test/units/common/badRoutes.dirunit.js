@@ -8,7 +8,6 @@ module.exports = {
         "nonStringRoute.unit.js"() {
             module.exports = {
                 async "non string route"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 2 );
                     await importAndRequire( `:boolean` ).throws();
                     __.end();
@@ -23,7 +22,6 @@ module.exports = {
         "nonStringRoute.unit.js"() {
             module.exports = {
                 async "non string route"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 2 );
                     await importAndRequire( `:null/something` ).throws();
                     __.end();
@@ -38,7 +36,6 @@ module.exports = {
         "emptyRoute.unit.js"() {
             module.exports = {
                 async "empty route"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 2 );
                     await importAndRequire( `:empty` ).throws();
                     __.end();

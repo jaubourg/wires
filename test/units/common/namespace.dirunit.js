@@ -14,7 +14,6 @@ module.exports = {
         "namespace.unit.js"() {
             module.exports = {
                 async test( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 2 );
                     await importAndRequire( `#` ).deepEqual( {
                         "name": `John`,
@@ -32,7 +31,6 @@ module.exports = {
         "namespace.unit.js"() {
             module.exports = {
                 async "empty"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 2 );
                     await importAndRequire( `#` ).throws();
                 },
@@ -47,7 +45,6 @@ module.exports = {
         "namespace.unit.js"() {
             module.exports = {
                 async "wrong type"( __ ) {
-                    const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                     __.plan( 2 );
                     await importAndRequire( `#` ).throws();
                 },

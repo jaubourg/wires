@@ -2,6 +2,8 @@
 "use strict";
 
 const createReporter = require( `tap-diff` );
+const fs = require( `fs` );
+const path = require( `path` );
 const tape = require( `tape` );
 
 const COMPARE = Symbol( `compare` );
@@ -213,9 +215,27 @@ const extendTape = fn => ( __, ...args ) => {
     return fn( __, ...args );
 };
 
+const fixtureDir = `${ path.resolve( `${ __dirname }/../fixture` ) }/`;
+const rMethod = /(\( __ \) \{)$/gm;
+
+const patchFile = filename => {
+    if ( !filename.startsWith( fixtureDir ) ) {
+        return;
+    }
+    const content = fs.readFileSync( filename, `utf8` );
+    const patched = content.replace(
+        rMethod,
+        `$1 const importAndRequire = __.importAndRequireFactory( e => import( e ), require );`
+    );
+    if ( patched !== content ) {
+        fs.writeFileSync( filename, patched );
+    }
+};
+
 module.exports = units => {
     tape.createStream().pipe( createReporter() ).pipe( process.stdout );
     for ( const { filename, label } of units ) {
+        patchFile( filename );
         for ( const [ name, fn ] of Object.entries( require( filename ) ) ) {
             tape.test( `${ label }: ${ JSON.stringify( name ) }`, extendTape( fn ) );
         }

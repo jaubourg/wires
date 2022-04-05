@@ -11,7 +11,6 @@ module.exports = {
     "recursive_expansion.unit.js"() {
         module.exports = {
             async test( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 2 );
                 await importAndRequire( `#paths` ).deepEqual( {
                     "data": `./lib/data`,

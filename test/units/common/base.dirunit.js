@@ -43,7 +43,6 @@ module.exports = {
     "base.unit.js"() {
         module.exports = {
             async data( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 14 );
                 await Promise.allSettled( [
                     importAndRequire( `#array` ).deepEqual( [ 1, 2, 3 ] ),
@@ -58,7 +57,6 @@ module.exports = {
                 ] );
             },
             async "undefined data"( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 6 );
                 await importAndRequire.all( [
                     [ `#notDefined`, undefined ],
@@ -67,7 +65,6 @@ module.exports = {
                 ] ).strictEqual();
             },
             async "data is cloned"( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 8 );
                 await Promise.allSettled( [ `#array`, `#object` ].map( async expression => {
                     const value = require( expression );
@@ -79,7 +76,6 @@ module.exports = {
                 } ) );
             },
             async "environment data"( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 5 );
                 await importAndRequire( `#>PATH` ).strictEqual( process.env.PATH );
                 const tmp = importAndRequire( `#>` );
@@ -90,7 +86,6 @@ module.exports = {
                 } );
             },
             async "casts"( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 30 );
                 const cast = require( `#cast` );
                 const { "default": castM } = await import( `#cast` );
@@ -107,14 +102,12 @@ module.exports = {
                 ] ).strictEqual();
             },
             async route( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 3 );
                 const tmp = importAndRequire( `:module` );
                 tmp.sameRequireAs( `./test` );
                 await tmp.sameAs( `./test.js` );
             },
             async raw( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 3 );
                 importAndRequire( `::./raw{#hello}` ).strictRequireEqual( `raw` );
                 await importAndRequire( `::./test.js` ).sameAs( `./test.js` );

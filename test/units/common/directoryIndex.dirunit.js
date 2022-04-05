@@ -16,7 +16,6 @@ module.exports = {
     "test.unit.js"() {
         module.exports = {
             async test( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 4 );
                 const tmp = importAndRequire( `:test` );
                 tmp.strictRequireEqual( true );

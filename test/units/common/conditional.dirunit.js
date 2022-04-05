@@ -12,7 +12,6 @@ module.exports = {
     "conditional.unit.js"() {
         module.exports = {
             async test( __ ) {
-                const importAndRequire = __.importAndRequireFactory( e => import( e ), require );
                 __.plan( 20 );
                 await importAndRequire.all( [
                     [ `#unexisting`, undefined ],
