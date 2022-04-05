@@ -217,7 +217,7 @@ module.exports = {
         };
         testSerialize( __, b, `BigInt("9999")`, equals );
         testSerialize( __, o, `{"t":[BigInt("9999")]}`, ( o1, o2 ) => equals( o1.t[ 0 ], o2.t[ 0 ] ) );
-        __.throws( () => serialize( BigInt( `abc` ) ) );
+        __.throws( () => serialize( BigInt( `abc` ), TypeError ) );
         __.end();
     },
     "URLs"( __ ) {

@@ -110,7 +110,7 @@ path
         }
         const route = config.getRoute( result );
         if ( !route ) {
-            throw new Error( `Unknown route '${ result }'` );
+            throw new Error( `unknown route ${ JSON.stringify( result ) }` );
         }
         let { value } = route;
         if ( typeof value === `function` ) {

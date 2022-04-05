@@ -104,7 +104,6 @@ module.exports = {
                 async test( __ ) {
                     __.plan( 2 );
                     await importAndRequire( `:bad-dyn/hello` ).throws();
-                    __.end();
                 },
             };
         },

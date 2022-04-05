@@ -21,7 +21,6 @@ module.exports = {
                 tmp.strictRequireEqual( true );
                 await tmp.throwsImport();
                 await importAndRequire( `:test-esm` ).strictEqual( true );
-                __.end();
             },
         };
     },

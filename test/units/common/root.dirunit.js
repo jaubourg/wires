@@ -13,12 +13,11 @@ module.exports = {
         },
         "root.unit.js"() {
             module.exports = {
-                test( __ ) {
-                    __.plan( 1 );
-                    __.deepEqual( require( `#` ), {
+                async test( __ ) {
+                    __.plan( 2 );
+                    await importAndRequire( `#` ).deepEqual( {
                         "age": 27,
                     } );
-                    __.end();
                 },
             };
         },
@@ -30,10 +29,9 @@ module.exports = {
         },
         "root.unit.js"() {
             module.exports = {
-                "wrong type"( __ ) {
-                    __.plan( 1 );
-                    __.throws( () => require( `#` ) );
-                    __.end();
+                async "wrong type"( __ ) {
+                    __.plan( 2 );
+                    await importAndRequire( `#` ).throws( / root should be a boolean, string provided/ );
                 },
             };
         },
@@ -51,12 +49,11 @@ module.exports = {
         },
         "root.unit.js"() {
             module.exports = {
-                "with namespace"( __ ) {
-                    __.plan( 1 );
-                    __.deepEqual( require( `#` ), {
+                async "with namespace"( __ ) {
+                    __.plan( 2 );
+                    await importAndRequire( `#` ).deepEqual( {
                         "age": 27,
                     } );
-                    __.end();
                 },
             };
         },

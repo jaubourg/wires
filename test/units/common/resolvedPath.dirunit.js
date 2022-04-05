@@ -5,34 +5,32 @@ module.exports = {
         "path": `./lib`,
         "cmdPath": `>/lib`,
         ":cmdPath": `>/lib/nodeVersion`,
-        ":resolvedRoute": `./lib/test`,
-        "indirectResolvedRoute": `./lib/test`,
+        ":resolvedRoute": `./lib/test.js`,
+        "indirectResolvedRoute": `./lib/test.js`,
         ":indirectResolvedRoute": `{#indirectResolvedRoute}`,
         ":homeRoute": `~/--wires-does-not-exist.js`,
     },
     "resolved_path.unit.js"() {
         const { resolve } = require( `path` );
         module.exports = {
-            test( __ ) {
-                __.plan( 6 );
-                __.strictEqual( require( `#path` ), `./lib` );
-                __.strictEqual( require( `#cmdPath` ), `>/lib` );
+            async test( __ ) {
+                __.plan( 11 );
                 __.strictEqual( require.resolve( `:cmdPath` ), resolve( process.cwd(), `lib/nodeVersion.js` ) );
-                __.strictEqual( require( `:resolvedRoute` ), `lib/test` );
-                __.strictEqual( require( `:indirectResolvedRoute` ), `lib/test` );
-                try {
-                    require( `:homeRoute` );
-                    __.ok( false, `no file in home` );
-                } catch ( e ) {
-                    __.strictEqual( e.code, `MODULE_NOT_FOUND`, `no file in home` );
-                }
-                __.end();
+                await Promise.allSettled( [
+                    importAndRequire.all( [
+                        [ `#path`, `./lib` ],
+                        [ `#cmdPath`, `>/lib` ],
+                        [ `:resolvedRoute`, `lib/test` ],
+                        [ `:indirectResolvedRoute`, `lib/test` ],
+                    ] ).strictEqual(),
+                    importAndRequire( `:homeRoute` ).throws( / Cannot find module / ),
+                ] );
             },
         };
     },
     "/lib": {
         "wires.json": {
-            ":backResolvedRoute": `../lib/test`,
+            ":backResolvedRoute": `../lib/test.js`,
         },
         "test.js"() {
             module.exports = `lib/test`;
@@ -40,15 +38,19 @@ module.exports = {
         "resolved_path_sub.unit.js"() {
             const { resolve } = require( `path` );
             module.exports = {
-                test( __ ) {
-                    __.plan( 6 );
-                    __.strictEqual( require( `#path` ), `./lib` );
-                    __.strictEqual( require( `#cmdPath` ), `>/lib` );
+                async test( __ ) {
+                    __.plan( 13 );
                     __.strictEqual( require.resolve( `:cmdPath` ), resolve( process.cwd(), `lib/nodeVersion.js` ) );
-                    __.strictEqual( require( `:resolvedRoute` ), `lib/test` );
-                    __.strictEqual( require( `:backResolvedRoute` ), `lib/test` );
-                    __.strictEqual( require( `:indirectResolvedRoute` ), `lib/test` );
-                    __.end();
+                    await Promise.allSettled( [
+                        importAndRequire.all( [
+                            [ `#path`, `./lib` ],
+                            [ `#cmdPath`, `>/lib` ],
+                            [ `:resolvedRoute`, `lib/test` ],
+                            [ `:backResolvedRoute`, `lib/test` ],
+                            [ `:indirectResolvedRoute`, `lib/test` ],
+                        ] ).strictEqual(),
+                        importAndRequire( `:homeRoute` ).throws( / Cannot find module / ),
+                    ] );
                 },
             };
         },

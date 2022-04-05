@@ -61,7 +61,7 @@ module.exports = {
                                 (
                                     isTest ?
                                         importAndRequire( `:module` ).strictEqual( `in src` ) :
-                                        importAndRequire( `:module` ).throws()
+                                        importAndRequire( `:module` ).throws( / Cannot find module / )
                                 ),
                             ] );
                         },

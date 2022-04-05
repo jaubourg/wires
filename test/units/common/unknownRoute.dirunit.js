@@ -3,12 +3,9 @@
 module.exports = {
     "unknown_route_no_config.unit.js"() {
         module.exports = {
-            test( __ ) {
-                __.plan( 1 );
-                __.throws( () => {
-                    require( `:xf56z` );
-                }, `unknown route 'xf56z'` );
-                __.end();
+            async test( __ ) {
+                __.plan( 2 );
+                await importAndRequire( `:xf56z` ).throws( / unknown route "xf56z"/, `unknown route "xf56z"` );
             },
         };
     },
@@ -22,17 +19,16 @@ module.exports = {
         },
         "unknown_route.unit.js"() {
             module.exports = {
-                test( __ ) {
-                    __.plan( 6 );
-                    __.strictEqual( require( `:null` ), null );
-                    __.strictEqual( require( `:null-computed` ), null );
-                    __.strictEqual( require( `:null-generic` ), null );
-                    __.strictEqual( require( `:null-generic/child` ), null );
-                    __.strictEqual( require( `:null-generic/very/long/path/.../...` ), null );
-                    __.throws( () => {
-                        require( `:xf56z` );
-                    }, `unknown route 'xf56z'` );
-                    __.end();
+                async test( __ ) {
+                    __.plan( 12 );
+                    await importAndRequire.all( [
+                        [ `:null`, null ],
+                        [ `:null-computed`, null ],
+                        [ `:null-generic`, null ],
+                        [ `:null-generic/child`, null ],
+                        [ `:null-generic/very/long/path/.../...`, null ],
+                    ] ).strictEqual();
+                    await importAndRequire( `:xf56z` ).throws( / unknown route "xf56z"/, `unknown route "xf56z"` );
                 },
             };
         },
