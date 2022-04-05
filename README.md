@@ -14,11 +14,13 @@
 [![Code quality][quality-image]][quality-url]
 [![Code Style][codestyle-image]][codestyle-url]
 
-A simple configuration utility for npm compatible platforms (mainly node.js) featuring smart module wiring for unobtrusive dependency injection.
+A simple configuration utility for NodeJS featuring smart module wiring for unobtrusive dependency injection.
 
 ## Overview
 
-wires augments the filename resolution mechanisms used by `require()` under the hood as a means to transparently inject configuration into your code.
+`wires` augments the filename resolution mechanisms used by `import` and `require()` under the hood as a means to transparently inject configuration into your code.
+
+**For simplicity's sake, we only reference `require()` in the examples in this document but everything described also applies to `import` with specificities discussed in the lastest section.**
 
 ```js
 require( "#port" ); // <= gets the http port of the server
@@ -69,11 +71,13 @@ Not that settings which keys are at-sign-lead are considered as directives and w
 
 Typically,
 
-1. install wires globally: `npm -g install wires`
-2. use `wires` in lieu of `node`.
+1. install `wires` globally: `npm -g install wires`
+2. use the `wires` command in lieu of `node`.
 
-So, `node --harmony path/to/myScript.js scriptArg`
-becomes `wires --harmony path/to/myScript.js scriptArg`.
+So, `node path/to/myScript.js scriptArg`
+becomes `wires path/to/myScript.js scriptArg`.
+
+As of version 5, `wires` supports ES Module resolution. As such, a custom loader has to be provided to the `node` executable. Since the feature is still experimental as of NodeJS version 16, one to two warning lines are displayed at start-up. 
 
 As of version 0.4.0, `wires` will look for local installations based on the current working directory. This means you can add wires as a dependency to your project and have this specific version take precedence whenever the global command is ran from within said project.
 
@@ -92,7 +96,25 @@ v0.2.0 (node v0.12.2)
 
 This behavior is compatible with version 0.2.0 and up.
 
-Alternatively, if you cannot, or don't want to, use the command, you may simply require wires in your main source file. Note that you only need to require it once for the entire code base.
+## Enabling manually
+
+If you cannot, or don't want to, use the `wires` command, you can use the `node` executable as follows:
+
+`node --loader=wires --require=wires path/to/myScript.js`
+
+This will enable both the CommonJS and ECMAScript module resolution override.
+
+If you only need one of those, you can type:
+- `node --loader=wires path/to/myScript.js` to enable for `import`
+- `node --require=wires path/to/myScript.js` to enable for `require()`
+
+Alternatively, if you only need CommonJS support, you can manually require `wires` at the beginning of the entry file of your project and use `node` as usual:
+
+```js
+require( "wires" );
+
+// rest of your code
+```
 
 ## Cascading Configuration
 
@@ -103,7 +125,7 @@ wires uses 4 types of configuration file:
 - `wires.json` contains actual settings
 - `wires.XXX.json` contains default settings specific to when the `WIRES_ENV` environment variable is set to `"XXX"`
 
-__Prior to version 3.0, wires did use the `NODE_ENV` environment variable rather than `WIRES_ENV`. Please adjust your projects accordingly when upgrading to 3.0 and higher.__
+__Prior to version 3.0, `wires` did use the `NODE_ENV` environment variable rather than `WIRES_ENV`. Please adjust your projects accordingly when upgrading to 3.0 and higher.__
 
 Actual configuration depends on the position of the file requiring it in the filesystem hierarchy. Each directory gets its own configuration which is computed as follows:
 
@@ -188,7 +210,7 @@ Note that routes are impervious to namespaces.
 
 ## Root Directive
 
-Sometimes, it is desirable to isolate your configuration: just set the `@root` directive to true and wires will stop climbing any further up the file hierarchy.
+Sometimes, it is desirable to isolate your configuration: just set the `@root` directive to true and `wires` will stop climbing any further up the file hierarchy.
 
 See the following example:
 
@@ -235,9 +257,9 @@ require( "#childKey" ) === "child value";
 - templated, to construct paths dynamically
     + `require( "./lib/{#vendor}/main.js" )`
     + `require( "nodeunit/reporters/{#unit.reporter}" )`
-- two-colons-lead, to bypass wires entirely (expect tracer)
+- two-colons-lead, to bypass `wires` entirely (expect tracer)
 	+ `require( "::wires-will-not-transform-this" )`
-- three-colons-lead, to bypass wires entirely (including tracer)
+- three-colons-lead, to bypass `wires` entirely (including tracer)
 	+ `require( ":::wires-will-not-transform-nor-trace-this" )`
 
 Targeting `undefined` or `null` values in expressions may yield potentially undesirable `"undefined"` or `"null"` in the resulting string. If and when you change the leading `#` to a leading `?` and the targeted value is "falsy" (`undefined`, `null`, `false`, etc...), then the result is an empty string (`""`). For instance:
@@ -356,7 +378,7 @@ You can put an arbitrary number of spaces after the opening parenthesis and arou
 
 As of version 2, every object property which name ends with a question mark in your configuration files is a fallback. Fallbacks are useful in situations where a setting may be _empty_ (`""`, `NaN`, `null` or `undefined`) yet you still need a default value for it.
 
-__Prior to version 4.0, wires did consider any _falsy_ value as _empty_ (`0`, `false`, etc). This was changed in order to accommodate casting as introduced in the very same version.__
+__Prior to version 4.0, `wires` did consider any _falsy_ value as _empty_ (`0`, `false`, etc). This was changed in order to accommodate casting as introduced in the very same version.__
 
 Let's take the following situation as an example:
 
@@ -538,7 +560,7 @@ require( ":to-do/other/path" ) === null;
 
 As of version 2.1, in your configuration files, every object property which name is colon-lead and ends with a slash followed by an opening then a closing parenthesis defines a computed route.
 
-They are very similar to generic routes except there is no automatic concatenation performed by wires. Rather, the value must be a string pointing to a module that exports a function. This function will be called by wires with the path segments as arguments and is expected to return the resulting path.
+They are very similar to generic routes except there is no automatic concatenation performed by `wires`. Rather, the value must be a string pointing to a module that exports a function. This function will be called by `wires` with the path segments as arguments and is expected to return the resulting path.
 
 This sounds quite complicated but let's re-implement the generic route example from the previous section with a computed route:
 
@@ -561,6 +583,8 @@ require( ":dbo/product/electronics" ) === require( "/myApp/db/models/model-produ
 
 Please note that paths returned by the function are resolved relatively to the location of the file where the function is defined.
 
+**For the time being, the function can only be exported through a CommonJS module, not an ES Module.**
+
 It is possible for a computed route function to return `null` : requiring such a route and it's children would result in `null`.
 
 ```js
@@ -578,6 +602,64 @@ module.exports = () => null; // not implemented yet
 
 require( ":dbo/client" ) === null;
 require( ":dbo/product" ) === null;
+```
+
+## `import`
+
+`wires` overrides both static and dynamic import statements. This makes it compatible with ES Module based projects.
+
+Unlike `require`, `import()` needs fully defined paths, extension included, and fails to fetch `index.js` when targeted at a directory, so you have to keep that in mind when creating routes.
+
+```js
+//myApp/wires.json
+
+{
+    ":dir1": "./dir",
+    ":dir2": "./dir/index",
+    ":dir3": "./dir/index.js"
+}
+
+//myApp/dir/index.js
+
+module.exports = "You Found Me!";
+
+//myApp/cjs.js
+
+require( `:dir1` ) === "You Found Me!"
+require( `:dir2` ) === "You Found Me!"
+require( `:dir3` ) === "You Found Me!"
+
+// myApp/esm.js
+
+import message1 from ":dir1"; // fails with exception
+import message2 from ":dir2"; // fails with exception
+import message3 from ":dir3"; // succeeds!
+
+message3 === "You Found Me!";
+```
+
+Also, for object values, `wires` will create a named export for every property which name is a proper JavaScript identifier.
+
+```js
+//myApp/wires.json
+
+{
+    "object": {
+        "property1": 1,
+        "property2": 2,
+        "no name export": 3
+    }
+}
+
+//myApp/esm.js
+import object, { property1, property2 } from "#object";
+
+object.property1 === 1;
+object.property2 === 2;
+object[ "no name export" ] === 3;
+
+property1 === 1;
+property2 === 2;
 ```
 
 ## License
