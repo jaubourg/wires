@@ -2,6 +2,7 @@
 
 require( `./build` );
 
+const { execSync } = require( `child_process` );
 const fs = require( `fs` );
 const path = require( `path` );
 
@@ -60,6 +61,7 @@ const pkg = require( `../publish/package.json` );
 {
     const pkgFiltered = new Set( [ ...( pkg.removePublish || [] ), `private`, `removePublish` ] );
     const filteredPkg = Object.fromEntries( Object.entries( pkg ).filter( ( [ k ] ) => !pkgFiltered.has( k ) ) );
+    filteredPkg.version = execSync( `git describe --tags --abbrev=0` ).toString().trim();
 
     fs.writeFileSync( path.resolve( publishDir, `package.json` ), JSON.stringify( filteredPkg, null, `    ` ) );
 }

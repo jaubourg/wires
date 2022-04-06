@@ -1,7 +1,6 @@
 "use strict";
 
 const { execSync } = require( `child_process` );
-const { "version": currentVersion } = require( `../../../package.json` );
 const path = require( `path` );
 
 const root = path.resolve( __dirname, `../../..` );
@@ -25,7 +24,6 @@ for ( const [ version, callsCurrent ] of versions ) {
         },
         "data.json": {
             "bin": binPath,
-            currentVersion,
             root,
             version,
         },
@@ -58,7 +56,6 @@ for ( const [ version, callsCurrent ] of versions ) {
                 },
             },
             "data.json": {
-                currentVersion,
                 version,
             },
             "current.unit.js"() {
@@ -71,7 +68,7 @@ for ( const [ version, callsCurrent ] of versions ) {
                 }`;
                 module.exports = {
                     [ `${ data.version } calls current` ]( __ ) {
-                        const expected = `v${ data.currentVersion } (node ${ process.version })`;
+                        const expected = `vundefined (node ${ process.version })`;
                         __.plan( 1 );
                         __.strictEqual(
                             exec( `${ versionBin } --version`, {

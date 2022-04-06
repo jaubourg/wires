@@ -65,6 +65,5 @@
         "coverage": "nyc --eager node test && nyc report --reporter=html",
         "coveralls": "nyc --eager node test && nyc report --reporter=text-lcov | coveralls",
         "test": "node test"
-    },
-    "version": "5.0.0-pre"
+    }
 }
