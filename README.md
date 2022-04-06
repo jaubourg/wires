@@ -8,7 +8,7 @@
 
 [![Dependencies Status][dependency-image]][dependency-url]
 
-[![Build Status][build-image]][build-url]
+[![Test Status][test-image]][test-url]
 [![Coverage Status][coverage-image]][coverage-url]
 
 [![Code quality][quality-image]][quality-url]
@@ -672,8 +672,6 @@ property2 === 2;
 [coverage-url]: https://coveralls.io/r/jaubourg/wires
 [dependency-image]: https://img.shields.io/librariesio/release/npm/wires?style=flat-square
 [dependency-url]: https://libraries.io/npm/wires
-[build-image]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fjaubourg%2Fwires%2Fbadge&style=flat-square
-[build-url]: https://github.com/jaubourg/wires/actions
 [license-image]: https://img.shields.io/npm/l/wires.svg?style=flat-square
 [license-url]: https://raw.githubusercontent.com/jaubourg/wires/master/LICENSE
 [node-image]: https://img.shields.io/node/v/wires.svg?style=flat-square
@@ -682,3 +680,5 @@ property2 === 2;
 [npm-url]: https://npmjs.org/package/wires
 [quality-image]: https://img.shields.io/lgtm/grade/javascript/g/jaubourg/wires.svg?style=flat-square&logo=lgtm&logoWidth=18
 [quality-url]: https://lgtm.com/projects/g/jaubourg/wires/context:javascript
+[test-image]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fjaubourg%2Fwires%2Fbadge&style=flat-square
+[test-url]: https://github.com/jaubourg/wires/actions
