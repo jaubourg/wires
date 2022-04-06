@@ -1,12 +1,12 @@
 "use strict";
 
 // build parser
-require( `../scripts/build` );
+require( `child_process` ).execSync( `node ${ __dirname }/../scripts/preparePublish TestVersion` );
+process.env.WIRES_DIR = require( `path` ).resolve( __dirname, `../publish` );
 
 const execUnits = require( `./runner/execUnits` );
-const runner = require( `./runner` );
 
-runner( [
+require( `./runner` )( [
     // lint
     require( `./runner/lint` ),
     // test command line

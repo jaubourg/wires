@@ -1,7 +1,7 @@
 /* eslint-disable func-names, no-empty-function, no-eval, max-lines, prefer-regex-literals */
 "use strict";
 
-const serialize = require( `../../../lib/serialize-javascript` );
+const serialize = require( `${ process.env.WIRES_DIR }/lib/serialize-javascript` );
 
 const testSerialize = ( __, value, expected, deserializeFN ) => {
     const serialized = serialize( value );

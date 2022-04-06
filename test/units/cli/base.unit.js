@@ -4,7 +4,7 @@ const cliTest = require( `../../util/cliTest` );
 const path = require( `path` );
 
 const fixtureDir = path.resolve( __dirname, `../fixture/commandLine` );
-const rootDir = path.resolve( __dirname, `../../..` );
+const rootDir = process.env.WIRES_DIR;
 
 const rWarningLines = /^\(.+$/gm;
 

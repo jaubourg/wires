@@ -20,8 +20,9 @@ jobs:
     - run: npm install
     - run: node test
     - run: |
-        node scripts/preparePublish
+        node scripts/preparePublish "$( git describe --tags --abbrev=0 )"
         cd publish
+        echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
         npm publish --dry-run
       env:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

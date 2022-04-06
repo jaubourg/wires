@@ -2,9 +2,10 @@
 
 require( `./build` );
 
-const { execSync } = require( `child_process` );
 const fs = require( `fs` );
 const path = require( `path` );
+
+const [ , , VERSION ] = process.argv;
 
 const baseDir = path.resolve( __dirname, `..` );
 const publishDir = path.resolve( baseDir, `publish` );
@@ -60,8 +61,11 @@ const pkg = require( `../publish/package.json` );
 // cleans package.json up
 {
     const pkgFiltered = new Set( [ ...( pkg.removePublish || [] ), `private`, `removePublish` ] );
+
     const filteredPkg = Object.fromEntries( Object.entries( pkg ).filter( ( [ k ] ) => !pkgFiltered.has( k ) ) );
-    filteredPkg.version = execSync( `git describe --tags --abbrev=0` ).toString().trim();
+    if ( VERSION ) {
+        filteredPkg.version = VERSION;
+    }
 
     fs.writeFileSync( path.resolve( publishDir, `package.json` ), JSON.stringify( filteredPkg, null, `    ` ) );
 }
@@ -131,9 +135,4 @@ const pkg = require( `../publish/package.json` );
             .join( `\n` )
             .replace( rLines, `\n\n` )
     );
-}
-
-// create .npmrc if needed
-if ( process.env.NPM_TOKEN ) {
-    fs.writeFileSync( path.resolve( publishDir, `.npmrc` ), `//registry.npmjs.org/:_authToken=\${NPM_TOKEN}` );
 }

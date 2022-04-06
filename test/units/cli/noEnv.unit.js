@@ -6,7 +6,7 @@ const path = require( `path` );
 module.exports = {
     "env config was not used": cliTest( [
         process.execPath,
-        path.resolve( __dirname, `../../../lib/wires` ),
+        path.resolve( process.env.WIRES_DIR ),
         path.resolve( __dirname, `../fixture/commandLineNoEnv/script.js` ),
     ], ( __, stdout ) => {
         __.plan( 1 );

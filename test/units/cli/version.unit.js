@@ -1,8 +1,9 @@
 "use strict";
 
 const cliTest = require( `../../util/cliTest` );
+const { version } = require( `${ process.env.WIRES_DIR }/package.json` );
 
-const versionString = `v${ require( `../../../package` ).version } (some_exe ${ process.version })\n`;
+const versionString = `v${ version } (some_exe ${ process.version })\n`;
 
 module.exports = {
     "short": cliTest( [

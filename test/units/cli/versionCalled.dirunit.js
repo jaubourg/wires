@@ -1,9 +1,9 @@
 "use strict";
 
 const { execSync } = require( `child_process` );
-const path = require( `path` );
+const { "version": currentVersion } = require( `${ process.env.WIRES_DIR }/package.json` );
 
-const root = path.resolve( __dirname, `../../..` );
+const root = process.env.WIRES_DIR;
 const binPath = require.resolve( `${ root }/bin` );
 
 const versions = JSON.parse( execSync( `npm view wires versions --json`, {
@@ -56,6 +56,7 @@ for ( const [ version, callsCurrent ] of versions ) {
                 },
             },
             "data.json": {
+                currentVersion,
                 version,
             },
             "current.unit.js"() {
@@ -68,7 +69,7 @@ for ( const [ version, callsCurrent ] of versions ) {
                 }`;
                 module.exports = {
                     [ `${ data.version } calls current` ]( __ ) {
-                        const expected = `vundefined (node ${ process.version })`;
+                        const expected = `v${ data.currentVersion } (node ${ process.version })`;
                         __.plan( 1 );
                         __.strictEqual(
                             exec( `${ versionBin } --version`, {
