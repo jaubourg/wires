@@ -1,17 +1,21 @@
 "use strict";
 
 const { execSync } = require( `child_process` );
+const { "version": currentVersion } = require( `../../../package.json` );
+const path = require( `path` );
 
-const binPath = require.resolve( `../../../bin` );
+const root = path.resolve( __dirname, `../../..` );
+const binPath = require.resolve( `${ root }/bin` );
 
 const versions = JSON.parse( execSync( `npm view wires versions --json`, {
     "env": process.env,
-} ) ).filter( version => {
-    const split = version.split( `.` );
-    return ( Number( split[ 0 ] ) > 0 ) || ( Number( split[ 1 ] ) >= 3 );
-} );
+} ) )
+    .flatMap( version => {
+        const [ major, minor ] = version.split( `.` ).slice( 0, 2 ).map( x => Number( x ) );
+        return ( ( major > 0 ) || ( minor >= 3 ) ) ? [ [ version, ( major > 0 ) || ( minor >= 4 ) ] ] : [];
+    } );
 
-for ( const version of versions ) {
+for ( const [ version, callsCurrent ] of versions ) {
     module.exports[ `/${ version }` ] = {
         "package.json": {
             "name": `test-wires`,
@@ -21,22 +25,66 @@ for ( const version of versions ) {
         },
         "data.json": {
             "bin": binPath,
+            currentVersion,
+            root,
             version,
         },
         [ `${ version }.unit.js` ]() {
             const data = require( `./data` );
-            const exec = require( `child_process` ).execSync;
-            module.exports[ `command line for ${ data.version }` ] = __ => {
-                __.plan( 1 );
-                __.strictEqual(
-                    exec( `node ${ data.bin } --version`, {
-                        "cwd": __dirname,
-                        "env": process.env,
-                    } ).toString(),
-                    `v${ data.version } (node ${ process.version })\n`
-                );
-                __.end();
+            const { "execSync": exec } = require( `child_process` );
+            module.exports = {
+                [ `current calls ${ data.version }` ]( __ ) {
+                    const expected = `v${ data.version } (node ${ process.version })`;
+                    __.plan( 1 );
+                    __.strictEqual(
+                        exec( `node ${ data.bin } --version`, {
+                            "cwd": __dirname,
+                            "env": process.env,
+                        } ).toString(),
+                        `${ expected }\n`,
+                        expected
+                    );
+                    __.end();
+                },
             };
         },
     };
+    if ( callsCurrent ) {
+        module.exports[ `/${ version }` ][ `/current` ] = {
+            "package.json": {
+                "name": `test-wires`,
+                "dependencies": {
+                    "wires": `file:${ root }`,
+                },
+            },
+            "data.json": {
+                currentVersion,
+                version,
+            },
+            "current.unit.js"() {
+                const data = require( `./data` );
+                const { "execSync": exec } = require( `child_process` );
+                const versionBin = `${
+                    __dirname
+                }/../node_modules/.bin/wires${
+                    process.platform === `win32` ? `.cmd` : ``
+                }`;
+                module.exports = {
+                    [ `${ data.version } calls current` ]( __ ) {
+                        const expected = `v${ data.currentVersion } (node ${ process.version })`;
+                        __.plan( 1 );
+                        __.strictEqual(
+                            exec( `${ versionBin } --version`, {
+                                "cwd": __dirname,
+                                "env": process.env,
+                            } ).toString(),
+                            `${ expected }\n`,
+                            expected
+                        );
+                        __.end();
+                    },
+                };
+            },
+        };
+    }
 }
