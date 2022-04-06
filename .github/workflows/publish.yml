@@ -13,6 +13,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16.x
+    - run: npm install
+    - run: node test
     - run: node scripts/preparePublish
     - run: cd publish
     - uses: JS-DevTools/npm-publish@v1
