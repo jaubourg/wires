@@ -19,9 +19,9 @@ jobs:
         node-version: 16.x
     - run: npm install
     - run: node test
-    - run: node scripts/preparePublish
-    - uses: JS-DevTools/npm-publish@v1
-      with:
-        dry-run: true
-        token: ${{ secrets.NPM_TOKEN }}
-        working-directory: ./publish
+    - run: |
+        node scripts/preparePublish
+        cd publish
+        npm publish --dry-run
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -132,3 +132,8 @@ const pkg = require( `../publish/package.json` );
             .replace( rLines, `\n\n` )
     );
 }
+
+// create .npmrc if needed
+if ( process.env.NPM_TOKEN ) {
+    fs.writeFileSync( path.resolve( publishDir, `.npmrc` ), `//registry.npmjs.org/:_authToken=\${NPM_TOKEN}` );
+}
