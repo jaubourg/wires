@@ -1,11 +1,11 @@
 /* eslint-disable no-magic-numbers */
 import "./index.js";
 
-import Config from "./lib/config/Config.js";
 import generateModule from "./lib/generateModule.js";
+import { deBypass, getConfig, isBypass, isRoute, isValue } from "./lib/base.js";
 import nodeVersion from "./lib/nodeVersion.js";
 
-const getItem = ( dir, expression, isPath ) => Config.cache( dir ).get( expression, isPath, false );
+const getItem = ( dir, expression, isPath ) => getConfig( dir ).get( expression, isPath, false );
 
 const rDir = /^file:\/\/(.+)\/[^/]*$/;
 const getDirectory = ( { parentURL } ) => {
@@ -41,18 +41,14 @@ export const getFormat = ( nodeVersion.major < 16 ) && ( ( url, context, default
 ) );
 export const getSource = ( nodeVersion.major < 16 ) && load;
 
-const rBypass = /^::/;
-const rRouteExpr = /^[~>:]|{[#?]/;
-const rValue = /^[#?]|^\s*\(\s*(?:bool(?:ean)?|num(ber)?)\s*\)/;
-
 export const resolve = ( specifier, context, defaultResolve ) => {
-    if ( rBypass.test( specifier ) ) {
-        return defaultResolve( specifier.slice( 2 ), context );
+    if ( isBypass( specifier ) ) {
+        return defaultResolve( deBypass( specifier ), context );
     }
-    if ( rRouteExpr.test( specifier ) ) {
+    if ( isRoute( specifier ) ) {
         return getPath( specifier, context, defaultResolve );
     }
-    if ( rValue.test( specifier ) ) {
+    if ( isValue( specifier ) ) {
         const dir = getDirectory( context );
         const url = `file://${ dir }/wires:${ specifier }`;
         if ( !cache.has( url ) ) {
