@@ -1,39 +1,22 @@
 {{
-    const {
-        castBoolean,
-        castNumber,
-        castString,
-        empty,
-        getEnv,
-        inCWD,
-        inDir,
-        inHome,
-        inParentDir,
-        isCode,
-        join,
-        needsFallback,
-    } = require( `./util` );
+    const Item = require( `./Item` );
     const isObject = require( `../../isObject` );
     const nullModulePath = require.resolve( `./null` );
 
-    const output = ( type, value ) => ( {
-        type,
-        value,
-    } );
-
     const rFallback = /\?$/;
     const parseFactory = ( _options, directory ) => {
-        const options = directory ? Object.assign( {}, _options, {
+        const options = directory ? {
+            ..._options,
             directory,
-        } ) : _options;
+        } : _options;
         const parse = data => {
             if ( data ) {
                 if ( typeof data === `string` ) {
                     // eslint-disable-next-line no-undef
-                    return peg$parse( data, options ).value;
+                    return peg$parse( data, options );
                 }
                 if ( Array.isArray( data ) ) {
-                    return data.map( parse );
+                    return Item.newValue( data.map( parse ) );
                 }
                 if ( isObject( data ) ) {
                     const object = {};
@@ -46,15 +29,17 @@
                         }
                     }
                     for ( const key of fallbacks ) {
+                        const item = parse( data[ key ] );
                         const realKey = key.slice( 0, -1 );
-                        if ( !object.hasOwnProperty( realKey ) || needsFallback( object[ realKey ] ) ) {
-                            object[ realKey ] = parse( data[ key ] );
-                        }
+                        object[ realKey ] =
+                            object.hasOwnProperty( realKey ) ?
+                                object[ realKey ].fallback( item ) :
+                                item;
                     }
-                    return object;
+                    return Item.newValue( object );
                 }
             }
-            return data;
+            return Item.newValue( data );
         };
         return parse;
     };
@@ -67,67 +52,70 @@
 start
     = &{ return isPath; } path:path
     {
-        return output( `path`, path );
+        return path;
     }
     / &{ return !isPath; } value:value
     {
-        return output( `value`, value );
+        return value;
     }
     / &{ return !isPath; } cast:cast result:template
     {
-        return output( `value`, cast( result ) );
+        return cast ? result[ cast ]() : result;
     }
     / result:template
     {
-        return output( isPath ? `path` : `value`, result );
+        return result;
     }
 
 path
-    = "::" ":"? .*
+    = method:pathDirPrefix "/" result:template
     {
-        return text().slice( 2 );
+        return result[ method ]( directory );
     }
-    / ">" result:template
+    / method:pathPrefix "/" result:template
     {
-        return inCWD( result );
-    }
-    / "~" result:template
-    {
-        return inHome( result );
-    }
-    / "./" result:template
-    {
-        return inDir( directory, result );
-    }
-    / "../" result:template
-    {
-        return inParentDir( directory, result );
+        return result[ method ]();
     }
     / ":" result:template
     {
-        if ( isCode( result ) ) {
-            throw new Error( `cannot get route from code` );
-        }
-        const route = config.getRoute( result );
+        const resultValue = result.getValue();
+        const route = config.getRoute( resultValue );
         if ( !route ) {
-            throw new Error( `unknown route ${ JSON.stringify( result ) }` );
+            throw new Error( `unknown route ${ JSON.stringify( resultValue ) }` );
         }
         let { value } = route;
         if ( typeof value === `function` ) {
+            console.log( `${ value }` );
             value = value( ...( route.remaining || [] ) );
         } else if ( typeof value === `string` ) {
             value += ( route.remaining || [] ).join( `/` );
         }
         if ( value === null ) {
-            return nullModulePath;
+            return Item.newValue( nullModulePath );
         }
         const parse = parseFactory( options, route.directory );
         let previous;
         do {
             previous = value;
-            value = parse( previous );
+            value = parse( previous ).getValue();
         } while ( value !== previous );
-        return value;
+        return Item.newValue( value );
+    }
+
+pathDirPrefix
+    = "." parent:"."?
+    {
+        return parent ? `inParentDir` : `inDir`;
+    }
+
+pathPrefix
+    = ">"
+    {
+        return `inCWD`;
+    }
+    / "~"
+    {
+        return `inHome`;
     }
 
 
@@ -136,20 +124,17 @@ value
     {
         let value;
         if ( env  ) {
-            value = getEnv( result, asCode );
+            value = result.getEnv( asCode );
         } else {
-            if ( isCode( result ) ) {
-                throw new Error( `cannot get value from code` );
-            }
-            const potential = config.getPath( result ).map( parseFactory( options ) );
-            let first = true;
-            while ( potential.length ) {
-                value = first ? potential.pop() : empty( potential.pop(), value );
-                first = false;
-            }
+            const resultValue = result.getValue();
+            const parse = parseFactory( options );
+            const paths = config.getPath( resultValue );
+            value = paths.reduce(
+                ( previous, value ) => previous.fallback( parse( value ) ), Item.newValue( undefined )
+            );
         }
         if ( modifier === `?` ) {
-            value = empty( value, `` );
+            value = value.fallback( `` );
         }
         return value;
     }
@@ -163,27 +148,27 @@ cast
 castType
     = "bool" "ean"?
     {
-        return castBoolean;
+        return `castBoolean`;
     }
     / "num" "ber"?
     {
-        return castNumber;
+        return `castNumber`;
     }
 
 template
     = items:templateItem*
     {
-        return items.length ? ( items.length > 1 ? join( ...items ) : items[ 0 ] ) : ``;
+        return items.length ? ( items.length > 1 ? Item.join( ...items ) : items[ 0 ] ) : Item.newValue( `` );
     }
 
 templateItem
     = "{" value:value "}"
     {
-        return castString( value );
+        return value.castString();
     }
     / [^{}]+
     {
-        return text();
+        return Item.newValue( text() );
     }
 
 _ = [\t\n\r ]*

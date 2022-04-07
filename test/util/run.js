@@ -34,36 +34,60 @@ class ImportAndRequire {
         this[ COMPARE_REQUIRE ]( tapeMethod, expression2, message );
     }
     async [ COMPARE_IMPORT ]( tapeMethod, expression2, message ) {
-        await this.#tapeObject[ tapeMethod ](
-            await this.#importFunction( this.#expression ),
-            await this.#importFunction( expression2 ),
-            `import( ${ JSON.stringify( this.#expression ) } )${ message ? `: ${ message }` : `` }`
-        );
+        try {
+            await this.#tapeObject[ tapeMethod ](
+                await this.#importFunction( this.#expression ),
+                await this.#importFunction( expression2 ),
+                `import( ${ JSON.stringify( this.#expression ) } )${ message ? `: ${ message }` : `` }`
+            );
+        } catch ( error ) {
+            this.#tapeObject.fail(
+                `import( ${ JSON.stringify( this.#expression ) } ): ${ error }`
+            );
+        }
     }
     [ COMPARE_REQUIRE ]( tapeMethod, expression2, message ) {
-        this.#tapeObject[ tapeMethod ](
-            this.#requireFunction( this.#expression ),
-            this.#requireFunction( expression2 ),
-            `require( ${ JSON.stringify( this.#expression ) } )${ message ? `: ${ message }` : `` }`
-        );
+        try {
+            this.#tapeObject[ tapeMethod ](
+                this.#requireFunction( this.#expression ),
+                this.#requireFunction( expression2 ),
+                `require( ${ JSON.stringify( this.#expression ) } )${ message ? `: ${ message }` : `` }`
+            );
+        } catch ( error ) {
+            this.#tapeObject.fail(
+                `import( ${ JSON.stringify( this.#expression ) } ): ${ error }`
+            );
+        }
     }
     async [ TEST ]( tapeMethod, expected, message ) {
         await this[ TEST_IMPORT ]( tapeMethod, expected, message );
         this[ TEST_REQUIRE ]( tapeMethod, expected, message );
     }
     async [ TEST_IMPORT ]( tapeMethod, expected, message ) {
-        await this.#tapeObject[ tapeMethod ](
-            ( await this.#importFunction( this.#expression ) ).default,
-            expected,
-            `import( ${ JSON.stringify( this.#expression ) } )${ message ? `: ${ message }` : `` }`
-        );
+        try {
+            await this.#tapeObject[ tapeMethod ](
+                ( await this.#importFunction( this.#expression ) ).default,
+                expected,
+                `import( ${ JSON.stringify( this.#expression ) } )${ message ? `: ${ message }` : `` }`
+            );
+        } catch ( error ) {
+            this.#tapeObject.fail(
+                `import( ${ JSON.stringify( this.#expression ) } ): ${ error }`
+            );
+        }
     }
     [ TEST_REQUIRE ]( tapeMethod, expected, message ) {
-        this.#tapeObject[ tapeMethod ](
-            this.#requireFunction( this.#expression ),
-            expected,
-            `require( ${ JSON.stringify( this.#expression ) } )${ message ? `: ${ message }` : `` }`
-        );
+        try {
+            this.#tapeObject[ tapeMethod ](
+                this.#requireFunction( this.#expression ),
+                expected,
+                `require( ${ JSON.stringify( this.#expression ) } )${ message ? `: ${ message }` : `` }`
+            );
+        } catch ( error ) {
+            this.#tapeObject.fail(
+                `import( ${ JSON.stringify( this.#expression ) } ): ${ error }`
+            );
+        }
     }
     async [ THROW ]( tapeMethod, expected, message ) {
         await this[ THROW_IMPORT ]( tapeMethod, expected, message );

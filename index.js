@@ -8,15 +8,16 @@ const CONFIG = Symbol( `wires-config` );
 const GET = Symbol( `wires-config` );
 const REQUIRE = Symbol( `require` );
 
+const rBypass = /^::/;
+const rRouteExpr = /^[~>:]|{[#?]/;
 const rValue = /^[#?]|^\s*\(\s*(?:bool(?:ean)?|num(ber)?)\s*\)/;
-const rRouteExpr = /^[~>]|{[#?]/;
 
 const Module = module.constructor;
 const { _resolveFilename, prototype } = Module;
 
 prototype[ GET ] = function( expr, isPath = false ) {
     const config = this[ CONFIG ] || ( this[ CONFIG ] = Config.cache( dirname( this.filename ) ) );
-    const { value } = config.get( expr, isPath );
+    const value = config.get( expr, isPath ).getValue();
     return isPath ? _resolveFilename( value, this ) : value;
 };
 
@@ -29,18 +30,14 @@ prototype.require = function( request ) {
 };
 
 Module._resolveFilename = ( request, mod ) => {
-    if ( request[ 0 ] === `:` ) {
-        if ( request[ 1 ] === `:` ) {
-            if ( request[ 2 ] === `:` ) {
-                // eslint-disable-next-line no-magic-numbers
-                return _resolveFilename( request.slice( 3 ), mod );
-            }
-            // eslint-disable-next-line no-magic-numbers
-            return _resolveFilename( request.slice( 2 ), mod );
-        }
+    if ( rBypass.test( request ) ) {
+        // eslint-disable-next-line no-magic-numbers
+        return _resolveFilename( request.slice( 2 ), mod );
+    }
+    if ( rRouteExpr.test( request ) ) {
         return mod[ GET ]( request, true );
     }
-    return rRouteExpr.test( request ) ? mod[ GET ]( request, true ) : _resolveFilename( request, mod );
+    return _resolveFilename( request.replace( rBypass, `` ), mod );
 };
 
 module.exports = undefined;

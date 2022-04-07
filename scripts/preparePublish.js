@@ -2,6 +2,7 @@
 
 require( `./build` );
 
+const { execSync } = require( `child_process` );
 const fs = require( `fs` );
 const path = require( `path` );
 
@@ -47,10 +48,7 @@ const publishDir = path.resolve( baseDir, `publish` );
     };
 
     try {
-        fs.rmSync( publishDir, {
-            "recursive": true,
-            "force": true,
-        } );
+        execSync( `rm -rf ${ JSON.stringify( publishDir ) }` );
     } catch ( _ ) {}
 
     copyRecursive( baseDir, publishDir );

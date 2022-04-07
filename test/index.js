@@ -1,7 +1,7 @@
 "use strict";
 
 // build parser
-require( `child_process` ).execSync( `node ${ __dirname }/../scripts/preparePublish TestVersion` );
+require( `child_process` ).execSync( `node ${ __dirname }/../scripts/preparePublish 0.0.0` );
 process.env.WIRES_DIR = require( `path` ).resolve( __dirname, `../publish` );
 
 const execUnits = require( `./runner/execUnits` );

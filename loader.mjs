@@ -5,7 +5,7 @@ import Config from "./lib/config/Config.js";
 import generateModule from "./lib/generateModule.js";
 import nodeVersion from "./lib/nodeVersion.js";
 
-const getItem = ( dir, expression, isPath ) => Config.cache( dir ).get( expression, isPath, false ).value;
+const getItem = ( dir, expression, isPath ) => Config.cache( dir ).get( expression, isPath, false );
 
 const rDir = /^file:\/\/(.+)\/[^/]*$/;
 const getDirectory = ( { parentURL } ) => {
@@ -17,7 +17,7 @@ const getDirectory = ( { parentURL } ) => {
 };
 
 const getPath = ( expr, context, defaultResolve ) =>
-    defaultResolve( getItem( getDirectory( context ), expr, true ) );
+    defaultResolve( getItem( getDirectory( context ), expr, true ).getValue() );
 
 const cache = new Map();
 
@@ -41,18 +41,13 @@ export const getFormat = ( nodeVersion.major < 16 ) && ( ( url, context, default
 ) );
 export const getSource = ( nodeVersion.major < 16 ) && load;
 
-const rRouteExpr = /^[~>]|{[#?]/;
+const rBypass = /^::/;
+const rRouteExpr = /^[~>:]|{[#?]/;
 const rValue = /^[#?]|^\s*\(\s*(?:bool(?:ean)?|num(ber)?)\s*\)/;
 
 export const resolve = ( specifier, context, defaultResolve ) => {
-    if ( specifier[ 0 ] === `:` ) {
-        if ( specifier[ 1 ] === `:` ) {
-            if ( specifier[ 2 ] === `:` ) {
-                return defaultResolve( specifier.slice( 3 ), context );
-            }
-            return defaultResolve( specifier.slice( 2 ), context );
-        }
-        return getPath( specifier, context, defaultResolve );
+    if ( rBypass.test( specifier ) ) {
+        return defaultResolve( specifier.slice( 2 ), context );
     }
     if ( rRouteExpr.test( specifier ) ) {
         return getPath( specifier, context, defaultResolve );

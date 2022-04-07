@@ -1,7 +1,7 @@
 on: 
   push:
     tags:
-      - "[0-9]+.[0-9]+.[0-9]+"
+      - "**"
   workflow_dispatch:
 jobs:
   publish:
@@ -19,8 +19,8 @@ jobs:
         node-version: 16.x
     - run: npm install
     - run: node test
+    - run: node scripts/preparePublish "$( git describe --tags --abbrev=0 )"
     - run: |
-        node scripts/preparePublish "$( git describe --tags --abbrev=0 )"
         cd publish
         echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
         npm publish --dry-run
