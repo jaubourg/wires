@@ -1,9 +1,8 @@
 {{
-    const Item = require( `./Item` );
     const isObject = require( `../../isObject` );
+    const { joinItems, newValue } = require( `./item` );
     const nullModulePath = require.resolve( `./null` );
 
-    const rFallback = /\?$/;
     const parseFactory = ( _options, directory ) => {
         const options = directory ? {
             ..._options,
@@ -16,30 +15,28 @@
                     return peg$parse( data, options );
                 }
                 if ( Array.isArray( data ) ) {
-                    return Item.newValue( data.map( parse ) );
+                    return newValue( data.map( parse ) );
                 }
                 if ( isObject( data ) ) {
-                    const object = {};
+                    const entries = [];
                     const fallbacks = [];
-                    for ( const key of Object.keys( data ) ) {
-                        if ( rFallback.test( key ) ) {
-                            fallbacks.push( key );
-                        } else {
-                            object[ key ] = parse( data[ key ] );
+                    for ( const [ key, item ] of Object.entries( data ) ) {
+                        ( ( key.slice( -1 ) === `?` ) ? fallbacks : entries ).push( [ key, parse( item ) ] )
+                    }
+                    const object = entries.length ? Object.fromEntries( entries ) : {};
+                    if ( fallbacks.length ) {
+                        for ( const [ key, fallback ] of fallbacks ) {
+                            const realKey = key.slice( 0, -1 );
+                            object[ realKey ] =
+                                object.hasOwnProperty( realKey ) ?
+                                    object[ realKey ].fallback( fallback ) :
+                                    fallback;
                         }
                     }
-                    for ( const key of fallbacks ) {
-                        const item = parse( data[ key ] );
-                        const realKey = key.slice( 0, -1 );
-                        object[ realKey ] =
-                            object.hasOwnProperty( realKey ) ?
-                                object[ realKey ].fallback( item ) :
-                                item;
-                    }
-                    return Item.newValue( object );
+                    return newValue( object );
                 }
             }
-            return Item.newValue( data );
+            return newValue( data );
         };
         return parse;
     };
@@ -91,7 +88,7 @@ path
             value += ( route.remaining || [] ).join( `/` );
         }
         if ( value === null ) {
-            return Item.newValue( nullModulePath );
+            return newValue( nullModulePath );
         }
         const parse = parseFactory( options, route.directory );
         let previous;
@@ -99,7 +96,7 @@ path
             previous = value;
             value = parse( previous ).getValue();
         } while ( value !== previous );
-        return Item.newValue( value );
+        return newValue( value );
     }
 
 pathDirPrefix
@@ -130,7 +127,7 @@ value
             const parse = parseFactory( options );
             const paths = config.getPath( resultValue );
             value = paths.reduce(
-                ( previous, value ) => previous.fallback( parse( value ) ), Item.newValue( undefined )
+                ( previous, value ) => previous.fallback( parse( value ) ), newValue( undefined )
             );
         }
         if ( modifier === `?` ) {
@@ -158,7 +155,7 @@ castType
 template
     = items:templateItem*
     {
-        return items.length ? ( items.length > 1 ? Item.join( ...items ) : items[ 0 ] ) : Item.newValue( `` );
+        return items.length ? ( items.length > 1 ? joinItems( ...items ) : items[ 0 ] ) : newValue( `` );
     }
 
 templateItem
@@ -168,7 +165,7 @@ templateItem
     }
     / [^{}]+
     {
-        return Item.newValue( text() );
+        return newValue( text() );
     }
 
 _ = [\t\n\r ]*
