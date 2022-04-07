@@ -82,7 +82,6 @@ path
         }
         let { value } = route;
         if ( typeof value === `function` ) {
-            console.log( `${ value }` );
             value = value( ...( route.remaining || [] ) );
         } else if ( typeof value === `string` ) {
             value += ( route.remaining || [] ).join( `/` );
