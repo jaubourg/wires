@@ -123,16 +123,19 @@ value
             value = result.getEnv( asCode );
         } else {
             const resultValue = result.getValue();
-            const parse = parseFactory( options );
             const paths = config.getPath( resultValue );
-            value = paths.reduce(
-                ( previous, value ) => previous.fallback( parse( value ) ), newValue( undefined )
-            );
+            if ( paths.length ) {
+                const parse = parseFactory( options );
+                value = paths.reduce(
+                    ( previous, value ) => ( previous ? previous.fallback( parse( value ) ) : parse( value ) ),
+                    undefined
+                );
+            }
         }
         if ( modifier === `?` ) {
-            value = value.fallback( `` );
+            value = value ? value.fallback( `` ) : newValue( `` );
         }
-        return value;
+        return value || newValue( undefined );
     }
 
 cast

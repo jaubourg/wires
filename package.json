@@ -47,7 +47,8 @@
             "import": "./loader.mjs",
             "require": "./index.js"
         },
-        "./lib/cli.js": "./lib/cli.js"
+        "./lib/cli.js": "./lib/cli.js",
+        "./rollup": "./rollup.js"
     },
     "license": "MIT",
     "main": "./index.js",
@@ -60,7 +61,7 @@
     },
     "private": true,
     "removePublish": [ "devDependencies", "eslintConfig", "nyc", "scripts" ],
-    "repository" : "jaubourg/wires",
+    "repository" : "github:jaubourg/wires",
     "scripts": {
         "coverage": "nyc --eager node test && nyc report --reporter=html",
         "coveralls": "nyc --eager node test && nyc report --reporter=text-lcov | coveralls",

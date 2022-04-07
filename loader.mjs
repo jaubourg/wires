@@ -33,6 +33,9 @@ export const getSource = ( nodeVersion.major < 16 ) && load;
 
 const rDir = /^file:\/\/(.+)\/[^/]*$/;
 const getDirectory = ( { parentURL } ) => {
+    if ( !parentURL ) {
+        return process.cwd();
+    }
     const tmp = rDir.exec( parentURL );
     if ( tmp ) {
         return tmp[ 1 ];
