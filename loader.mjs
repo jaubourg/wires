@@ -1,7 +1,7 @@
 /* eslint-disable no-magic-numbers */
 import "./index.js";
 
-import generateModule from "./lib/generateModule.js";
+import { generateModule, DEFAULT_EXPORT } from "./lib/generateModule.js";
 import { deBypass, getConfig, isBypass, isRoute, isValue } from "./lib/base.js";
 import nodeVersion from "./lib/nodeVersion.js";
 
@@ -19,15 +19,16 @@ const getDirectory = ( { parentURL } ) => {
 const getPath = ( expr, context, defaultResolve ) =>
     defaultResolve( getItem( getDirectory( context ), expr, true ).getValue() );
 
-const cache = new Map();
+const wiresMarker = `file:///wires${ DEFAULT_EXPORT }:`;
 
 // node 16+
 export const load = ( url, context, defaultLoad ) => {
-    const data = cache.get( url );
-    if ( data ) {
+    const tmp = url.startsWith( wiresMarker ) && JSON.parse( url.slice( wiresMarker.length ) );
+    if ( tmp ) {
+        const [ directory, expression ] = tmp;
         return {
             "format": `module`,
-            "source": generateModule( getItem( data.dir, data.specifier ) ),
+            "source": generateModule( getItem( directory, expression ) ),
         };
     }
     return defaultLoad( url, context );
@@ -35,7 +36,7 @@ export const load = ( url, context, defaultLoad ) => {
 
 // node 12 and 14
 export const getFormat = ( nodeVersion.major < 16 ) && ( ( url, context, defaultGetFormat ) => (
-    cache.has( url ) ? {
+    url.startsWith( wiresMarker ) ? {
         "format": `module`,
     } : defaultGetFormat( url, context )
 ) );
@@ -49,16 +50,8 @@ export const resolve = ( specifier, context, defaultResolve ) => {
         return getPath( specifier, context, defaultResolve );
     }
     if ( isValue( specifier ) ) {
-        const dir = getDirectory( context );
-        const url = `file://${ dir }/wires:${ specifier }`;
-        if ( !cache.has( url ) ) {
-            cache.set( url, {
-                dir,
-                specifier,
-            } );
-        }
         return {
-            url,
+            "url": `${ wiresMarker }${ JSON.stringify( [ getDirectory( context ), specifier ] ) }`,
         };
     }
     return defaultResolve( specifier, context );
