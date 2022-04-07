@@ -77,9 +77,9 @@ Typically,
 So, `node path/to/myScript.js scriptArg`
 becomes `wires path/to/myScript.js scriptArg`.
 
-As of version 5, `wires` supports ES Module resolution. As such, a custom loader has to be provided to the `node` executable. Since the feature is still experimental as of NodeJS version 16, one to two warning lines are displayed at start-up. 
+As of version `5.0`, `wires` supports ES Module resolution. As such, a custom loader has to be provided to the `node` executable. Since the feature is still experimental as of NodeJS version `16`, one to two warning lines are displayed at start-up. 
 
-As of version 0.4.0, `wires` will look for local installations based on the current working directory. This means you can add wires as a dependency to your project and have this specific version take precedence whenever the global command is ran from within said project.
+As of version `0.4.0`, `wires` will look for local installations based on the current working directory. This means you can add wires as a dependency to your project and have this specific version take precedence whenever the global command is ran from within said project.
 
 ```
 > wires --version
@@ -94,7 +94,7 @@ wires@0.2.0 node_modules\wires
 v0.2.0 (node v0.12.2)
 ```
 
-This behavior is compatible with version 0.2.0 and up.
+This behavior is compatible with version `0.2.0` and up.
 
 ## Enabling manually
 
@@ -118,14 +118,14 @@ require( "wires" );
 
 ## Cascading Configuration
 
-wires uses 4 types of configuration file:
+wires uses four types of configuration file:
 
 - `wires-defaults.json` contains default settings
 - `wires-defaults.XXX.json` contains default settings specific to when the `WIRES_ENV` environment variable is set to `"XXX"`
 - `wires.json` contains actual settings
 - `wires.XXX.json` contains default settings specific to when the `WIRES_ENV` environment variable is set to `"XXX"`
 
-__Prior to version 3.0, `wires` did use the `NODE_ENV` environment variable rather than `WIRES_ENV`. Please adjust your projects accordingly when upgrading to 3.0 and higher.__
+__Prior to version `3.0`, `wires` did use the `NODE_ENV` environment variable rather than `WIRES_ENV`. Please adjust your projects accordingly when upgrading to version `3.0` and higher.__
 
 Actual configuration depends on the position of the file requiring it in the filesystem hierarchy. Each directory gets its own configuration which is computed as follows:
 
@@ -300,7 +300,7 @@ require( "#env" ) === ( process.env.SOME_VAR || "" );
 
 ## Casting
 
-As of version 4.0, it is possible to cast string values into booleans or numbers in configuration files:
+As of version `4.0`, it is possible to cast string values into booleans or numbers in configuration files:
 
 ```js
 // wires.json
@@ -374,9 +374,9 @@ You can put an arbitrary number of spaces after the opening parenthesis and arou
 
 ## Fallbacks
 
-As of version 2, every object property which name ends with a question mark in your configuration files is a fallback. Fallbacks are useful in situations where a setting may be _empty_ (`""`, `NaN`, `null` or `undefined`) yet you still need a default value for it.
+As of version `2.0`, every object property which name ends with a question mark in your configuration files is a fallback. Fallbacks are useful in situations where a setting may be _empty_ (`""`, `NaN`, `null` or `undefined`) yet you still need a default value for it.
 
-__Prior to version 4.0, `wires` did consider any _falsy_ value as _empty_ (`0`, `false`, etc). This was changed in order to accommodate casting as introduced in the very same version.__
+__Prior to version `4.0`, `wires` did consider any _falsy_ value as _empty_ (`0`, `false`, etc). This was changed in order to accommodate casting as introduced in the very same version.__
 
 Let's take the following situation as an example:
 
@@ -506,7 +506,7 @@ require( ":data" ) === require( "/current/working/directory/data.json" );
 require( ":eslint" ) === require( "/path/to/home/directory/.eslintrc.json" );
 ```
 
-As of version 2.1, it is possible to set a route to `null` : requiring such a route would result in `null`.
+As of version `2.1.0`, it is possible to set a route to `null`. Requiring such a route would result in `null`.
 
 ```js
 //myApp/wires.json
@@ -539,7 +539,7 @@ require( ":dbo/client" ) === require( "/myApp/db/models/model-client" );
 require( ":dbo/product/electronics" ) === require( "/myApp/db/models/model-product/electronics" );
 ```
 
-As of version 2.1, it is possible to set a route to `null` : requiring such a route and it's children would result in `null`.
+As of version `2.1.0`, it is possible to set a generic route to `null`. Requiring such a route and its children would result in `null`.
 
 ```js
 //myApp/wires.json
@@ -556,7 +556,7 @@ require( ":to-do/other/path" ) === null;
 
 ## Computed Routes
 
-As of version 2.1, in your configuration files, every object property which name is colon-lead and ends with a slash followed by an opening then a closing parenthesis defines a computed route.
+As of version `2.1.0`, in your configuration files, every object property which name is colon-lead and ends with a slash followed by an opening then a closing parenthesis defines a computed route.
 
 They are very similar to generic routes except there is no automatic concatenation performed by `wires`. Rather, the value must be a string pointing to a module that exports a function. This function will be called by `wires` with the path segments as arguments and is expected to return the resulting path.
 
@@ -583,7 +583,7 @@ Please note that paths returned by the function are resolved relatively to the l
 
 **For the time being, the function can only be exported through a CommonJS module, not an ES Module.**
 
-It is possible for a computed route function to return `null` : requiring such a route and it's children would result in `null`.
+It is possible for a computed route function to return `null` : requiring such a route and its children would result in `null`.
 
 ```js
 //myApp/wires.json
@@ -604,9 +604,9 @@ require( ":dbo/product" ) === null;
 
 ## `import`
 
-`wires` overrides both static and dynamic import statements. This makes it compatible with ES Module based projects.
+As of version `5.0`, `wires` overrides both static and dynamic import statements. This makes it compatible with ES Module based projects.
 
-Unlike `require`, `import()` needs fully defined paths, extension included, and fails to fetch `index.js` when targeted at a directory, so you have to keep that in mind when creating routes.
+Unlike `require`, `import()` needs fully defined paths, file extension included, and fails to fetch `index.js` when targeted at a directory, so you have to keep that in mind when creating routes.
 
 ```js
 //myApp/wires.json
@@ -627,7 +627,7 @@ require( `:dir1` ) === "You Found Me!"
 require( `:dir2` ) === "You Found Me!"
 require( `:dir3` ) === "You Found Me!"
 
-// myApp/esm.js
+//myApp/esm.js
 
 import message1 from ":dir1"; // fails with exception
 import message2 from ":dir2"; // fails with exception
