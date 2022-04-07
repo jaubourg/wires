@@ -257,10 +257,8 @@ require( "#childKey" ) === "child value";
 - templated, to construct paths dynamically
     + `require( "./lib/{#vendor}/main.js" )`
     + `require( "nodeunit/reporters/{#unit.reporter}" )`
-- two-colons-lead, to bypass `wires` entirely (expect tracer)
+- two-colons-lead, to bypass `wires` entirely
 	+ `require( "::wires-will-not-transform-this" )`
-- three-colons-lead, to bypass `wires` entirely (including tracer)
-	+ `require( ":::wires-will-not-transform-nor-trace-this" )`
 
 Targeting `undefined` or `null` values in expressions may yield potentially undesirable `"undefined"` or `"null"` in the resulting string. If and when you change the leading `#` to a leading `?` and the targeted value is "falsy" (`undefined`, `null`, `false`, etc...), then the result is an empty string (`""`). For instance:
 
