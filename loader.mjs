@@ -1,11 +1,12 @@
 /* eslint-disable no-magic-numbers */
 import "./index.js";
 
-import { generateModule, DEFAULT_EXPORT } from "./lib/generateModule.js";
+import generateModule from "./lib/generateModule.js";
 import { deBypass, getConfig, isBypass, isRoute, isValue } from "./lib/base.js";
 import nodeVersion from "./lib/nodeVersion.js";
+import UID from "./lib/UID.js";
 
-const marker = `file:///wires${ DEFAULT_EXPORT }:`;
+const marker = `file:///wires${ UID }:`;
 
 // node 16+
 export const load = ( url, context, defaultLoad ) => {
