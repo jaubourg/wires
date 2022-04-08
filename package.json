@@ -12,7 +12,7 @@
         "eslint-formatter-codeframe": "7.32.1",
         "fs-extra": "10.0.1",
         "tap-diff": "0.1.1",
-        "tape": "5.5.2",
+        "tape": "5.5.3",
         "nyc": "15.1.0",
         "peggy": "1.2.0"
     },
