@@ -37,10 +37,12 @@ jobs:
     - name: run tests
       run: node test
 
-    - if: matrix.node-version == '16.x'
-
-      name: compute coverage and send to coveralls
+    - name: compute coverage
+      if: matrix.node-version == '16.x'
       run: npm run coveralls
+
+    - name: send result to coveralls
+      if: matrix.node-version == '16.x'
       uses: coverallsapp/github-action@master
       with:
         github-token: ${{ secrets.COVERALLS_TOKEN }}
