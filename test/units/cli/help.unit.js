@@ -3,7 +3,7 @@
 const cliTest = require( `../../util/cliTest` );
 
 const helpString =
-    `${ require( `fs` ).readFileSync( require( `path` ).resolve( __dirname, `../../../lib/help.txt` ), `utf8` )
+    `${ require( `fs` ).readFileSync( require( `path` ).resolve( __dirname, `../../../cli/help.txt` ), `utf8` )
         .replace( /ENGINE/g, `some_exe` ) }\n`;
 
 module.exports = {

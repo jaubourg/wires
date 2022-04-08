@@ -47,7 +47,8 @@
             "import": "./loader.mjs",
             "require": "./index.js"
         },
-        "./lib/cli.js": "./lib/cli.js",
+        "./cli": "./cli/index.js",
+        "./lib/cli.js": "./cli/index.js",
         "./rollup": "./rollup.js"
     },
     "license": "MIT",

@@ -1,6 +1,6 @@
 "use strict";
 
-const cli = require( `${ process.env.WIRES_DIR }/lib/cli` );
+const cli = require( `${ process.env.WIRES_DIR }/cli` );
 
 // eslint-disable-next-line max-statements
 module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {
