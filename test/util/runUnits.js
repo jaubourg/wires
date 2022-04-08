@@ -2,6 +2,7 @@
 
 "use strict";
 
+const { exec } = require( `child_process` );
 const fs = require( `fs` );
 const fse = require( `fs-extra` );
 const path = require( `path` );
@@ -73,29 +74,41 @@ const npmInstall = [];
 // eslint-disable-next-line no-extend-native
 Object.prototype.__MODIFIED_PROTOTYPE = true;
 
+const executeFactory = command => cwd => new Promise( ( resolve, reject ) => exec(
+    command,
+    {
+        cwd,
+        "env": process.env,
+    },
+    error => ( error ? reject( error ) : resolve() )
+) );
+
+const setupPromises = [];
+
+const now = Date.now();
+
 if ( npmInstall.length ) {
-    const { exec } = require( `child_process` );
-    console.log( `npm install for fixtures...` );
-    const now = Date.now();
-    Promise.all(
-        npmInstall.map(
-            cwd => new Promise( ( resolve, reject ) => exec(
-                `npm install`,
-                {
-                    cwd,
-                    "env": process.env,
-                },
-                error => ( error ? reject( error ) : resolve() )
-            ) )
-        )
-    )
-        .then( () => {
-            console.log( `install done in ${ Date.now() - now }ms\n` );
-            run( units );
-        } )
-        .catch( e => setTimeout( () => {
-            throw e;
-        } ) );
-} else {
-    run( units );
+    console.log( `setup: npm install for fixtures` );
+    setupPromises.push( ...npmInstall.map( executeFactory( `npm install` ) ) );
 }
+
+Promise.allSettled( setupPromises )
+    .then( outcomes => {
+        if ( outcomes.length ) {
+            const failed = outcomes.reduce( ( hasFailed, { reason, status } ) => {
+                if ( status === `rejected` ) {
+                    console.error( reason );
+                    return true;
+                }
+                return hasFailed;
+            }, false );
+            if ( failed ) {
+                throw new Error( `setup failed` );
+            }
+            console.log( `setup done in ${ Date.now() - now }ms\n` );
+        }
+        return run( units );
+    } )
+    .catch( e => setTimeout( () => {
+        throw e;
+    } ) );
