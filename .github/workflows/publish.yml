@@ -10,8 +10,6 @@ jobs:
 
   publish:
 
-    if: github.repository == 'jaubourg/wires'
-
     runs-on: ubuntu-latest
 
     steps:
