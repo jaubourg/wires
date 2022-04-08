@@ -1,28 +1,47 @@
 on:
+
   push:
     branches:
     - "**"
+
   pull_request:
     branches:
     - "**"
+
 jobs:
+
   test:
+
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         node-version:
         - 12.x
         - 14.x
         - 16.x
+
     steps:
-    - uses: actions/checkout@v3
-    - name: NodeJS ${{ matrix.node-version }}
+
+    - name: checkout
+      uses: actions/checkout@v3
+
+    - name: install NodeJS ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: npm test
-    - run: if [[ $(node --version) == v16.* ]]; then npm run coveralls; fi
-      if: github.repository == 'jaubourg/wires'
-      env:
-        COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+
+    - name: install NPM dependencies
+      run: npm install
+
+    - name: run tests
+      run: node test
+
+    - if: matrix.node-version == '16.x'
+
+      name: compute coverage and send to coveralls
+      run: npm run coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        github-token: ${{ secrets.COVERALLS_TOKEN }}
+        path-to-lcov: coverage.lcov

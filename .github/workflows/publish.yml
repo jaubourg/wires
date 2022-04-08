@@ -1,26 +1,44 @@
 on: 
+
   push:
     tags:
       - "*"
+
   workflow_dispatch:
+
 jobs:
+
   publish:
+
     if: github.repository == 'jaubourg/wires'
+
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
+
+    - name: checkout
+      uses: actions/checkout@v3
       with:
         # to be able to get tags
         # when manually triggering
         fetch-depth: 0
-    - name: NodeJS
+
+    - name: install NodeJS
       uses: actions/setup-node@v3
       with:
         node-version: 16.x
-    - run: npm install
-    - run: node test
+
+    - name: install NPM dependencies
+      run: npm install
+
+    - name: run tests
+      run: node test
+
+    - name: prepare publish
     - run: node scripts/preparePublish "$( git describe --tags --abbrev=0 )"
-    - run: |
+
+    - name: publish
+      run: |
         cd publish
         echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
         npm publish

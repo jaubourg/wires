@@ -6,7 +6,6 @@
     "bugs": "https://github.com/jaubourg/wires",
     "description": "simple configuration utility with smart module wiring for unobtrusive dependency injection",
     "devDependencies": {
-        "coveralls": "3.1.1",
         "eslint": "8.13.0",
         "eslint-config-creative-area": "0.11.1",
         "eslint-formatter-codeframe": "7.32.1",
@@ -66,7 +65,7 @@
     "repository" : "github:jaubourg/wires",
     "scripts": {
         "coverage": "nyc --eager node test && nyc report --reporter=html",
-        "coveralls": "nyc --eager node test && nyc report --reporter=text-lcov | coveralls",
+        "coveralls": "nyc --eager node test && nyc report --reporter=text-lcov > coverage.lcov",
         "test": "node test"
     }
 }
