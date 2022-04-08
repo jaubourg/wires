@@ -54,19 +54,18 @@ const publishDir = path.resolve( baseDir, `publish` );
     copyRecursive( baseDir, publishDir );
 }
 
-let pkg = require( `../publish/package.json` );
+const pkg = require( `../publish/package.json` );
 
 // cleans package.json up
-{
-    const pkgFiltered = new Set( [ ...( pkg.removePublish || [] ), `private`, `removePublish` ] );
-
-    pkg = Object.fromEntries( Object.entries( pkg ).filter( ( [ k ] ) => !pkgFiltered.has( k ) ) );
-    if ( VERSION ) {
-        pkg.version = VERSION;
-    }
-
-    fs.writeFileSync( path.resolve( publishDir, `package.json` ), JSON.stringify( pkg, null, `    ` ) );
+for ( const field of ( new Set( [ ...( pkg.removePublish || [] ), `private`, `removePublish` ] ) ).values() ) {
+    delete pkg[ field ];
 }
+
+if ( VERSION ) {
+    pkg.version = VERSION;
+}
+
+fs.writeFileSync( path.resolve( publishDir, `package.json` ), JSON.stringify( pkg, null, `    ` ) );
 
 // fixes badges in README.md (removes dev ones and fixes versions for the others)
 {
