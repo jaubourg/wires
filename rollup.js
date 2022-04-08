@@ -29,7 +29,7 @@ module.exports = () => ( {
             return deBypass( source );
         }
         if ( isRoute( source ) ) {
-            return getConfig( getDirectory( importer ) ).get( source, true, false ).getValue();
+            return getConfig( getDirectory( importer ) ).get( source, true ).getValue();
         }
         if ( isValue( source ) ) {
             return `${ marker }${ JSON.stringify( [ getDirectory( importer ), source ] ) }`;

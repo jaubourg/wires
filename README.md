@@ -9,11 +9,11 @@
 [![Coverage Status][coverage-image]][coverage-url]
 [![Test Status][test-image]][test-url]
 
-**A simple configuration utility for NodeJS featuring smart module wiring for unobtrusive dependency injection.**
-
-## Table of Content
+__a simple configuration utility for NodeJS featuring smart module wiring for unobtrusive dependency injection__
 
 <img align="right" width="22.5%" src="https://raw.githubusercontent.com/jaubourg/wires/master/logo.svg?sanitize=true" style="margin:0 3%">
+
+## Table of Content
 
 - [Overview](#overview)
 - [Getting Started](#getting-started)
@@ -27,11 +27,11 @@
 - [Routes](#routes)
     - [Generic](#generic-routes)
     - [Computed](#computed-routes)
-- [Import](#import)
+- [`import`](#import)
 
 ## Overview
 
-**`wires` augments the filename resolution mechanisms used by `import` and `require()` under the hood as a means to transparently inject configuration into your code.**
+__`wires` augments the filename resolution mechanisms used by `import` and `require()` under the hood as a means to transparently inject configuration into your code.__
 
 *For simplicity's sake, we only reference `require()` in the examples in this document but everything described also applies to `import` with minor specificities discussed in [a dedicated section](#import).*
 
@@ -78,7 +78,7 @@ require( ":models/user" ) === require ( "models/dbo/user" );
 require( ":models/article" ) === require ( "models/dbo/article" )
 ```
 
-Not that settings which keys are at-sign-lead are considered as directives and will not appear in your configuration. Currently supported directives are `@namespace` and `@root`.
+Not that settings which keys are at-sign-lead are considered as directives and will not appear in your configuration. Currently supported directives are [`@namespace`](#namespace-directive) and [`@root`](#root-directive).
 
 ## Getting started
 
@@ -87,7 +87,7 @@ Typically,
 1. install `wires` globally: `npm -g install wires`
 2. use the `wires` command in lieu of `node`.
 
-So, `node path/to/myScript.js scriptArg`
+So, `node path/to/myScript.js scriptArg`<br>
 becomes `wires path/to/myScript.js scriptArg`.
 
 As of version `5.0`, `wires` supports ES Module resolution. As such, a custom loader has to be provided to the `node` executable. Since the feature is still experimental as of NodeJS version `16`, one to two warning lines are displayed at start-up. 
@@ -285,7 +285,7 @@ In your configuration files, every object property which name is not colon-lead 
 A setting can be of any type, including an object. When the value of a setting is a string, it accepts the template syntax seen in the previous section.
 
 ```js
-// wires.json
+// /app/wires.json
 
 {
     "number": 56,
@@ -299,7 +299,7 @@ A setting can be of any type, including an object. When the value of a setting i
     "env": "{?>SOME_VAR}"
 }
 
-// file.js
+// /app/file.js
 
 require( "#number" ) === 56;
 require( "#string" ) === "some string";
@@ -313,7 +313,7 @@ require( "#env" ) === ( process.env.SOME_VAR || "" );
 
 As of version `2.0`, every object property which name ends with a question mark in your configuration files is a fallback. Fallbacks are useful in situations where a setting may be _empty_ (`""`, `NaN`, `null` or `undefined`) yet you still need a default value for it.
 
-_Prior to version `4.0`, `wires` did consider any _falsy_ value as _empty_ (`0`, `false`, etc). This was changed in order to accommodate casting as introduced in the very same version._
+__Prior to version `4.0`, `wires` did consider any _falsy_ value as _empty_ (`0`, `false`, etc). This was changed in order to accommodate casting as introduced in the very same version.__
 
 Let's considering the following situation:
 
