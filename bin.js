@@ -13,9 +13,6 @@ let path;
 for ( let i = 0; !path && ( i < LOCALS.length ); ++i ) {
     try {
         path = Module._findPath( LOCALS[ i ], Module._nodeModulePaths( `.` ) );
-        if ( path ) {
-            break;
-        }
     } catch ( e ) {
         if ( e.code !== `ERR_PACKAGE_PATH_NOT_EXPORTED` ) {
             throw e;
