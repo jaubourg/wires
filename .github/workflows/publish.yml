@@ -10,6 +10,8 @@ jobs:
 
   publish:
 
+    if: github.repository == 'jaubourg/wires'
+
     runs-on: ubuntu-latest
 
     steps:
@@ -33,7 +35,7 @@ jobs:
       run: node test
 
     - name: prepare publish
-    - run: node scripts/preparePublish "$( git describe --tags --abbrev=0 )"
+      run: node scripts/preparePublish "$( git describe --tags --abbrev=0 )"
 
     - name: publish
       run: |
