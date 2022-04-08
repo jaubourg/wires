@@ -1,28 +1,40 @@
 "use strict";
 
 const { generate } = require( `peggy` );
-const { readFileSync, writeFileSync } = require( `fs` );
+const { readdirSync, readFileSync, writeFileSync } = require( `fs` );
 const { resolve } = require( `path` );
 
-const targetDir = resolve( __dirname, `../lib/config/parse` );
+// exportables
 
-// funcs
+{
+    const rJS = /\.js$/;
+    const targetDir = resolve( __dirname, `../lib/exportable` );
 
-writeFileSync(
-    resolve( targetDir, `funcs.mjs` ),
-    readFileSync( resolve( targetDir, `funcs.js` ), `utf8` )
-        .replace( /^"use strict";\n+/g, `` )
-        .replace(
-            /^const (\{ [^}]+ }) = require\( `([^`]+)` \);$/gm,
-            ( _, names, mod ) => `import ${ names } from "${ mod }";`
-        )
-        .replace( /^module.exports = /m, `export default ` )
-);
+    readdirSync( targetDir ).forEach( file => {
+        if ( !rJS.test( file ) ) {
+            return;
+        }
+        writeFileSync(
+            resolve( targetDir, file.replace( rJS, `.mjs` ) ),
+            readFileSync( resolve( targetDir, file ), `utf8` )
+                .replace( /^"use strict";\n+/g, `` )
+                .replace(
+                    /^const (\{ [^}]+ }) = require\( `([^`]+)` \);$/gm,
+                    ( _, names, mod ) => `import ${ names } from "${ mod }";`
+                )
+                .replace( /^module.exports = /m, `export default ` )
+        );
+    } );
+}
 
 // parser
 
-const grammar = readFileSync( resolve( targetDir, `grammar.peggy` ), `utf8` );
-writeFileSync( resolve( targetDir, `index.js` ), generate( grammar, {
-    "format": `commonjs`,
-    "output": `source`,
-} ) );
+{
+    const targetDir = resolve( __dirname, `../lib/parse` );
+
+    const grammar = readFileSync( resolve( targetDir, `grammar.peggy` ), `utf8` );
+    writeFileSync( resolve( targetDir, `index.js` ), generate( grammar, {
+        "format": `commonjs`,
+        "output": `source`,
+    } ) );
+}

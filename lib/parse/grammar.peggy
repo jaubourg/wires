@@ -1,7 +1,7 @@
 {{
-    const isObject = require( `../../isObject` );
+    const isObject = require( `../isObject` );
     const { joinItems, newValue } = require( `./item` );
-    const nullModulePath = require.resolve( `./null` );
+    const nullModulePath = require.resolve( `../exportable/null` );
 
     const parseFactory = ( _options, directory ) => {
         const options = directory ? {

@@ -1,7 +1,7 @@
 "use strict";
 
 const assert = require( `assert` ).ok;
-const { deBypass, getConfig, isBypass, isRoute, isValue } = require( `./lib/base` );
+const { deBypass, getConfig, isBypass, isRoute, isValue } = require( `./lib/loader-utils` );
 const { dirname } = require( `path` );
 
 const CONFIG = Symbol( `wires-config` );

@@ -2,7 +2,7 @@
 /coverage
 /node_modules
 /publish
-/lib/config/parse/funcs.mjs
-/lib/config/parse/index.js
+/lib/exportable/*.mjs
+/lib/parse/index.js
 /package-lock.json
 /yarn.lock

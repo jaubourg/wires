@@ -2,7 +2,7 @@
 import "./index.js";
 
 import generateModule from "./lib/generateModule.js";
-import { deBypass, getConfig, isBypass, isRoute, isValue } from "./lib/base.js";
+import { deBypass, getConfig, isBypass, isRoute, isValue } from "./lib/loader-utils.js";
 import nodeVersion from "./lib/nodeVersion.js";
 import UID from "./lib/UID.js";
 
