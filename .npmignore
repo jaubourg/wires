@@ -2,7 +2,7 @@
 /coverage
 /scripts
 /test
-/lib/config/parse/grammar.peggy
+/lib/parse/grammar.peggy
 /logo.svg
 /package-lock.json
 /yarn.lock
