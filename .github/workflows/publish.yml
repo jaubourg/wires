@@ -41,6 +41,7 @@ jobs:
       run: |
         cd publish
         echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
-        npm publish
+        npm publish ${DRY_RUN}
       env:
+        DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && '--dry-run' || '' }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
