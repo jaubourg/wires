@@ -80,11 +80,12 @@ path
         if ( !route ) {
             throw new Error( `unknown route ${ JSON.stringify( resultValue ) }` );
         }
+        const { remaining } = route;
         let { value } = route;
         if ( typeof value === `function` ) {
-            value = value( ...( route.remaining || [] ) );
-        } else if ( typeof value === `string` ) {
-            value += ( route.remaining || [] ).join( `/` );
+            value = remaining ? value( ...remaining ) : value();
+        } else if ( remaining && ( typeof value === `string` ) ) {
+            value += remaining.join( `/` );
         }
         if ( value === null ) {
             return newValue( nullModulePath );
@@ -124,12 +125,13 @@ value
         } else {
             const resultValue = result.getValue();
             const paths = config.getPath( resultValue );
-            if ( paths.length ) {
+            const { length } = paths;
+            if ( length ) {
                 const parse = parseFactory( options );
-                value = paths.reduce(
-                    ( previous, value ) => ( previous ? previous.fallback( parse( value ) ) : parse( value ) ),
-                    undefined
-                );
+                value = parse( paths[ 0 ] );
+                for ( let i = 1; i < length; ++i ) {
+                    value = value.fallback( parse( paths[ i ] ) );
+                }
             }
         }
         if ( modifier === `?` ) {
