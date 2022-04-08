@@ -72,14 +72,8 @@ let pkg = require( `../publish/package.json` );
 {
     const rBadge = /https:\/\/img.shields.io\/(librariesio|node|npm(?:\/l)?)(?:\/[^?\s]*)?(\?\S*)?/g;
     const rLines = /\n\n\n+/g;
-    const rRemove = /\[(?:codestyle|coverage|quality|test)-(?:image|url)\]/;
+    const rRemove = /\[(?:coverage|dependency|quality|test)-(?:image|url)\]/;
     const types = new Map( [
-        [
-            `librariesio`,
-            {
-                "newPath": `librariesio/release/npm/${ pkg.name }/${ pkg.version }`,
-            },
-        ],
         [
             `node`,
             {
@@ -109,6 +103,10 @@ let pkg = require( `../publish/package.json` );
     fs.writeFileSync(
         readmePath,
         fs.readFileSync( readmePath, `utf8` )
+            .split( `\n` )
+            .filter( line => !rRemove.test( line ) )
+            .join( `\n` )
+            .replace( rLines, `\n\n` )
             .replace(
                 rBadge,
                 ( _, type, query ) => {
@@ -128,9 +126,5 @@ let pkg = require( `../publish/package.json` );
                     );
                 }
             )
-            .split( `\n` )
-            .filter( line => !rRemove.test( line ) )
-            .join( `\n` )
-            .replace( rLines, `\n\n` )
     );
 }
