@@ -33,7 +33,7 @@ __a simple configuration utility for NodeJS featuring smart module wiring for un
 
 __`wires` augments the filename resolution mechanisms used by `import` and `require()` under the hood as a means to transparently inject configuration into your code.__
 
-*For simplicity's sake, we only reference `require()` in the examples in this document but everything described also applies to `import` with minor specificities discussed in [a dedicated section](#import).*
+*For simplicity's sake, we only provide examples using `require()` in this documentation but everything described here also applies to `import` with minor specificities discussed in [a dedicated section](#import).*
 
 ```js
 require( "#port" ); // <= http port of the server
