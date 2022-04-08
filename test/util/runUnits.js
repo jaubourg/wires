@@ -14,6 +14,12 @@ const rUnit = /\.unit\.js$/;
 const fixtureDir = path.resolve( __dirname, `../fixture` );
 const unitDir = path.resolve( __dirname, `../units/${ process.argv[ 2 ] }` );
 
+process.on( `exit`, () => {
+    try {
+        fse.removeSync( fixtureDir );
+    } catch ( e ) {}
+} );
+
 const files = new Set( process.argv.slice( 3 ) );
 
 const dirUnits = {};
@@ -32,12 +38,6 @@ for ( const basename of fs.readdirSync( unitDir ) ) {
         }
     }
 }
-
-process.on( `exit`, () => {
-    try {
-        fse.removeSync( fixtureDir );
-    } catch ( e ) {}
-} );
 
 const npmInstall = [];
 

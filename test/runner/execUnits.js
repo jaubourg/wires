@@ -19,16 +19,14 @@ module.exports = ( type, { bin, wiresEnv = `test` } = {} ) => () => new Promise(
             wiresEnv || `-`
         })\n`
     );
-    const env = {};
-    for ( const key of Object.keys( process.env ) ) {
-        env[ key ] = process.env[ key ];
-    }
-    env[ `WIRES_ENV` ] = wiresEnv;
     spawn(
         process.execPath,
         bin ? [ binPath, unitPath, type ] : [ ...wiresArgs, unitPath, type ],
         {
-            env,
+            "env": {
+                ...process.env,
+                "WIRES_ENV": wiresEnv,
+            },
             "stdio": `inherit`,
         }
     )
