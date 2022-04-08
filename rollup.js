@@ -15,8 +15,7 @@ module.exports = () => ( {
             const [ directory, expression ] = JSON.parse( id.slice( marker.length ) );
             return generateModule( getConfig( directory ).get( expression, false, true ) );
         }
-        const exportable = isExportable( id );
-        if ( exportable ) {
+        if ( isExportable( id ) ) {
             return generateModule( id );
         }
         return null;
