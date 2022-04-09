@@ -2,7 +2,6 @@
 
 [![NPM Version][npm-image]][npm-url]
 [![Node Version][node-image]][node-url]
-[![Dependencies Status][dependency-image]][dependency-url]
 [![License][license-image]][license-url]
 
 [![Coverage Status][coverage-image]][coverage-url]
@@ -10,9 +9,9 @@
 
 __a simple configuration utility for NodeJS featuring smart module wiring for unobtrusive dependency injection__
 
-<img align="right" width="22.5%" src="https://raw.githubusercontent.com/jaubourg/wires/master/logo.svg?sanitize=true" style="margin:0 3%">
-
 ## Table of Content
+
+<img align="right" width="22.5%" src="https://raw.githubusercontent.com/jaubourg/wires/master/logo.svg?sanitize=true" style="margin:0 3%">
 
 - [Overview](#overview)
 - [Getting Started](#getting-started)
@@ -175,7 +174,7 @@ In practice, you'll rarely use all files at once. Typically, parts of your appli
 require( "#mysql.host" ) === "localhost";
 require( "#mysql.port" ) === 3306,
 require( "#mysql.user" ) === "root",
-require( "#mysql.password" ) === process.env.PASSWORD,
+require( "#mysql.password" ) === String( process.env.PASSWORD ),
 require( "#mysql.database" ) === "test3"
 ```
 
@@ -212,7 +211,7 @@ Let's go back to the previous example:
 require( "#host" ) === "localhost";
 require( "#port" ) === 3306,
 require( "#user" ) === "root",
-require( "#password" ) === process.env.PASSWORD,
+require( "#password" ) === String( process.env.PASSWORD ),
 require( "#database" ) === "test3"
 ```
 
@@ -678,8 +677,6 @@ property2 === 2;
 
 [coverage-image]: https://img.shields.io/coveralls/jaubourg/wires.svg?style=flat-square
 [coverage-url]: https://coveralls.io/r/jaubourg/wires
-[dependency-image]: https://img.shields.io/librariesio/release/npm/wires?style=flat-square
-[dependency-url]: https://libraries.io/npm/wires
 [license-image]: https://img.shields.io/npm/l/wires.svg?style=flat-square
 [license-url]: https://raw.githubusercontent.com/jaubourg/wires/master/LICENSE
 [node-image]: https://img.shields.io/node/v/wires.svg?style=flat-square

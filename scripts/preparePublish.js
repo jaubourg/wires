@@ -71,7 +71,7 @@ fs.writeFileSync( path.resolve( publishDir, `package.json` ), JSON.stringify( pk
 {
     const rBadge = /https:\/\/img.shields.io\/(librariesio|node|npm(?:\/l)?)(?:\/[^?\s]*)?(\?\S*)?/g;
     const rLines = /\n\n\n+/g;
-    const rRemove = /\[(?:coverage|dependency|test)-(?:image|url)\]/;
+    const rRemove = /\[(?:coverage|test)-(?:image|url)\]/;
     const types = new Map( [
         [
             `node`,
