@@ -39,7 +39,7 @@ jobs:
 
     - name: compute coverage
       if: matrix.node-version == '16.x'
-      run: npm run coveralls
+      run: npm run coverage_lcov
 
     - name: send result to coveralls
       if: matrix.node-version == '16.x'

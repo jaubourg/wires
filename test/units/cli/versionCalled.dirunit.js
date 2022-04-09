@@ -3,8 +3,7 @@
 const { execSync } = require( `child_process` );
 const { "version": currentVersion } = require( `${ process.env.WIRES_DIR }/package.json` );
 
-const root = process.env.WIRES_DIR;
-const binPath = require.resolve( `${ root }/bin` );
+const binPath = require.resolve( `${ process.env.WIRES_DIR }/bin` );
 
 const versions = JSON.parse( execSync( `npm view wires versions --json`, {
     "env": process.env,
@@ -24,7 +23,7 @@ for ( const [ version, callsCurrent ] of versions ) {
         },
         "data.json": {
             "bin": binPath,
-            root,
+            "root": process.env.WIRES_DIR,
             version,
         },
         [ `${ version }.unit.js` ]() {
@@ -52,7 +51,7 @@ for ( const [ version, callsCurrent ] of versions ) {
             "package.json": {
                 "name": `test-wires`,
                 "dependencies": {
-                    "wires": `file:${ root }`,
+                    "wires": `file:${ process.env.WIRES_DIR }`,
                 },
             },
             "data.json": {

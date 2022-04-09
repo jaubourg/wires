@@ -3,12 +3,12 @@
 const path = require( `path` );
 const { spawn } = require( `child_process` );
 
-const binPath = path.resolve( __dirname, `../../bin.js` );
+const binPath = path.resolve( `${ process.env.WIRES_DIR }/bin.js` );
 const unitPath = path.resolve( __dirname, `../util/runUnits.js` );
 
 const wiresArgs = [
-    `--require=${ path.resolve( __dirname, `../../index.js` ) }`,
-    `--loader=${ path.resolve( __dirname, `../../loader.mjs` ) }`,
+    `--require=${ path.resolve( `${ process.env.WIRES_DIR }/index.js` ) }`,
+    `--loader=${ path.resolve( `${ process.env.WIRES_DIR }/loader.mjs` ) }`,
 ];
 
 module.exports = ( type, { bin, wiresEnv = `test` } = {} ) => () => new Promise( ( resolve, reject ) => {

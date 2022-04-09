@@ -55,17 +55,19 @@
     "main": "./index.js",
     "name": "wires",
     "nyc": {
+        "all": true,
         "cache": true,
-        "exclude": [ "lib/config/parse/index.js" ],
+        "exclude": [ "publish/lib/exportable/*.mjs", "publish/lib/parse/index.js" ],
         "extension": [ ".js", ".mjs" ],
-        "include": [ "lib", "index.js", "loader.mjs" ]
+        "include": [ "publish/lib", "publish/bin.js", "publish/index.js", "publish/loader.mjs" ]
     },
     "private": true,
     "removePublish": [ "devDependencies", "eslintConfig", "nyc", "scripts" ],
     "repository" : "github:jaubourg/wires",
     "scripts": {
-        "coverage": "nyc --eager node test && nyc report --reporter=html",
-        "coveralls": "nyc --eager node test && nyc report --reporter=text-lcov > coverage.lcov",
+        "coverage": "node scripts/preparePublish 0.0.0 && nyc instrument publish --in-place && WIRES_DIR=publish nyc --eager node test",
+        "coverage_html": "$npm_execpath coverage && node scripts/preparePublish 0.0.0 && nyc report --reporter=html",
+        "coverage_lcov": "$npm_execpath coverage && nyc report --reporter=text-lcov > coverage.lcov && node scripts/lcov",
         "test": "node test"
     }
 }

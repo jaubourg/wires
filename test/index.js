@@ -1,10 +1,18 @@
 "use strict";
 
-// build parser
-require( `child_process` ).execSync( `node ${ __dirname }/../scripts/preparePublish 0.0.0` );
-process.env.WIRES_DIR = require( `path` ).resolve( __dirname, `../publish` );
-
+const { execSync } = require( `child_process` );
 const execUnits = require( `./runner/execUnits` );
+const { resolve } = require( `path` );
+
+// handles publishing
+if ( process.env.WIRES_DIR ) {
+    // already published ( coverage )
+    process.env.WIRES_DIR = resolve( __dirname, `..`, process.env.WIRES_DIR );
+} else {
+    // needs publishing
+    execSync( `node ${ __dirname }/../scripts/preparePublish 0.0.0` );
+    process.env.WIRES_DIR = resolve( __dirname, `../publish` );
+}
 
 require( `./runner` )( [
     // lint
