@@ -66,8 +66,8 @@
     "repository" : "github:jaubourg/wires",
     "scripts": {
         "coverage": "node scripts/preparePublish 0.0.0 && nyc instrument publish --in-place && WIRES_DIR=publish nyc --eager node test",
-        "coverage_html": "$npm_execpath coverage && node scripts/preparePublish 0.0.0 && nyc report --reporter=html",
-        "coverage_lcov": "$npm_execpath coverage && nyc report --reporter=text-lcov > coverage.lcov && node scripts/lcov",
+        "coverage_html": "$npm_execpath run coverage && node scripts/preparePublish 0.0.0 && nyc report --reporter=html",
+        "coverage_lcov": "$npm_execpath run coverage && nyc report --reporter=text-lcov > coverage.lcov && node scripts/lcov",
         "test": "node test"
     }
 }
