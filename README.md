@@ -5,7 +5,6 @@
 [![Dependencies Status][dependency-image]][dependency-url]
 [![License][license-image]][license-url]
 
-[![Code quality][quality-image]][quality-url]
 [![Coverage Status][coverage-image]][coverage-url]
 [![Test Status][test-image]][test-url]
 
@@ -687,7 +686,5 @@ property2 === 2;
 [node-url]: https://npmjs.org/package/wires
 [npm-image]: https://img.shields.io/npm/v/wires.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/wires
-[quality-image]: https://img.shields.io/lgtm/grade/javascript/g/jaubourg/wires.svg?style=flat-square&logo=lgtm&logoWidth=18
-[quality-url]: https://lgtm.com/projects/g/jaubourg/wires/context:javascript
 [test-image]: https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fjaubourg%2Fwires%2Fbadge&style=flat-square
 [test-url]: https://github.com/jaubourg/wires/actions
