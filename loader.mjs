@@ -47,7 +47,7 @@ export const resolve = ( specifier, context, defaultResolve ) => {
         return defaultResolve( deBypass( specifier ), context );
     }
     if ( isRoute( specifier ) ) {
-        return defaultResolve( getConfig( getDirectory( context ) ).get( specifier, true ).getValue() );
+        return defaultResolve( getConfig( getDirectory( context ) ).get( specifier, true ).getValue(), context );
     }
     if ( isValue( specifier ) ) {
         return {
