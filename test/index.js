@@ -1,7 +1,6 @@
 "use strict";
 
 const { execSync } = require( `child_process` );
-const execUnits = require( `./runner/execUnits` );
 const { resolve } = require( `path` );
 
 // handles publishing
@@ -13,6 +12,8 @@ if ( process.env.WIRES_DIR ) {
     execSync( `node ${ __dirname }/../scripts/preparePublish 0.0.0` );
     process.env.WIRES_DIR = resolve( __dirname, `../publish` );
 }
+
+const execUnits = require( `./runner/execUnits` );
 
 require( `./runner` )( [
     // lint
