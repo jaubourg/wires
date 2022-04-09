@@ -2,6 +2,7 @@
 /coverage
 /scripts
 /test
+/coverage.lcov
 /lib/parse/grammar.peggy
 /logo.svg
 /package-lock.json
