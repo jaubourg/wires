@@ -3,6 +3,7 @@
 
 const createReporter = require( `tap-diff` );
 const fs = require( `fs` );
+const { importOrRequire } = require( `./common` );
 const path = require( `path` );
 const tape = require( `tape` );
 
@@ -240,28 +241,38 @@ const extendTape = fn => ( __, ...args ) => {
 };
 
 const fixtureDir = `${ path.resolve( `${ __dirname }/../fixture` ) }/`;
-const rMethod = /(\( __ \) \{)$/gm;
+const rMethod = /(\( __ \) \{| __ => \{|function \( __ \) \{)$/gm;
 
-const patchFile = filename => {
+const patchFile = ( filename, type ) => {
     if ( !filename.startsWith( fixtureDir ) ) {
         return;
     }
     const content = fs.readFileSync( filename, `utf8` );
-    const patched = content.replace(
+    let patched = content.replace(
         rMethod,
-        `$1 const importAndRequire = __.importAndRequireFactory( e => import( e ), require );`
+        type === `c` ?
+            `$1 const importAndRequire = __.importAndRequireFactory( e => import( e ), require );` :
+            `$1 const importAndRequire = __.importAndRequireFactory( e => import( e ), __require( import.meta.url ) );`
     );
+    if ( type === `m` ) {
+        patched = `import { createRequire as __require } from "module";\n\n${ patched }`;
+    }
     if ( patched !== content ) {
         fs.writeFileSync( filename, patched );
     }
 };
 
-module.exports = units => {
-    tape.createStream().pipe( createReporter() ).pipe( process.stdout );
-    for ( const { filename, label } of units ) {
-        patchFile( filename );
-        for ( const [ name, fn ] of Object.entries( require( filename ) ) ) {
-            tape.test( `${ label }: ${ JSON.stringify( name ) }`, extendTape( fn ) );
+module.exports = async units => {
+    const tests = [];
+    for ( const { filename, label, type } of units ) {
+        patchFile( filename, type );
+        // eslint-disable-next-line no-await-in-loop
+        for ( const [ name, fn ] of Object.entries( await importOrRequire( filename, type === `m` ) ) ) {
+            tests.push( [ `${ label } ${ name }`, extendTape( fn ) ] );
         }
+    }
+    tape.createStream().pipe( createReporter() ).pipe( process.stdout );
+    for ( const [ name, fn ] of tests ) {
+        tape.test( name, fn );
     }
 };
