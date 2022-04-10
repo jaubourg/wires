@@ -29,7 +29,10 @@ module.exports = () => ( {
             } );
         }
         if ( isRoute( source ) ) {
-            return getConfig( getDirectory( importer ) ).get( source, true ).getValue();
+            return this.resolve( getConfig( getDirectory( importer ) ).get( source, true ).getValue(), importer, {
+                ...options,
+                "skipSelf": true,
+            } );
         }
         if ( isValue( source ) ) {
             return `${ marker }${ JSON.stringify( [ getDirectory( importer ), source ] ) }`;
