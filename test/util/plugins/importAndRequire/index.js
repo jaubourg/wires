@@ -213,15 +213,16 @@ const createImportAndRequire = import( `./createImportAndRequire.mjs` ).then( m 
 
 const importsAndRequires = new Map();
 
-module.exports = async ( tapeObject, filename ) => {
-    if ( !tapeObject[ INSTALL_IMPORT_AND_REQUIRE ] ) {
-        Object.assign( Object.getPrototypeOf( tapeObject ), tapeExtension );
-    }
-    let importAndRequire = importsAndRequires.get( filename );
-    if ( !importAndRequire ) {
-        importsAndRequires.set( filename, ( importAndRequire = ( await createImportAndRequire )( filename ) ) );
-    }
-    tapeObject[ INSTALL_IMPORT_AND_REQUIRE ]( importAndRequire );
-    return tapeObject;
+module.exports = {
+    "object": async ( tapeObject, filename ) => {
+        if ( !tapeObject[ INSTALL_IMPORT_AND_REQUIRE ] ) {
+            Object.assign( Object.getPrototypeOf( tapeObject ), tapeExtension );
+        }
+        let importAndRequire = importsAndRequires.get( filename );
+        if ( !importAndRequire ) {
+            importsAndRequires.set( filename, ( importAndRequire = ( await createImportAndRequire )( filename ) ) );
+        }
+        tapeObject[ INSTALL_IMPORT_AND_REQUIRE ]( importAndRequire );
+        return tapeObject;
+    },
 };
-

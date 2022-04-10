@@ -26,10 +26,11 @@ const tapeExtension = {
     },
 };
 
-module.exports = tapeObject => {
-    if ( !tapeObject[ RESOLVE_OR_REJECT ] ) {
-        Object.assign( Object.getPrototypeOf( tapeObject ), tapeExtension );
-    }
-    return tapeObject;
+module.exports = {
+    "object": tapeObject => {
+        if ( !tapeObject[ RESOLVE_OR_REJECT ] ) {
+            Object.assign( Object.getPrototypeOf( tapeObject ), tapeExtension );
+        }
+        return tapeObject;
+    },
 };
-

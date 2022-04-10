@@ -8,14 +8,20 @@ const tape = require( `tape` );
 
 const plugins = readdirSync( resolve( __dirname, `plugins` ) ).map( n => require( `./plugins/${ n }` ) );
 
-const extendTape = ( fn, filename, isESM ) => async ( _tapeObject, ...args ) => {
+const extendTape = ( _fn, filename, isESM ) => async _tapeObject => {
+    let fn = _fn;
     let tapeObject = _tapeObject;
-    for ( const plugin of plugins ) {
-        tapeObject = await plugin( tapeObject, filename, isESM );
+    for ( const { "function": func, object } of plugins ) {
+        if ( object ) {
+            tapeObject = await object( tapeObject, filename, isESM );
+        }
+        if ( func ) {
+            fn = await func( fn, filename, isESM );
+        }
     }
     let tmp;
     try {
-        tmp = await fn( tapeObject, ...args );
+        tmp = await fn( tapeObject );
     } catch ( e ) {
         tapeObject.doesNotThrow( () => {
             throw e;
