@@ -176,7 +176,6 @@ class ImportAndRequire {
     }
 }
 
-const RESOLVE_OR_REJECT = Symbol( `resolve or reject` );
 // eslint-disable-next-line id-length
 const INSTALL_IMPORT_AND_REQUIRE = Symbol( `importAndRequire factory` );
 
@@ -207,27 +206,6 @@ const tapeExtension = {
         Object.defineProperty( this, `importAndRequire`, {
             "value": fn,
         } );
-    },
-    async [ RESOLVE_OR_REJECT ]( block, tapeMethod, args ) {
-        let result;
-        let error;
-        try {
-            result = await block();
-        } catch ( e ) {
-            error = e;
-        }
-        return this[ tapeMethod ]( () => {
-            if ( error ) {
-                throw error;
-            }
-            return result;
-        }, ...args );
-    },
-    rejects( block, ...args ) {
-        return this[ RESOLVE_OR_REJECT ]( block, `throws`, args );
-    },
-    resolves( block, ...args ) {
-        return this[ RESOLVE_OR_REJECT ]( block, `doesNotThrow`, args );
     },
 };
 
