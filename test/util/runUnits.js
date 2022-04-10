@@ -115,6 +115,39 @@ if ( npmInstall.length ) {
     setupPromises.push( ...npmInstall.map( executeFactory( `npm install` ) ) );
 }
 
+const rollups = units.filter( ( { filename, type } ) => ( type === `m` ) && filename.startsWith( `${ fixtureDir }/` ) );
+
+if ( rollups.length ) {
+    console.log( `setup: rollup` );
+    const { rollup } = require( `rollup` );
+    const wiresRollup = require( `${ process.env.WIRES_DIR }/rollup.js` );
+    setupPromises.push( ...rollups.map( async ( { filename, label, type } ) => {
+        let bundle;
+        try {
+            const inputOptions = {
+                "input": filename,
+                "plugins": [ wiresRollup() ],
+            };
+            const outputOptions = {
+                "file": `${ filename }.rollup.mjs`,
+                "format": `es`,
+            };
+            bundle = await rollup( inputOptions );
+            await bundle.generate( outputOptions );
+            await bundle.write( outputOptions );
+            units.push( {
+                "filename": outputOptions.file,
+                "label": `${ label } (rollup)`,
+                type,
+            } );
+        } finally {
+            if ( bundle ) {
+                bundle.close();
+            }
+        }
+    } ) );
+}
+
 Promise.allSettled( setupPromises )
     .then( outcomes => {
         if ( outcomes.length ) {
@@ -130,5 +163,7 @@ Promise.allSettled( setupPromises )
             }
             console.log( `setup done in ${ Date.now() - now }ms\n` );
         }
+        // eslint-disable-next-line no-nested-ternary
+        units.sort( ( u1, u2 ) => ( u1.label < u2.label ? -1 : ( u1.label > u2.label ? 1 : 0 ) ) );
         return run( units );
     } );

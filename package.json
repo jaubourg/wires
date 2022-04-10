@@ -60,7 +60,7 @@
         "cache": true,
         "exclude": [ "publish/lib/exportable/*.mjs", "publish/lib/parse/index.js" ],
         "extension": [ ".js", ".mjs" ],
-        "include": [ "publish/lib", "publish/bin.js", "publish/index.js", "publish/loader.mjs" ]
+        "include": [ "publish/lib", "publish/bin.js", "publish/index.js", "publish/loader.mjs", "publish/rollup.js" ]
     },
     "private": true,
     "removePublish": [ "devDependencies", "eslintConfig", "nyc", "scripts" ],
