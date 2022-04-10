@@ -45,8 +45,8 @@ module.exports = {
             async data( __ ) {
                 __.plan( 14 );
                 await Promise.allSettled( [
-                    importAndRequire( `#array` ).deepEqual( [ 1, 2, 3 ] ),
-                    importAndRequire.all( [
+                    __.importAndRequire( `#array` ).deepEqual( [ 1, 2, 3 ] ),
+                    __.importAndRequire.all( [
                         [ `#array.length`, 3 ],
                         [ `#false`, false ],
                         [ `#key`, `value` ],
@@ -58,7 +58,7 @@ module.exports = {
             },
             async "undefined data"( __ ) {
                 __.plan( 6 );
-                await importAndRequire.all( [
+                await __.importAndRequire.all( [
                     [ `#notDefined`, undefined ],
                     [ `#null.notDefined`, undefined ],
                     [ `#object.notDefined`, undefined ],
@@ -68,7 +68,7 @@ module.exports = {
                 __.plan( 8 );
                 await Promise.allSettled( [ `#array`, `#object` ].map( async expression => {
                     const value = require( expression );
-                    const tmp = importAndRequire( expression );
+                    const tmp = __.importAndRequire( expression );
                     tmp.notStrictRequireEqual( value );
                     tmp.deepRequireEqual( value );
                     await tmp.sameImportAs( expression );
@@ -77,8 +77,8 @@ module.exports = {
             },
             async "environment data"( __ ) {
                 __.plan( 5 );
-                await importAndRequire( `#>PATH` ).strictEqual( process.env.PATH );
-                const tmp = importAndRequire( `#>` );
+                await __.importAndRequire( `#>PATH` ).strictEqual( process.env.PATH );
+                const tmp = __.importAndRequire( `#>` );
                 tmp.strictRequireEqual( process.env );
                 await tmp.notStrictImportEqual( process.env );
                 await tmp.deepImportEqual( {
@@ -95,7 +95,7 @@ module.exports = {
                 } );
                 __.ok( isNaN( castM.pop() ), `import: #${ castM.length } is NaN` );
                 __.ok( isNaN( cast.pop() ), `require: #${ cast.length } is NaN` );
-                await importAndRequire.all( [
+                await __.importAndRequire.all( [
                     [ `#cast_bool_fallback1`, true ],
                     [ `#cast_bool_fallback2`, false ],
                     [ `#cast_number_fallback`, 16 ],
@@ -103,14 +103,14 @@ module.exports = {
             },
             async route( __ ) {
                 __.plan( 3 );
-                const tmp = importAndRequire( `:module` );
+                const tmp = __.importAndRequire( `:module` );
                 tmp.sameRequireAs( `./test` );
                 await tmp.sameAs( `./test.js` );
             },
             async raw( __ ) {
                 __.plan( 3 );
-                importAndRequire( `::./raw{#hello}` ).strictRequireEqual( `raw` );
-                await importAndRequire( `::./test.js` ).sameAs( `./test.js` );
+                __.importAndRequire( `::./raw{#hello}` ).strictRequireEqual( `raw` );
+                await __.importAndRequire( `::./test.js` ).sameAs( `./test.js` );
             },
         };
     },

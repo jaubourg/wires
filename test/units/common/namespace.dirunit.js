@@ -15,7 +15,7 @@ module.exports = {
             module.exports = {
                 async test( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `#` ).deepEqual( {
+                    await __.importAndRequire( `#` ).deepEqual( {
                         "name": `John`,
                         "age": 27,
                     } );
@@ -32,7 +32,7 @@ module.exports = {
             module.exports = {
                 async "empty"( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `#` ).throws();
+                    await __.importAndRequire( `#` ).throws();
                 },
             };
         },
@@ -46,7 +46,7 @@ module.exports = {
             module.exports = {
                 async "wrong type"( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `#` ).throws();
+                    await __.importAndRequire( `#` ).throws();
                 },
             };
         },

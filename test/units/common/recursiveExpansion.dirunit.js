@@ -12,7 +12,7 @@ module.exports = {
         module.exports = {
             async test( __ ) {
                 __.plan( 2 );
-                await importAndRequire( `#paths` ).deepEqual( {
+                await __.importAndRequire( `#paths` ).deepEqual( {
                     "data": `./lib/data`,
                     "tests": [ `./lib/test1`, `./lib/test2` ],
                 } );

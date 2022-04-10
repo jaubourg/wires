@@ -18,14 +18,14 @@ module.exports = {
         module.exports = {
             async data( __ ) {
                 __.plan( 4 );
-                await importAndRequire.all( [
+                await __.importAndRequire.all( [
                     [ `#key`, `value` ],
                     [ `#keyDefaults`, `valueDefault` ],
                 ] ).strictEqual();
             },
             async route( __ ) {
                 __.plan( 4 );
-                await importAndRequire.all( [
+                await __.importAndRequire.all( [
                     [ `:module`, `./test.js` ],
                     [ `:moduleDefaults`, `./test.js` ],
                 ] ).sameAs();

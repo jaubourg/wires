@@ -8,7 +8,7 @@ module.exports = {
         module.exports = {
             async test( __ ) {
                 __.plan( 2 );
-                await importAndRequire( `:fs` ).sameAs( `fs` );
+                await __.importAndRequire( `:fs` ).sameAs( `fs` );
             },
         };
     },

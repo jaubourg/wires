@@ -16,14 +16,14 @@ module.exports = {
         module.exports = {
             async data( __ ) {
                 __.plan( 4 );
-                await importAndRequire.all( [
+                await __.importAndRequire.all( [
                     [ `#show`, `value_is_lib` ],
                     [ `#path`, process.env.PATH ],
                 ] ).strictEqual();
             },
             async route( __ ) {
                 __.plan( 2 );
-                await importAndRequire( `:module` ).sameAs( `./lib/test.js` );
+                await __.importAndRequire( `:module` ).sameAs( `./lib/test.js` );
             },
         };
     },

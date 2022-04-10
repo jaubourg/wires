@@ -13,7 +13,7 @@ module.exports = {
         module.exports = {
             async test( __ ) {
                 __.plan( 20 );
-                await importAndRequire.all( [
+                await __.importAndRequire.all( [
                     [ `#unexisting`, undefined ],
                     [ `?unexisting`, `` ],
                     [ `#>UNEXISTING`, undefined ],

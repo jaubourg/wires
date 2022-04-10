@@ -14,7 +14,7 @@ module.exports = {
             module.exports = {
                 async test( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `./{#folder}/test.js` ).strictEqual( `level/lib` );
+                    await __.importAndRequire( `./{#folder}/test.js` ).strictEqual( `level/lib` );
                 },
             };
         },

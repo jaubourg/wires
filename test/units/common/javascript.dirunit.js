@@ -13,7 +13,7 @@ module.exports = {
         module.exports = {
             async javascript( __ ) {
                 __.plan( 2 );
-                await importAndRequire( `#key` ).strictEqual( `value from js` );
+                await __.importAndRequire( `#key` ).strictEqual( `value from js` );
             },
         };
     },

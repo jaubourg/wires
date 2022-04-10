@@ -9,7 +9,7 @@ module.exports = {
             module.exports = {
                 async "non string route"( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `:boolean` ).throws();
+                    await __.importAndRequire( `:boolean` ).throws();
                 },
             };
         },
@@ -22,7 +22,7 @@ module.exports = {
             module.exports = {
                 async "non string route"( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `:null/something` ).throws();
+                    await __.importAndRequire( `:null/something` ).throws();
                 },
             };
         },
@@ -35,7 +35,7 @@ module.exports = {
             module.exports = {
                 async "empty route"( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `:empty` ).throws();
+                    await __.importAndRequire( `:empty` ).throws();
                 },
             };
         },

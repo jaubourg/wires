@@ -26,7 +26,7 @@ module.exports = {
                 ];
                 __.plan( list.length * 3 );
                 list.forEach( expression => __.strictEqual( require.resolve( expression ), index ) );
-                await importAndRequire.all( list.map( e => [ e, index ] ) ).sameAs();
+                await __.importAndRequire.all( list.map( e => [ e, index ] ) ).sameAs();
             },
         };
     },

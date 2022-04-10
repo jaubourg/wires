@@ -75,7 +75,7 @@ module.exports = {
                         `path.in.more`, `path.in.trueish`, `path.in.vicious`,
                     ].map( s => [ `#${ s }`, s ] );
                     __.plan( list.length * 2 );
-                    await importAndRequire.all( list ).strictEqual();
+                    await __.importAndRequire.all( list ).strictEqual();
                 },
                 async "computed values"( __ ) {
                     const list = [
@@ -84,11 +84,11 @@ module.exports = {
                         [ `#computedWithoutFallback`, `` ],
                     ];
                     __.plan( list.length * 2 );
-                    await importAndRequire.all( list ).strictEqual();
+                    await __.importAndRequire.all( list ).strictEqual();
                 },
                 async "recursive replace"( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `#path` ).deepEqual( {
+                    await __.importAndRequire( `#path` ).deepEqual( {
                         "in": {
                             "defaults": `path.in.defaults`,
                             "falsy": `path.in.falsy`,
@@ -117,11 +117,11 @@ module.exports = {
                         [ `#path.in.value?`, undefined ],
                     ];
                     __.plan( list.length * 2 );
-                    await importAndRequire.all( list ).strictEqual();
+                    await __.importAndRequire.all( list ).strictEqual();
                 },
                 async "NaN is bad"( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `#NaN` ).strictEqual( `fallback` );
+                    await __.importAndRequire( `#NaN` ).strictEqual( `fallback` );
                 },
             };
         },

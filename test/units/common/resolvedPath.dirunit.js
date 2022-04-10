@@ -16,14 +16,14 @@ module.exports = {
             async test( __ ) {
                 __.plan( 12 );
                 await Promise.allSettled( [
-                    importAndRequire( `:cmdPath` ).sameAs( resolve( process.cwd(), `lib/nodeVersion.js` ) ),
-                    importAndRequire.all( [
+                    __.importAndRequire( `:cmdPath` ).sameAs( resolve( process.cwd(), `lib/nodeVersion.js` ) ),
+                    __.importAndRequire.all( [
                         [ `#path`, `./lib` ],
                         [ `#cmdPath`, `>/lib` ],
                         [ `:resolvedRoute`, `lib/test` ],
                         [ `:indirectResolvedRoute`, `lib/test` ],
                     ] ).strictEqual(),
-                    importAndRequire( `:homeRoute` ).throws( / Cannot find module / ),
+                    __.importAndRequire( `:homeRoute` ).throws( / Cannot find module / ),
                 ] );
             },
         };
@@ -41,15 +41,15 @@ module.exports = {
                 async test( __ ) {
                     __.plan( 14 );
                     await Promise.allSettled( [
-                        importAndRequire( `:cmdPath` ).sameAs( resolve( process.cwd(), `lib/nodeVersion.js` ) ),
-                        importAndRequire.all( [
+                        __.importAndRequire( `:cmdPath` ).sameAs( resolve( process.cwd(), `lib/nodeVersion.js` ) ),
+                        __.importAndRequire.all( [
                             [ `#path`, `./lib` ],
                             [ `#cmdPath`, `>/lib` ],
                             [ `:resolvedRoute`, `lib/test` ],
                             [ `:backResolvedRoute`, `lib/test` ],
                             [ `:indirectResolvedRoute`, `lib/test` ],
                         ] ).strictEqual(),
-                        importAndRequire( `:homeRoute` ).throws( / Cannot find module / ),
+                        __.importAndRequire( `:homeRoute` ).throws( / Cannot find module / ),
                     ] );
                 },
             };

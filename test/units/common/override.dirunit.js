@@ -26,10 +26,10 @@ module.exports = {
                 async test( __ ) {
                     __.plan( 8 );
                     await Promise.allSettled( [
-                        importAndRequire( `#array` ).deepEqual(
+                        __.importAndRequire( `#array` ).deepEqual(
                             process.env.WIRES_ENV === `test` ? [ 1, 2, 3 ] : [ `a`, `b`, `c` ]
                         ),
-                        importAndRequire.all( [
+                        __.importAndRequire.all( [
                             [ `#folder`, `lib` ],
                             [ `#lolfolder`, `lollib` ],
                             [ `:module`, `in lib` ],
@@ -53,15 +53,15 @@ module.exports = {
                         async test( __ ) {
                             __.plan( 8 );
                             await Promise.allSettled( [
-                                importAndRequire( `#array` ).deepEqual( [ 4, 5, 6 ] ),
-                                importAndRequire.all( [
+                                __.importAndRequire( `#array` ).deepEqual( [ 4, 5, 6 ] ),
+                                __.importAndRequire.all( [
                                     [ `#folder`, isTest ? `src` : `none` ],
                                     [ `#lolfolder`, isTest ? `lolsrc` : `lolnone` ],
                                 ] ).strictEqual(),
                                 (
                                     isTest ?
-                                        importAndRequire( `:module` ).strictEqual( `in src` ) :
-                                        importAndRequire( `:module` ).throws( / Cannot find module / )
+                                        __.importAndRequire( `:module` ).strictEqual( `in src` ) :
+                                        __.importAndRequire( `:module` ).throws( / Cannot find module / )
                                 ),
                             ] );
                         },

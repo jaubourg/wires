@@ -24,7 +24,7 @@ module.exports = {
             module.exports = {
                 async "dir route override"( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `:path/test.js` ).strictEqual( `child` );
+                    await __.importAndRequire( `:path/test.js` ).strictEqual( `child` );
                 },
             };
         },

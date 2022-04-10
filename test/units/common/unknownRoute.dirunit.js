@@ -5,7 +5,7 @@ module.exports = {
         module.exports = {
             async test( __ ) {
                 __.plan( 2 );
-                await importAndRequire( `:xf56z` ).throws( / unknown route "xf56z"/, `unknown route "xf56z"` );
+                await __.importAndRequire( `:xf56z` ).throws( / unknown route "xf56z"/, `unknown route "xf56z"` );
             },
         };
     },
@@ -21,14 +21,14 @@ module.exports = {
             module.exports = {
                 async test( __ ) {
                     __.plan( 12 );
-                    await importAndRequire.all( [
+                    await __.importAndRequire.all( [
                         [ `:null`, null ],
                         [ `:null-computed`, null ],
                         [ `:null-generic`, null ],
                         [ `:null-generic/child`, null ],
                         [ `:null-generic/very/long/path/.../...`, null ],
                     ] ).strictEqual();
-                    await importAndRequire( `:xf56z` ).throws( / unknown route "xf56z"/, `unknown route "xf56z"` );
+                    await __.importAndRequire( `:xf56z` ).throws( / unknown route "xf56z"/, `unknown route "xf56z"` );
                 },
             };
         },

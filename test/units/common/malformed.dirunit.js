@@ -10,7 +10,7 @@ module.exports = {
         module.exports = {
             async test( __ ) {
                 __.plan( 2 );
-                await importAndRequire( `#key` ).throws();
+                await __.importAndRequire( `#key` ).throws();
             },
         };
     },

@@ -15,7 +15,7 @@ module.exports = {
             module.exports = {
                 async test( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `#` ).deepEqual( {
+                    await __.importAndRequire( `#` ).deepEqual( {
                         "age": 27,
                     } );
                 },
@@ -31,7 +31,7 @@ module.exports = {
             module.exports = {
                 async "wrong type"( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `#` ).throws( / root should be a boolean, string provided/ );
+                    await __.importAndRequire( `#` ).throws( / root should be a boolean, string provided/ );
                 },
             };
         },
@@ -51,7 +51,7 @@ module.exports = {
             module.exports = {
                 async "with namespace"( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `#` ).deepEqual( {
+                    await __.importAndRequire( `#` ).deepEqual( {
                         "age": 27,
                     } );
                 },

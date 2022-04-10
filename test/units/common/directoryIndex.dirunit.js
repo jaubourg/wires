@@ -17,10 +17,10 @@ module.exports = {
         module.exports = {
             async test( __ ) {
                 __.plan( 4 );
-                const tmp = importAndRequire( `:test` );
+                const tmp = __.importAndRequire( `:test` );
                 tmp.strictRequireEqual( true );
                 await tmp.throwsImport();
-                await importAndRequire( `:test-esm` ).strictEqual( true );
+                await __.importAndRequire( `:test-esm` ).strictEqual( true );
             },
         };
     },

@@ -6,6 +6,8 @@ const { spawn } = require( `child_process` );
 const binPath = path.resolve( `${ process.env.WIRES_DIR }/bin.js` );
 const unitPath = path.resolve( __dirname, `../util/runUnits.js` );
 
+const commonArgs = [ `--experimental-import-meta-resolve` ];
+
 const wiresArgs = [
     `--require=${ path.resolve( `${ process.env.WIRES_DIR }/index.js` ) }`,
     `--loader=${ path.resolve( `${ process.env.WIRES_DIR }/loader.mjs` ) }`,
@@ -21,7 +23,7 @@ module.exports = ( type, { bin, wiresEnv = `test` } = {} ) => () => new Promise(
     );
     spawn(
         process.execPath,
-        bin ? [ binPath, unitPath, type ] : [ ...wiresArgs, unitPath, type ],
+        bin ? [ binPath, ...commonArgs, unitPath, type ] : [ ...wiresArgs, ...commonArgs, unitPath, type ],
         {
             "env": {
                 ...process.env,

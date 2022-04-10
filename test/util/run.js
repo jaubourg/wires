@@ -2,8 +2,6 @@
 "use strict";
 
 const createReporter = require( `tap-diff` );
-const fs = require( `fs` );
-const path = require( `path` );
 const tape = require( `tape` );
 
 const COMPARE = Symbol( `compare` );
@@ -182,24 +180,11 @@ class ImportAndRequire {
 }
 
 const RESOLVE_OR_REJECT = Symbol( `resolve or reject` );
+// eslint-disable-next-line id-length
+const INSTALL_IMPORT_AND_REQUIRE = Symbol( `importAndRequire factory` );
 
 const tapeExtension = {
-    async [ RESOLVE_OR_REJECT ]( block, tapeMethod, args ) {
-        let result;
-        let error;
-        try {
-            result = await block();
-        } catch ( e ) {
-            error = e;
-        }
-        return this[ tapeMethod ]( () => {
-            if ( error ) {
-                throw error;
-            }
-            return result;
-        }, ...args );
-    },
-    importAndRequireFactory( importFunction, requireFunction ) {
+    [ INSTALL_IMPORT_AND_REQUIRE ]( { "import": importFunction, "require": requireFunction } ) {
         const fn = expression => new ImportAndRequire( importFunction, requireFunction, this, expression );
         fn.all = list => new Proxy( ImportAndRequire.prototype, {
             "get": ( proto, name ) => (
@@ -222,7 +207,24 @@ const tapeExtension = {
                     undefined
             ),
         } );
-        return fn;
+        Object.defineProperty( this, `importAndRequire`, {
+            "value": fn,
+        } );
+    },
+    async [ RESOLVE_OR_REJECT ]( block, tapeMethod, args ) {
+        let result;
+        let error;
+        try {
+            result = await block();
+        } catch ( e ) {
+            error = e;
+        }
+        return this[ tapeMethod ]( () => {
+            if ( error ) {
+                throw error;
+            }
+            return result;
+        }, ...args );
     },
     rejects( block, ...args ) {
         return this[ RESOLVE_OR_REJECT ]( block, `throws`, args );
@@ -232,10 +234,13 @@ const tapeExtension = {
     },
 };
 
-const extendTape = fn => async ( __, ...args ) => {
-    if ( !__[ RESOLVE_OR_REJECT ] ) {
+const createImportAndRequire = import( `./createImportAndRequire.mjs` ).then( m => m.createImportAndRequire );
+
+const extendTape = ( fn, filename ) => async ( __, ...args ) => {
+    if ( !__[ INSTALL_IMPORT_AND_REQUIRE ] ) {
         Object.assign( Object.getPrototypeOf( __ ), tapeExtension );
     }
+    __[ INSTALL_IMPORT_AND_REQUIRE ]( ( await createImportAndRequire )( filename ) );
     let tmp;
     try {
         tmp = await fn( __, ...args );
@@ -247,37 +252,13 @@ const extendTape = fn => async ( __, ...args ) => {
     return tmp;
 };
 
-const fixtureDir = `${ path.resolve( `${ __dirname }/../fixture` ) }/`;
-const rMethod = /(\( __ \) \{| __ => \{|function \( __ \) \{)$/gm;
-
-const patchFile = ( filename, type ) => {
-    if ( !filename.startsWith( fixtureDir ) ) {
-        return;
-    }
-    const content = fs.readFileSync( filename, `utf8` );
-    let patched = content.replace(
-        rMethod,
-        type === `c` ?
-            `$1 const importAndRequire = __.importAndRequireFactory( e => import( e ), require );` :
-            `$1 const importAndRequire = __.importAndRequireFactory( e => import( e ), __require( import.meta.url ) );`
-    );
-    if ( type === `m` ) {
-        patched = `import { createRequire as __require } from "module";\n\n${ patched }`;
-    }
-    if ( patched !== content ) {
-        fs.writeFileSync( filename, patched );
-    }
-};
-
-const importOrRequire = ( filename, esm ) => ( esm ? import( filename ) : require( filename ) );
-
 module.exports = async units => {
     const tests = [];
     for ( const { filename, label, type } of units ) {
-        patchFile( filename, type );
         // eslint-disable-next-line no-await-in-loop
-        for ( const [ name, fn ] of Object.entries( await importOrRequire( filename, type === `m` ) ) ) {
-            tests.push( [ `${ label } ${ name }`, extendTape( fn ) ] );
+        const entries = Object.entries( ( type === `m` ) ? await import( filename ) : require( filename ) );
+        for ( const [ name, fn ] of entries ) {
+            tests.push( [ `${ label } ${ name }`, extendTape( fn, filename ) ] );
         }
     }
     tape.createStream().pipe( createReporter() ).pipe( process.stdout );

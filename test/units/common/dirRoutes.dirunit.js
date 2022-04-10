@@ -78,17 +78,17 @@ module.exports = {
                             [ `${ pre }dir/four/sub`, `dir1` ],
                         ].map(
                             async ( [ expression, expected ] ) => {
-                                await importAndRequire(
+                                await __.importAndRequire(
                                     `${ expression }${ /\/number$/.test( expression ) ? `ES.js` : `/index.js` }`
                                 ).strictImportEqual( expected );
-                                importAndRequire( expression ).strictRequireEqual( expected );
+                                __.importAndRequire( expression ).strictRequireEqual( expected );
                             }
                         ),
-                        importAndRequire( `${ pre }dir/four` ).throws(),
-                        /^:dyn/.test( pre ) && importAndRequire( pre ).sameAs( `../dir3/numberES.js` ),
+                        __.importAndRequire( `${ pre }dir/four` ).throws(),
+                        /^:dyn/.test( pre ) && __.importAndRequire( pre ).sameAs( `../dir3/numberES.js` ),
                     ] ).concat(
                         [ `:bad-dyn1/try`, `:bad-dyn2/try` ].map(
-                            expression => importAndRequire( expression ).throws()
+                            expression => __.importAndRequire( expression ).throws()
                         )
                     ) );
                 },
@@ -103,7 +103,7 @@ module.exports = {
             module.exports = {
                 async test( __ ) {
                     __.plan( 2 );
-                    await importAndRequire( `:bad-dyn/hello` ).throws();
+                    await __.importAndRequire( `:bad-dyn/hello` ).throws();
                 },
             };
         },
