@@ -5,7 +5,7 @@ const { dirname } = require( `path` );
 const generateModule = require( `./lib/generateModule` );
 const UID = require( `./lib/UID` );
 
-const marker = `\0${ UID }:`;
+const marker = `\0~wires~${ UID }:`;
 
 const getDirectory = path => ( path ? dirname( path ) : process.cwd() );
 

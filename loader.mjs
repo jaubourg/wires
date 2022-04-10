@@ -6,7 +6,7 @@ import { deBypass, getConfig, isBypass, isRoute, isValue } from "./lib/loader-ut
 import nodeVersion from "./lib/nodeVersion.js";
 import UID from "./lib/UID.js";
 
-const marker = `file:///wires${ UID }:`;
+const marker = `file:///~wires~${ UID }:`;
 
 // node 16+
 export const load = ( url, context, defaultLoad ) => {
@@ -22,11 +22,13 @@ export const load = ( url, context, defaultLoad ) => {
 };
 
 // node 12 and 14
+/* istanbul ignore next */
 export const getFormat = ( nodeVersion.major < 16 ) && ( ( url, context, defaultGetFormat ) => (
     url.startsWith( marker ) ? {
         "format": `module`,
     } : defaultGetFormat( url, context )
 ) );
+/* istanbul ignore next */
 export const getSource = ( nodeVersion.major < 16 ) && load;
 
 // all versions
@@ -43,6 +45,12 @@ const getDirectory = ( { parentURL } ) => {
 };
 
 export const resolve = ( specifier, context, defaultResolve ) => {
+    // in case it was already resolved
+    if ( specifier.startsWith( marker ) ) {
+        return {
+            "url": specifier,
+        };
+    }
     if ( isBypass( specifier ) ) {
         return defaultResolve( deBypass( specifier ), context );
     }
