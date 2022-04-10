@@ -2,14 +2,15 @@
 
 "use strict";
 
+const esmDir = require( `./esmDir` );
 const { exec } = require( `child_process` );
 const fs = require( `fs` );
 const fse = require( `fs-extra` );
-const { importOrRequire } = require( `./common` );
 const path = require( `path` );
 const run = require( `./run` );
 
 const rCleanFunction = /^.*\r?\n|\r?\n.*$/g;
+const rJSON = /\.json$/;
 const rUnit = /^(.+)\.(dir)?unit\.(c|m)?js$/;
 
 const fixtureDir = path.resolve( __dirname, `../fixture` );
@@ -31,16 +32,6 @@ const files = new Set( process.argv.slice( 3 ) );
     {
         const dirUnits = [];
 
-        const esmDir = object => {
-            if ( object.hasOwnProperty( `default` ) ) {
-                const { "default": def } = object;
-                // eslint-disable-next-line no-param-reassign
-                delete object.default;
-                Object.assign( object, def );
-            }
-            return object;
-        };
-
         for ( const basename of fs.readdirSync( unitDir ) ) {
             if ( !files.size || files.has( basename ) ) {
                 const tmp = rUnit.exec( basename );
@@ -50,8 +41,7 @@ const files = new Set( process.argv.slice( 3 ) );
                     if ( isDir ) {
                         dirUnits.push( {
                             name,
-                            // eslint-disable-next-line no-await-in-loop
-                            "tree": await importOrRequire( filename, ( type === `m` ) && esmDir ),
+                            "tree": ( type === `m` ) ? esmDir( filename ) : require( filename ),
                             type,
                         } );
                     } else {
@@ -66,6 +56,8 @@ const files = new Set( process.argv.slice( 3 ) );
         }
 
         if ( dirUnits.length ) {
+            // eslint-disable-next-line no-param-reassign, require-atomic-updates
+            await Promise.all( dirUnits.map( async u => ( u.tree = await u.tree ) ) );
             fs.mkdirSync( fixtureDir );
             const generateTree = ( dir, tree, type ) => {
                 fs.mkdirSync( dir );
@@ -85,7 +77,7 @@ const files = new Set( process.argv.slice( 3 ) );
                                 if ( type === `c` ) {
                                     val = `"use strict";\n${ val }`;
                                 }
-                            } else {
+                            } else if ( rJSON.test( filename ) ) {
                                 val = JSON.stringify( val, null, `    ` );
                             }
                             fs.writeFileSync( filename, val );
@@ -143,8 +135,5 @@ const files = new Set( process.argv.slice( 3 ) );
                 console.log( `setup done in ${ Date.now() - now }ms\n` );
             }
             return run( units );
-        } )
-        .catch( e => setTimeout( () => {
-            throw e;
-        } ) );
+        } );
 } )();

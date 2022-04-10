@@ -11,6 +11,5 @@ module.exports = {
     ], ( __, stdout ) => {
         __.plan( 1 );
         __.strictEqual( JSON.parse( stdout ), true );
-        __.end();
     }, null, `` ),
 };

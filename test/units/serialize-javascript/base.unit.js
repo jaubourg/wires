@@ -19,20 +19,17 @@ module.exports = {
     "is a function"( __ ) {
         __.plan( 1 );
         __.strictEqual( typeof serialize, `function` );
-        __.end();
     },
     nullish( __ ) {
         __.plan( 6 );
         strictSerialize( __, null, `null` );
         strictSerialize( __, undefined, `undefined` );
-        __.end();
     },
     "special numbers"( __ ) {
         __.plan( 9 );
         strictSerialize( __, Infinity, `Infinity` );
         strictSerialize( __, -Infinity, `-Infinity` );
         testSerialize( __, NaN, `NaN`, v => __.ok( ( typeof v === `number` ) && isNaN( v ) ) );
-        __.end();
     },
     JSON( __ ) {
         const data = {
@@ -56,7 +53,6 @@ module.exports = {
         deepSerialize( __, data, JSON.stringify( data ) );
         __.strictEqual( eval( serialize( string ) ), string );
         deepSerialize( __, withUndefined, `{"undef":undefined,"nest":{"undef":undefined}}` );
-        __.end();
     },
     collisions( __ ) {
         const codes = `ABDFILMNRSTU`;
@@ -66,7 +62,6 @@ module.exports = {
             deepSerialize( __, string, JSON.stringify( string ) );
             deepSerialize( __, [ Infinity, `"${ string }` ], `[Infinity,"\\"${ string }"]` );
         }
-        __.end();
     },
     functions( __ ) {
         const funcs = [
@@ -104,7 +99,6 @@ module.exports = {
                 return true;
             },
         } ) })` ).hello(), true );
-        __.end();
     },
     "arrow functions"( __ ) {
         const funcs = [
@@ -135,7 +129,6 @@ module.exports = {
         __.strictEqual( eval( `(${ serialize( {
             "hello": () => true,
         } ) })` ).hello(), true );
-        __.end();
     },
     regexps( __ ) {
         const equals = ( r1, r2 ) => {
@@ -159,7 +152,6 @@ module.exports = {
         for ( const [ regexp, expected ] of regexps ) {
             testSerialize( __, regexp, `new RegExp(${ expected })`, equals );
         }
-        __.end();
     },
     dates( __ ) {
         const equals = ( d1, d2 ) => {
@@ -172,7 +164,6 @@ module.exports = {
         testSerialize( __, {
             "date": new Date( `2016-04-28T22:02:17.156Z` ),
         }, `{"date":new Date("2016-04-28T22:02:17.156Z")}`, ( o1, o2 ) => equals( o1.date, o2.date ) );
-        __.end();
     },
     maps( __ ) {
         __.plan( 3 );
@@ -183,7 +174,6 @@ module.exports = {
         ] ), `new Map([["a",123],[null,456],[Infinity,789]])`, ( m1, m2 ) => {
             __.deepEqual( [ ...m1.entries() ], [ ...m2.entries() ] );
         } );
-        __.end();
     },
     sets( __ ) {
         __.plan( 3 );
@@ -195,7 +185,6 @@ module.exports = {
                 __.deepEqual( [ ...s1.values() ], [ ...s2.values() ] );
             }
         );
-        __.end();
     },
     "sparse arrays"( __ ) {
         __.plan( 3 );
@@ -204,7 +193,6 @@ module.exports = {
         array.length = 3;
         array[ 5 ] = `wat`;
         deepSerialize( __, array, `Array.prototype.slice.call({"1":2,"2":3,"5":"wat","length":6})` );
-        __.end();
     },
     "BigInts"( __ ) {
         const equals = ( b1, b2 ) => {
@@ -218,7 +206,6 @@ module.exports = {
         testSerialize( __, b, `BigInt("9999")`, equals );
         testSerialize( __, o, `{"t":[BigInt("9999")]}`, ( o1, o2 ) => equals( o1.t[ 0 ], o2.t[ 0 ] ) );
         __.throws( () => serialize( BigInt( `abc` ), TypeError ) );
-        __.end();
     },
     "URLs"( __ ) {
         const equals = ( u1, u2 ) => {
@@ -226,12 +213,10 @@ module.exports = {
         };
         __.plan( 3 );
         testSerialize( __, new URL( `https://x.com/` ), `new URL("https://x.com/")`, equals );
-        __.end();
     },
     "XSS"( __ ) {
         __.plan( 3 );
         strictSerialize( __, `</script>`, `"\\u003C\\u002Fscript\\u003E"` );
-        __.end();
     },
     "options"( __ ) {
         const falsy = [ 0, ``, undefined, null, false ];
@@ -299,6 +284,5 @@ module.exports = {
                 }
             }
         }
-        __.end();
     },
 };

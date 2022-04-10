@@ -16,7 +16,6 @@ module.exports = {
         __.strictEqual( stdout, helpString, `help string properly created` );
         __.strictEqual( stderr, ``, `nothing on stderr` );
         __.strictEqual( exitCode, 0, `exit code is 0` );
-        __.end();
     } ),
     "long": cliTest( [
         `some_exe`,
@@ -27,7 +26,6 @@ module.exports = {
         __.strictEqual( stdout, helpString, `help string properly created` );
         __.strictEqual( stderr, ``, `nothing on stderr` );
         __.strictEqual( exitCode, 0, `exit code is 0` );
-        __.end();
     } ),
     "short circuit": cliTest( [
         `some_exe`,
@@ -39,6 +37,5 @@ module.exports = {
         __.strictEqual( stdout, helpString, `help string properly created` );
         __.strictEqual( stderr, ``, `nothing on stderr` );
         __.strictEqual( exitCode, 0, `exit code is 0` );
-        __.end();
     } ),
 };

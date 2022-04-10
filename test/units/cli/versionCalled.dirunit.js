@@ -41,7 +41,6 @@ for ( const [ version, callsCurrent ] of versions ) {
                         `${ expected }\n`,
                         expected
                     );
-                    __.end();
                 },
             };
         },
@@ -78,7 +77,6 @@ for ( const [ version, callsCurrent ] of versions ) {
                             `${ expected }\n`,
                             expected
                         );
-                        __.end();
                     },
                 };
             },

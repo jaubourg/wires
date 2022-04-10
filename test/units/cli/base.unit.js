@@ -44,7 +44,6 @@ module.exports = {
                 },
             },
         }, `everything has been properly transmitted` );
-        __.end();
     }, fixtureDir ),
     "missing script": cliTest( [
         process.execPath,
@@ -54,7 +53,6 @@ module.exports = {
         __.strictEqual( exitCode, -1, `correct exit code (-1)` );
         const errorMessage = `ERROR: path_to_script required`;
         __.strictEqual( stderr.substr( 0, errorMessage.length ), errorMessage, `correct error message` );
-        __.end();
     } ),
 };
 
@@ -69,6 +67,5 @@ for ( const option of [ `-e`, `--eval`, `-i`, `--interactive`, `-p`, `--print` ]
         const command = process.execPath;
         const errorMessage = `ERROR: ${ path.basename( command, path.extname( command ) ) } option not supported`;
         __.strictEqual( stderr.substr( 0, errorMessage.length ), errorMessage, `correct error message` );
-        __.end();
     } );
 }

@@ -3,15 +3,17 @@
 const cli = require( `${ process.env.WIRES_DIR }/cli` );
 
 // eslint-disable-next-line max-statements
-module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {
+module.exports = ( argv, callback, cwd, nodeEnv ) => __ => new Promise( ( resolve, reject ) => {
     let stdout = ``;
     let stderr = ``;
-    let exitMarker = {};
     let exitCode;
-    const finish = () => {
-        setTimeout( callback, 0, __, stdout, stderr, exitCode );
-    };
-    let childProcess;
+    const finish = error => setTimeout( () => {
+        if ( error ) {
+            reject( error );
+        } else {
+            resolve( callback( __, stdout, stderr, exitCode ) );
+        }
+    }, 0 );
     let previousCwd;
     let previousNodeEnv;
     if ( cwd ) {
@@ -23,7 +25,8 @@ module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {
         process.env[ `WIRES_ENV` ] = nodeEnv;
     }
     try {
-        childProcess = cli( {
+        let done = false;
+        const childProcess = cli( {
             argv,
             "stdio": `pipe`,
             log( message ) {
@@ -34,18 +37,21 @@ module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {
             },
             exit( code ) {
                 exitCode = code;
-                if ( exitMarker ) {
-                    throw exitMarker;
+                if ( !done ) {
+                    // eslint-disable-next-line no-throw-literal
+                    throw undefined;
                 }
                 finish();
             },
         } );
-        exitMarker = undefined;
-    } catch ( error ) {
-        if ( error !== exitMarker ) {
-            throw error;
+        done = true;
+        if ( exitCode === undefined ) {
+            childProcess.stdio[ 1 ].on( `data`, buffer => ( stdout += buffer ) );
+            childProcess.stdio[ 2 ].on( `data`, buffer => ( stderr += buffer ) );
         }
-        return finish();
+    } catch ( error ) {
+        finish( error );
+        return;
     } finally {
         if ( cwd ) {
             process.chdir( previousCwd );
@@ -54,7 +60,4 @@ module.exports = ( argv, callback, cwd, nodeEnv ) => __ => {
             process.env[ `WIRES_ENV` ] = previousNodeEnv;
         }
     }
-    childProcess.stdio[ 1 ].on( `data`, buffer => ( stdout += buffer ) );
-    childProcess.stdio[ 2 ].on( `data`, buffer => ( stderr += buffer ) );
-    return undefined;
-};
+} );

@@ -3,7 +3,6 @@
 
 const createReporter = require( `tap-diff` );
 const fs = require( `fs` );
-const { importOrRequire } = require( `./common` );
 const path = require( `path` );
 const tape = require( `tape` );
 
@@ -233,11 +232,19 @@ const tapeExtension = {
     },
 };
 
-const extendTape = fn => ( __, ...args ) => {
+const extendTape = fn => async ( __, ...args ) => {
     if ( !__[ RESOLVE_OR_REJECT ] ) {
         Object.assign( Object.getPrototypeOf( __ ), tapeExtension );
     }
-    return fn( __, ...args );
+    let tmp;
+    try {
+        tmp = await fn( __, ...args );
+    } catch ( e ) {
+        __.doesNotThrow( () => {
+            throw e;
+        } );
+    }
+    return tmp;
 };
 
 const fixtureDir = `${ path.resolve( `${ __dirname }/../fixture` ) }/`;
@@ -261,6 +268,8 @@ const patchFile = ( filename, type ) => {
         fs.writeFileSync( filename, patched );
     }
 };
+
+const importOrRequire = ( filename, esm ) => ( esm ? import( filename ) : require( filename ) );
 
 module.exports = async units => {
     const tests = [];
