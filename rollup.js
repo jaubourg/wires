@@ -10,7 +10,7 @@ const marker = `\0~wires~${ UID }:`;
 const getDirectory = path => ( path ? dirname( path ) : process.cwd() );
 
 module.exports = () => ( {
-    "load": id => {
+    load( id ) {
         if ( id.startsWith( marker ) ) {
             const [ directory, expression ] = JSON.parse( id.slice( marker.length ) );
             return generateModule( getConfig( directory ).get( expression, false, true ) );
@@ -21,9 +21,12 @@ module.exports = () => ( {
         return null;
     },
     "name": `wires`,
-    resolveId( source, importer ) {
+    resolveId( source, importer, options ) {
         if ( isBypass( source ) ) {
-            return deBypass( source );
+            return this.resolve( deBypass( source ), importer, {
+                ...options,
+                "skipSelf": true,
+            } );
         }
         if ( isRoute( source ) ) {
             return getConfig( getDirectory( importer ) ).get( source, true ).getValue();
