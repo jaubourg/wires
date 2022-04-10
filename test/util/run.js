@@ -8,16 +8,16 @@ const tape = require( `tape` );
 
 const plugins = readdirSync( resolve( __dirname, `plugins` ) ).map( n => require( `./plugins/${ n }` ) );
 
-const extendTape = ( fn, filename, isESM ) => async ( __, ...args ) => {
+const extendTape = ( fn, filename, isESM ) => async ( _tapeObject, ...args ) => {
+    let tapeObject = _tapeObject;
     for ( const plugin of plugins ) {
-        // eslint-disable-next-line no-param-reassign
-        __ = await plugin( __, filename, isESM );
+        tapeObject = await plugin( tapeObject, filename, isESM );
     }
     let tmp;
     try {
-        tmp = await fn( __, ...args );
+        tmp = await fn( tapeObject, ...args );
     } catch ( e ) {
-        __.doesNotThrow( () => {
+        tapeObject.doesNotThrow( () => {
             throw e;
         } );
     }
