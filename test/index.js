@@ -1,7 +1,14 @@
 "use strict";
 
 const { execSync } = require( `child_process` );
+const { removeSync } = require( `fs-extra` );
 const { resolve } = require( `path` );
+
+process.on( `exit`, () => {
+    try {
+        removeSync( resolve( __dirname, `./fixture` ) );
+    } catch ( e ) {}
+} );
 
 // handles publishing
 if ( process.env.WIRES_DIR ) {

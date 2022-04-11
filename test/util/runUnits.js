@@ -5,7 +5,6 @@
 const esmDir = require( `./esmDir` );
 const { exec } = require( `child_process` );
 const fs = require( `fs` );
-const fse = require( `fs-extra` );
 const path = require( `path` );
 const run = require( `./run` );
 
@@ -14,21 +13,27 @@ const rJSON = /\.json$/;
 const rUnit = /^(.+)\.(dir)?unit\.(c|m)?js$/;
 
 const fixtureDir = path.resolve( __dirname, `../fixture` );
-const unitDir = path.resolve( __dirname, `../units/${ process.argv[ 2 ] }` );
+const jsonFile = path.resolve( fixtureDir, `.${ process.argv[ 2 ] }.json` );
 
-process.on( `exit`, () => {
+const units = ( () => {
     try {
-        fse.removeSync( fixtureDir );
-    } catch ( e ) {}
-} );
+        return require( jsonFile );
+    } catch ( e ) {
+        return [];
+    }
+} )();
 
-const files = new Set( process.argv.slice( 3 ) );
+if ( units.length ) {
 
-const units = [];
-const npmInstall = [];
+    run( units );
 
-{
+} else {
+
+    const files = new Set( process.argv.slice( 3 ) );
+    const unitDir = path.resolve( __dirname, `../units/${ process.argv[ 2 ] }` );
+
     const dirUnits = [];
+    const npmInstall = [];
 
     for ( const basename of fs.readdirSync( unitDir ) ) {
         if ( !files.size || files.has( basename ) ) {
@@ -54,7 +59,9 @@ const npmInstall = [];
     }
 
     if ( dirUnits.length ) {
-        fs.mkdirSync( fixtureDir );
+        try {
+            fs.mkdirSync( fixtureDir );
+        } catch ( e ) {}
         const generateTree = ( dir, tree, type ) => {
             fs.mkdirSync( dir );
             if ( tree ) {
@@ -92,102 +99,101 @@ const npmInstall = [];
             generateTree( path.join( fixtureDir, name ), tree, type );
         }
     }
-}
 
-// eslint-disable-next-line no-extend-native
-Object.prototype.__MODIFIED_PROTOTYPE = true;
+    const executeFactory = command => cwd => new Promise( ( resolve, reject ) => exec(
+        command,
+        {
+            cwd,
+            "env": process.env,
+        },
+        error => ( error ? reject( error ) : resolve() )
+    ) );
 
-const executeFactory = command => cwd => new Promise( ( resolve, reject ) => exec(
-    command,
-    {
-        cwd,
-        "env": process.env,
-    },
-    error => ( error ? reject( error ) : resolve() )
-) );
+    const now = Date.now();
+    const setupPromises = [];
 
-const setupPromises = [];
-
-const now = Date.now();
-
-if ( npmInstall.length ) {
-    console.log( `setup: npm install for fixtures` );
-    setupPromises.push( ...npmInstall.map( executeFactory( `npm install` ) ) );
-}
-
-const rollups = units.filter( ( { filename } ) => filename.startsWith( `${ fixtureDir }/` ) );
-
-if ( rollups.length ) {
-    console.log( `setup: rollup` );
-
-    const { rollup } = require( `rollup` );
-    const commonjs = require( `@rollup/plugin-commonjs` );
-    const json = require( `@rollup/plugin-json` );
-    const { nodeResolve } = require( `@rollup/plugin-node-resolve` );
-    const wiresRollup = require( `${ process.env.WIRES_DIR }/rollup.js` );
-
-    const maxListeners = process.getMaxListeners();
-    process.setMaxListeners( Math.max( units.length, maxListeners ) );
-
-    const promises = rollups.map( async ( { filename, label, type } ) => {
-        let bundle;
-        try {
-            const plugins = type === `c` ? [
-                wiresRollup(),
-                nodeResolve(),
-                json(),
-                commonjs( {
-                    "ignoreDynamicRequires": true,
-                    "requireReturnsDefault": true,
-                } ),
-            ] : [ wiresRollup(), json() ];
-            const inputOptions = {
-                "input": filename,
-                plugins,
-            };
-            const outputOptions = {
-                "exports": `auto`,
-                "file": `${ filename }.rollup.${ type === `m` ? `m` : `` }js`,
-                "format": type === `m` ? `es` : `cjs`,
-            };
-            bundle = await rollup( inputOptions );
-            await bundle.generate( outputOptions );
-            await bundle.write( outputOptions );
-            units.push( {
-                "filename": outputOptions.file,
-                "label": `${ label } (rollup)`,
-                type,
-            } );
-        } finally {
-            if ( bundle ) {
-                bundle.close();
-            }
-        }
-    } );
-
-    if ( maxListeners !== process.getMaxListeners() ) {
-        Promise.allSettled( promises ).finally( () => process.setMaxListeners( maxListeners ) );
+    if ( npmInstall.length ) {
+        console.log( `setup: npm install for fixtures` );
+        setupPromises.push( ...npmInstall.map( executeFactory( `npm install` ) ) );
     }
 
-    setupPromises.push( ...promises );
-}
+    const rollups = units.filter( ( { filename } ) => filename.startsWith( `${ fixtureDir }/` ) );
 
-Promise.allSettled( setupPromises )
-    .then( outcomes => {
-        if ( outcomes.length ) {
-            const failed = outcomes.reduce( ( hasFailed, { reason, status } ) => {
-                if ( status === `rejected` ) {
-                    console.error( reason );
-                    return true;
+    if ( rollups.length ) {
+        console.log( `setup: rollup` );
+
+        const { rollup } = require( `rollup` );
+        const commonjs = require( `@rollup/plugin-commonjs` );
+        const json = require( `@rollup/plugin-json` );
+        const { nodeResolve } = require( `@rollup/plugin-node-resolve` );
+        const wiresRollup = require( `${ process.env.WIRES_DIR }/rollup.js` );
+
+        const maxListeners = process.getMaxListeners();
+        process.setMaxListeners( Math.max( units.length, maxListeners ) );
+
+        const promises = rollups.map( async ( { filename, label, type } ) => {
+            let bundle;
+            try {
+                const plugins = type === `c` ? [
+                    wiresRollup(),
+                    nodeResolve(),
+                    json(),
+                    commonjs( {
+                        "ignoreDynamicRequires": true,
+                        "requireReturnsDefault": true,
+                    } ),
+                ] : [ wiresRollup(), json() ];
+                const inputOptions = {
+                    "input": filename,
+                    plugins,
+                };
+                const outputOptions = {
+                    "exports": `auto`,
+                    "file": `${ filename }.rollup.${ type === `m` ? `m` : `` }js`,
+                    "format": type === `m` ? `es` : `cjs`,
+                };
+                bundle = await rollup( inputOptions );
+                await bundle.generate( outputOptions );
+                await bundle.write( outputOptions );
+                units.push( {
+                    "filename": outputOptions.file,
+                    "label": `${ label } (rollup)`,
+                    type,
+                } );
+            } finally {
+                if ( bundle ) {
+                    bundle.close();
                 }
-                return hasFailed;
-            }, false );
-            if ( failed ) {
-                throw new Error( `setup failed` );
             }
-            console.log( `setup done in ${ Date.now() - now }ms\n` );
+        } );
+
+        if ( maxListeners !== process.getMaxListeners() ) {
+            Promise.allSettled( promises ).finally( () => process.setMaxListeners( maxListeners ) );
         }
-        // eslint-disable-next-line no-nested-ternary
-        units.sort( ( u1, u2 ) => ( u1.label < u2.label ? -1 : ( u1.label > u2.label ? 1 : 0 ) ) );
-        return run( units );
-    } );
+
+        setupPromises.push( ...promises );
+    }
+
+    Promise.allSettled( setupPromises )
+        .then( outcomes => {
+            if ( outcomes.length ) {
+                const failed = outcomes.reduce( ( hasFailed, { reason, status } ) => {
+                    if ( status === `rejected` ) {
+                        console.error( reason );
+                        return true;
+                    }
+                    return hasFailed;
+                }, false );
+                if ( failed ) {
+                    throw new Error( `setup failed` );
+                }
+                console.log( `setup done in ${ Date.now() - now }ms\n` );
+            }
+            // eslint-disable-next-line no-nested-ternary
+            units.sort( ( u1, u2 ) => ( u1.label < u2.label ? -1 : ( u1.label > u2.label ? 1 : 0 ) ) );
+            fs.writeFileSync( jsonFile, JSON.stringify( units ) );
+            // eslint-disable-next-line no-extend-native
+            Object.prototype.__MODIFIED_PROTOTYPE = true;
+            return run( units );
+        } );
+}
