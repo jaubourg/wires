@@ -675,7 +675,39 @@ property2 === 2;
 
 ## Bundlers
 
-A primary goal of `wires` is to be compatible with as many bundlers as possible.
+A primary goal of `wires` is to be compatible with as many bundlers as possible. The bundle does not need `wires` to run and does not include the core code of the package.
+
+While routes are computed statically, values that depend on environment variables will properly change if the corresponding environment variable changes. `wires` will add a few short functions to the bundle to ensure as much.
+
+For instance, if we have the following situation:
+
+```js
+
+// /wires.json
+
+{
+    "server": {
+        "keepAlive": "(number) {?>KEEP_ALIVE}",
+        "keepAlive": 60,
+        "port": "(number) {?>PORT}",
+        "port?": 8080
+    }
+}
+
+// /index.js
+
+import { keepAlive, port } from "#server";
+
+console.log( keepAlive, port );
+```
+
+then:
+- `node index.js` will output `60 8080`
+- `KEEP_ALIVE=30 PORT=80 node index.js` will output `30 80`
+
+If `index.js` is bundled into `bundle.js`:
+- `node bundle.js` will output `60 8080`
+- `KEEP_ALIVE=30000 PORT=80 node bundle.js` will output `30 80`
 
 ### Rollup
 
