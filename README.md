@@ -26,6 +26,8 @@ __a simple configuration utility for NodeJS featuring smart module wiring for un
     - [Generic](#generic-routes)
     - [Computed](#computed-routes)
 - [`import`](#import)
+- [Bundlers](#bundlers)
+    - [ `rollup.js` ](#rollup)
 
 ## Overview
 
@@ -669,6 +671,59 @@ object[ "no name export" ] === 3;
 
 property1 === 1;
 property2 === 2;
+```
+
+## Bundlers
+
+A primary goal of `wires` is to be compatible with as many bundlers as possible.
+
+### Rollup
+
+As of version `5`, `wires` exposes a `rollup` plugin at `wires/rollup` (it is part of the `wires` package itself).
+
+Simply create a `rollup.config.js` [configuration file](https://www.rollupjs.org/guide/en/#configuration-files) and import the plugin:
+
+```js
+import wires from "wires/rollup";
+
+export default {
+    input: "src/index.js",
+    output: {
+        dir: "output",
+        format: "es"
+    },
+    plugins: [ wires() ],
+};
+```
+
+Then call `rollup` either via the [CLI](https://www.rollupjs.org/guide/en/#command-line-reference) or the [API](https://www.rollupjs.org/guide/en/#javascript-api).
+
+The plugin is compatible with both [`@rollup/plugin-commonjs`](https://www.npmjs.com/package/@rollup/plugin-commonjs) and [`@rollup/plugin-node-resolve`](https://www.npmjs.com/package/@rollup/plugin-node-resolve) which makes it possible to bundle CommonJS projects, provided you set the former's `requireReturnsDefault` options to `true` and put the latter after the `wires` plugin in the list of plugins.
+
+It can also make sense to include [`@rollup/plugin-json`](https://www.npmjs.com/package/@rollup/plugin-json).
+
+```js
+import commonjs from "@rollup/plugin-commonjs";
+import json from "@rollup/plugin-json";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import wires from "wires/rollup";
+
+export default {
+    input: "src/index.js",
+    output: {
+        dir: "output",
+        exports: "auto",
+        format: "cjs"
+    },
+    plugins: [
+        wires(),
+        nodeResolve(),
+        json(),
+        commonjs( {
+            requireReturnsDefault: true
+        } )
+    ]
+};
 ```
 
 ## License
