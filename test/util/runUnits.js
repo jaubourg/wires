@@ -15,21 +15,30 @@ const rUnit = /^(.+)\.(dir)?unit\.(c|m)?js$/;
 const fixtureDir = path.resolve( __dirname, `../fixture` );
 const jsonFile = path.resolve( fixtureDir, `.${ process.argv[ 2 ] }.json` );
 
-const units = ( () => {
-    try {
-        return require( jsonFile );
-    } catch ( e ) {
-        return [];
-    }
-} )();
+const rBundle = /^--bundle=(only|no|yes)$/;
 
-if ( units.length ) {
+const hasBundleOption = rBundle.exec( process.argv[ 3 ] || `` );
+const hasBundle = !hasBundleOption || ( hasBundleOption[ 1 ] !== `no` );
+const onlyBundle = !hasBundleOption || ( hasBundleOption[ 1 ] !== `no` );
+
+// eslint-disable-next-line no-nested-ternary
+console.log( `  > bundle: ${ onlyBundle ? `only` : ( hasBundle ? `yes` : `no` ) }` );
+
+let units;
+
+try {
+    units = require( jsonFile );
+} catch ( e ) {}
+
+if ( units ) {
 
     run( units );
 
 } else {
 
-    const files = new Set( process.argv.slice( 3 ) );
+    units = [];
+
+    const files = new Set( process.argv.slice( hasBundleOption ? 4 : 3 ) );
     const unitDir = path.resolve( __dirname, `../units/${ process.argv[ 2 ] }` );
 
     const dirUnits = [];
@@ -124,7 +133,10 @@ if ( units.length ) {
         setupPromises.push( ...npmInstall.map( executeFactory( `npm install` ) ) );
     }
 
-    const rollups = units.filter( ( { filename } ) => filename.startsWith( `${ fixtureDir }/` ) );
+    const rollups = hasBundle ? units.filter( ( { filename } ) => filename.startsWith( `${ fixtureDir }/` ) ) : [];
+    if ( onlyBundle ) {
+        units = [];
+    }
 
     if ( rollups.length ) {
         const { rollup } = require( `rollup` );

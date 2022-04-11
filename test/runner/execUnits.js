@@ -13,7 +13,7 @@ const wiresArgs = [
     `--loader=${ path.resolve( `${ process.env.WIRES_DIR }/loader.mjs` ) }`,
 ];
 
-module.exports = ( type, { bin, wiresEnv = `test` } = {} ) => () => new Promise( ( resolve, reject ) => {
+module.exports = ( type, { bin, bundle, wiresEnv = `test` } = {} ) => () => new Promise( ( resolve, reject ) => {
     console.log(
         `running tests for ${ type } (${
             bin ? `` : `no `
@@ -21,9 +21,21 @@ module.exports = ( type, { bin, wiresEnv = `test` } = {} ) => () => new Promise(
             wiresEnv || `-`
         })\n`
     );
+    const bundleMode = `--bundle=${
+        // eslint-disable-next-line no-nested-ternary
+        bundle ?
+            ( bundle === `only` ? `only` : `yes` ) :
+            ( bundle === false ? `no` : `yes` )
+    }`;
     spawn(
         process.execPath,
-        bin ? [ binPath, ...commonArgs, unitPath, type ] : [ ...wiresArgs, ...commonArgs, unitPath, type ],
+        // eslint-disable-next-line no-nested-ternary
+        bin ?
+            [ binPath, ...commonArgs, unitPath, type, bundleMode ] :
+            (
+                ( bin === false ) ?
+                    [ ...commonArgs, unitPath, type, bundleMode ] :
+                    [ ...wiresArgs, ...commonArgs, unitPath, type, bundleMode ] ),
         {
             "env": {
                 ...process.env,
