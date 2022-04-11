@@ -115,22 +115,40 @@ if ( npmInstall.length ) {
     setupPromises.push( ...npmInstall.map( executeFactory( `npm install` ) ) );
 }
 
-const rollups = units.filter( ( { filename, type } ) => ( type === `m` ) && filename.startsWith( `${ fixtureDir }/` ) );
+const rollups = units.filter( ( { filename } ) => filename.startsWith( `${ fixtureDir }/` ) );
 
 if ( rollups.length ) {
     console.log( `setup: rollup` );
+
     const { rollup } = require( `rollup` );
+    const commonjs = require( `@rollup/plugin-commonjs` );
+    const json = require( `@rollup/plugin-json` );
+    const { nodeResolve } = require( `@rollup/plugin-node-resolve` );
     const wiresRollup = require( `${ process.env.WIRES_DIR }/rollup.js` );
-    setupPromises.push( ...rollups.map( async ( { filename, label, type } ) => {
+
+    const maxListeners = process.getMaxListeners();
+    process.setMaxListeners( Math.max( units.length, maxListeners ) );
+
+    const promises = rollups.map( async ( { filename, label, type } ) => {
         let bundle;
         try {
+            const plugins = type === `c` ? [
+                wiresRollup(),
+                nodeResolve(),
+                json(),
+                commonjs( {
+                    "ignoreDynamicRequires": true,
+                    "requireReturnsDefault": true,
+                } ),
+            ] : [ wiresRollup(), json() ];
             const inputOptions = {
                 "input": filename,
-                "plugins": [ wiresRollup() ],
+                plugins,
             };
             const outputOptions = {
-                "file": `${ filename }.rollup.mjs`,
-                "format": `es`,
+                "exports": `auto`,
+                "file": `${ filename }.rollup.${ type === `m` ? `m` : `` }js`,
+                "format": type === `m` ? `es` : `cjs`,
             };
             bundle = await rollup( inputOptions );
             await bundle.generate( outputOptions );
@@ -145,7 +163,13 @@ if ( rollups.length ) {
                 bundle.close();
             }
         }
-    } ) );
+    } );
+
+    if ( maxListeners !== process.getMaxListeners() ) {
+        Promise.allSettled( promises ).finally( () => process.setMaxListeners( maxListeners ) );
+    }
+
+    setupPromises.push( ...promises );
 }
 
 Promise.allSettled( setupPromises )
