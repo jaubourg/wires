@@ -46,4 +46,15 @@ require( `./runner` )( [
     } ),
     // test with --require and --loader command lines
     execUnits( `common` ),
+    // tests without having wires installed (for bundlers)
+    execUnits( `bundlers`, {
+        "bin": false,
+        "bundle": `only`,
+    } ),
+    // tests without having wires installed (for bundlers, no env)
+    execUnits( `bundlers`, {
+        "bin": false,
+        "bundle": `only`,
+        "wiresEnv": ``,
+    } ),
 ] );

@@ -1,5 +1,7 @@
 "use strict";
 
+require( `wires` );
+
 const { deBypass, getConfig, isBypass, isExportable, isRoute, isValue } = require( `./lib/loader-utils` );
 const { dirname } = require( `path` );
 const generateModule = require( `./lib/generateModule` );
