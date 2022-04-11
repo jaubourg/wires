@@ -32,8 +32,8 @@ module.exports = {
             ],
             "execArgv": [
                 `--require=${ path.resolve( rootDir, `index.js` ) }`,
-                `--throw-deprecation`,
                 `--loader=${ path.resolve( rootDir, `loader.mjs` ) }`,
+                `--throw-deprecation`,
             ],
             "config": {
                 "string": `value`,
@@ -45,27 +45,13 @@ module.exports = {
             },
         }, `everything has been properly transmitted` );
     }, fixtureDir ),
-    "missing script": cliTest( [
+    "missing arguments": cliTest( [
         process.execPath,
         `executable-name`,
     ], ( __, _, stderr, exitCode ) => {
         __.plan( 2 );
         __.strictEqual( exitCode, -1, `correct exit code (-1)` );
-        const errorMessage = `ERROR: path_to_script required`;
+        const errorMessage = `ERROR: arguments expected`;
         __.strictEqual( stderr.substr( 0, errorMessage.length ), errorMessage, `correct error message` );
     } ),
 };
-
-for ( const option of [ `-e`, `--eval`, `-i`, `--interactive`, `-p`, `--print` ] ) {
-    module.exports[ `forbidden option ${ option }` ] = cliTest( [
-        process.execPath,
-        `executable-name`,
-        option,
-    ], ( __, _, stderr, exitCode ) => {
-        __.plan( 2 );
-        __.strictEqual( exitCode, -1, `correct exit code (-1)` );
-        const command = process.execPath;
-        const errorMessage = `ERROR: ${ path.basename( command, path.extname( command ) ) } option not supported`;
-        __.strictEqual( stderr.substr( 0, errorMessage.length ), errorMessage, `correct error message` );
-    } );
-}

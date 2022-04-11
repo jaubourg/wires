@@ -2,15 +2,10 @@
 
 const path = require( `path` );
 
-const rCommand = /^-/;
-
-const notSupportedArray = [ `-e`, `--eval`, `-i`, `--interactive`, `-p`, `--print` ];
-const notSupported = new Set( notSupportedArray );
-
 module.exports = options => {
 
-    // get the command
-    const [ command ] = options.argv;
+    // get everything
+    const [ command, , ...args ] = options.argv;
 
     // deduce the engine name
     const engineName = path.basename( command, path.extname( command ) );
@@ -43,49 +38,14 @@ module.exports = options => {
         [ `--version`, version ],
     ] );
 
-    // let's get the target script and args
-    let targetScript;
-    const nodeArgs = [];
-    const scriptArgs = [];
-
-    options.argv.forEach( ( arg, i ) => {
-        if ( i <= 1 ) {
-            return;
+    // do we have an info call?
+    if ( args.length ) {
+        const info = infoOptions.get( args[ 0 ] );
+        if ( info ) {
+            info();
         }
-        // we already found the targetScript
-        if ( targetScript ) {
-            scriptArgs.push( arg );
-
-        // if this is a -xxx argument
-        } else if ( rCommand.test( arg ) ) {
-
-            // refuse eval-related ones
-            if ( notSupported.has( arg ) ) {
-                help( `${ engineName } option not supported (${ notSupportedArray.join( `, ` ) })` );
-            }
-
-            // handle info options
-            const infoOption = infoOptions.get( arg );
-            if ( infoOption ) {
-                infoOption();
-            }
-
-            // keep the argument
-            nodeArgs.push( arg );
-
-        // handle the special case of debug
-        } else if ( arg === `debug` ) {
-            nodeArgs.push( arg );
-
-        // store as override when needed
-        } else {
-            targetScript = arg;
-        }
-    } );
-
-    // no script, no dice
-    if ( !targetScript ) {
-        help( `path_to_script required` );
+    } else {
+        help( `arguments expected` );
     }
 
     // and *boom*, we have our own wires-enabled node here :)
@@ -94,10 +54,8 @@ module.exports = options => {
             command,
             [
                 `--require=${ path.resolve( __dirname, `../index.js` ) }`,
-                ...nodeArgs,
                 `--loader=${ path.resolve( __dirname, `../loader.mjs` ) }`,
-                targetScript,
-                ...scriptArgs,
+                ...args,
             ],
             {
                 "stdio": options.stdio,
