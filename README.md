@@ -87,10 +87,8 @@ Typically,
 1. install `wires` globally: `npm -g install wires`
 2. use the `wires` command in lieu of `node`.
 
-So, `node path/to/myScript.js scriptArg`<br>
-becomes `wires path/to/myScript.js scriptArg`.
-
-As of version `5.0`, `wires` supports ES Module resolution. As such, a custom loader has to be provided to the `node` executable. Since the feature is still experimental as of NodeJS version `16`, one to two warning lines are displayed at start-up. 
+So, `node ...`<br>
+becomes `wires ...`.
 
 As of version `0.4.0`, `wires` will look for local installations based on the current working directory. This means you can add wires as a dependency to your project and have this specific version take precedence whenever the global command is ran from within said project.
 
@@ -109,15 +107,15 @@ v0.2.0 (node v0.12.2)
 
 This behavior is compatible with version `0.2.0` and up.
 
-If you cannot, or don't want to, use the `wires` command, you can use the `node` executable as follows:
+If you don't want to install `wires` globally, you should use<br>
+`npx wires ...`<br>
+which will find and execute your locally installed `wires` command.
 
-`node --loader=wires --require=wires path/to/myScript.js`
+If you don't want to use the `wires` command, you can use the `node` executable as follows:
+- `wires` >= `5`: `node --require=wires --loader=wires ...`
+- `wires` < `5`: `node --require=wires ...`
 
 This will enable both the CommonJS and ECMAScript module resolution override.
-
-If you only need one of those, you can type:
-- `node --loader=wires path/to/myScript.js` to enable for `import`
-- `node --require=wires path/to/myScript.js` to enable for `require()`
 
 Alternatively, if you only need CommonJS support, you can manually require `wires` at the beginning of the entry file of your project and use `node` as usual:
 

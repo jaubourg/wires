@@ -1,5 +1,22 @@
 "use strict";
 
+// silence experimental loader warning
+{
+    const listeners = process.listeners( `warning` );
+    if ( listeners.length ) {
+        process.removeAllListeners( `warning` );
+        for ( const listener of listeners ) {
+            process.on( `wires-warning`, listener );
+        }
+        const rLoader = /(?:\b|^)--experimental-loader(?:\b|$)/;
+        process.on( `warning`, info => {
+            if ( ( info.name !== `ExperimentalWarning` ) || !rLoader.test( info.message ) ) {
+                process.emit( `wires-warning`, info );
+            }
+        } );
+    }
+}
+
 const assert = require( `assert` ).ok;
 const { deBypass, getConfig, isBypass, isRoute, isValue } = require( `./lib/loader-utils` );
 const { dirname } = require( `path` );

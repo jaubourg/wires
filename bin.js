@@ -20,7 +20,7 @@ for ( let i = 0; !path && ( i < LOCALS.length ); ++i ) {
     }
 }
 
-require( path || `./cli` )( {
+require( path || `./lib/cli` )( {
     "argv": process.argv,
     "error": console.error,
     "exit": process.exit,
