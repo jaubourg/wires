@@ -86,15 +86,22 @@ module.exports = {
                 } );
             },
             async "casts"( __ ) {
-                __.plan( 30 );
+                __.plan( 32 );
                 const cast = require( `#cast` );
                 const { "default": castM } = await import( `#cast` );
-                [ true, true, true, true, false, null, null, 16, 16, 16, 16 ].forEach( ( v, i ) => {
-                    __.strictEqual( castM[ i ], v, `import: #${ i } is ${ v }` );
-                    __.strictEqual( cast[ i ], v, `require: #${ i } is ${ v }` );
+                const check = [ true, true, true, true, false, null, null, 16, 16, 16, 16, NaN ];
+                __.strictEqual( castM.length, check.length, `import: array has correct length` );
+                __.strictEqual( cast.length, check.length, `require: array has correct length` );
+                const isActuallyNaN = n => ( typeof n === `number` ) && isNaN( n );
+                check.forEach( ( v, i ) => {
+                    if ( isActuallyNaN( v ) ) {
+                        __.ok( isActuallyNaN( castM[ i ] ), `import: #${ i } is ${ v }` );
+                        __.ok( isActuallyNaN( cast[ i ] ), `require: #${ i } is ${ v }` );
+                    } else {
+                        __.strictEqual( castM[ i ], v, `import: #${ i } is ${ v }` );
+                        __.strictEqual( cast[ i ], v, `require: #${ i } is ${ v }` );
+                    }
                 } );
-                __.ok( isNaN( castM.pop() ), `import: #${ castM.length } is NaN` );
-                __.ok( isNaN( cast.pop() ), `require: #${ cast.length } is NaN` );
                 await __.importAndRequire.all( [
                     [ `#cast_bool_fallback1`, true ],
                     [ `#cast_bool_fallback2`, false ],
