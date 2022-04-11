@@ -6,19 +6,11 @@
 
 const Module = module.constructor;
 
-const LOCALS = [ `wires/cli`, `wires/lib/cli.js` ];
-
 let path;
 
-for ( let i = 0; !path && ( i < LOCALS.length ); ++i ) {
-    try {
-        path = Module._findPath( LOCALS[ i ], Module._nodeModulePaths( `.` ) );
-    } catch ( e ) {
-        if ( e.code !== `ERR_PACKAGE_PATH_NOT_EXPORTED` ) {
-            throw e;
-        }
-    }
-}
+try {
+    path = Module._findPath( `wires/lib/cli.js`, Module._nodeModulePaths( `.` ) );
+} catch ( e ) {}
 
 require( path || `./lib/cli` )( {
     "argv": process.argv,
