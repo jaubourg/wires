@@ -111,17 +111,22 @@ if ( units.length ) {
 
     const now = Date.now();
     const setupPromises = [];
+    console.log( `  > starting setup` );
+    const setupConsole = Object.fromEntries( Object.entries( console ).filter( ( [ name, value ] ) => {
+        if ( typeof value === `function` ) {
+            console[ name ] = () => undefined;
+            return true;
+        }
+        return false;
+    } ) );
 
     if ( npmInstall.length ) {
-        console.log( `setup: npm install for fixtures` );
         setupPromises.push( ...npmInstall.map( executeFactory( `npm install` ) ) );
     }
 
     const rollups = units.filter( ( { filename } ) => filename.startsWith( `${ fixtureDir }/` ) );
 
     if ( rollups.length ) {
-        console.log( `setup: rollup` );
-
         const { rollup } = require( `rollup` );
         const commonjs = require( `@rollup/plugin-commonjs` );
         const json = require( `@rollup/plugin-json` );
@@ -176,6 +181,7 @@ if ( units.length ) {
 
     Promise.allSettled( setupPromises )
         .then( outcomes => {
+            Object.assign( console, setupConsole );
             if ( outcomes.length ) {
                 const failed = outcomes.reduce( ( hasFailed, { reason, status } ) => {
                     if ( status === `rejected` ) {
@@ -187,8 +193,8 @@ if ( units.length ) {
                 if ( failed ) {
                     throw new Error( `setup failed` );
                 }
-                console.log( `setup done in ${ Date.now() - now }ms\n` );
             }
+            console.log( `  > setup done in ${ Date.now() - now }ms\n` );
             // eslint-disable-next-line no-nested-ternary
             units.sort( ( u1, u2 ) => ( u1.label < u2.label ? -1 : ( u1.label > u2.label ? 1 : 0 ) ) );
             fs.writeFileSync( jsonFile, JSON.stringify( units ) );
