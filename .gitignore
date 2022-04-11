@@ -4,5 +4,6 @@
 /publish
 /lib/exportable/*.mjs
 /lib/parse/index.js
+/test/fixtures
 /package-lock.json
 /yarn.lock
