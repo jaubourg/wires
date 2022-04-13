@@ -17,7 +17,9 @@ module.exports = ( type, { bin, bundle, wiresEnv = `test` } = {} ) => () => new 
     console.log(
         `running tests for ${ type } (${
             bin ? `` : `no `
-        }binary, ENV=${
+        }binary, ${
+            bin === false ? `no ` : ``
+        }wires, ENV=${
             wiresEnv || `-`
         })\n`
     );

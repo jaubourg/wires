@@ -1,14 +1,14 @@
 "use strict";
 
 // silence experimental loader warning
-{
+if ( !module.parent || ( module.parent.id === `internal/preload` ) ) {
     const listeners = process.listeners( `warning` );
     if ( listeners.length ) {
         process.removeAllListeners( `warning` );
         for ( const listener of listeners ) {
             process.on( `wires-warning`, listener );
         }
-        const rLoader = /(?:\b|^)--experimental-loader(?:\b|$)/;
+        const rLoader = /(?:\b|^)(?:--experimental-loader|Custom ESM Loaders)(?:\b|$)/;
         process.on( `warning`, info => {
             if ( ( info.name !== `ExperimentalWarning` ) || !rLoader.test( info.message ) ) {
                 process.emit( `wires-warning`, info );
