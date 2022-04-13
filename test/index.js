@@ -22,6 +22,9 @@ if ( process.env.WIRES_DIR ) {
 
 const execUnits = require( `./runner/execUnits` );
 
+// eslint-disable-next-line no-console
+console.log( `Running on NodeJS ${ process.version }` );
+
 require( `./runner` )( [
     // lint
     require( `./runner/lint` ),
