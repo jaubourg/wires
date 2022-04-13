@@ -1,6 +1,6 @@
 "use strict";
 
-require( `wires` );
+require( `./index.js` );
 
 const { deBypass, getConfig, isBypass, isExportable, isRoute, isValue } = require( `./lib/loader-utils` );
 const { dirname } = require( `path` );
