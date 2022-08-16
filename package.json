@@ -14,7 +14,7 @@
         "eslint-formatter-codeframe": "7.32.1",
         "fs-extra": "10.1.0",
         "tap-diff": "0.1.1",
-        "tape": "5.5.3",
+        "tape": "5.6.0",
         "nyc": "15.1.0",
         "peggy": "1.2.0",
         "rollup": "2.74.1"
