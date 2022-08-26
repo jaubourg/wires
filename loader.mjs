@@ -4,27 +4,28 @@ import "./index.js";
 import generateModule from "./lib/generateModule.js";
 import { deBypass, getConfig, isBypass, isRoute, isValue } from "./lib/loader-utils.js";
 import nodeVersion from "./lib/nodeVersion.js";
-import UID from "./lib/UID.js";
+import { fileURLToPath, pathToFileURL } from "url";
 
-const marker = `file:///~wires~${ UID }:`;
+const rWires = /^(file:\/\/.+)\?wires=(.+)$/;
 
 // node 16+
-export const load = ( url, context, defaultLoad ) => {
-    const tmp = url.startsWith( marker ) && JSON.parse( url.slice( marker.length ) );
+export const load = ( url, context, nextLoad ) => {
+    const tmp = rWires.exec( url );
     if ( tmp ) {
-        const [ directory, expression ] = tmp;
+        const [ , dir, expr ] = tmp;
         return {
             "format": `module`,
-            "source": generateModule( getConfig( directory ).get( expression ) ),
+            "shortCircuit": true,
+            "source": generateModule( getConfig( fileURLToPath( dir ) ).get( decodeURIComponent( expr ) ) ),
         };
     }
-    return defaultLoad( url, context );
+    return nextLoad( url, context );
 };
 
 // node 12 and 14
 /* istanbul ignore next */
 export const getFormat = ( nodeVersion.major < 16 ) && ( ( url, context, defaultGetFormat ) => (
-    url.startsWith( marker ) ? {
+    rWires.test( url ) ? {
         "format": `module`,
     } : defaultGetFormat( url, context )
 ) );
@@ -44,25 +45,25 @@ const getDirectory = ( { parentURL } ) => {
     return process.cwd();
 };
 
-export const resolve = ( specifier, context, defaultResolve ) => {
+export const resolve = ( specifier, context, nextResolve ) => {
     // in case it was already resolved
-    if ( specifier.startsWith( marker ) ) {
+    if ( rWires.test( specifier ) ) {
         return {
             "shortCircuit": true,
             "url": specifier,
         };
     }
     if ( isBypass( specifier ) ) {
-        return defaultResolve( deBypass( specifier ), context );
+        return nextResolve( deBypass( specifier ), context );
     }
     if ( isRoute( specifier ) ) {
-        return defaultResolve( getConfig( getDirectory( context ) ).get( specifier, true ).getValue(), context );
+        return nextResolve( getConfig( getDirectory( context ) ).get( specifier, true ).getValue(), context );
     }
     if ( isValue( specifier ) ) {
         return {
             "shortCircuit": true,
-            "url": `${ marker }${ JSON.stringify( [ getDirectory( context ), specifier ] ) }`,
+            "url": `${ pathToFileURL( getDirectory( context ) ) }?wires=${ encodeURIComponent( specifier ) }`,
         };
     }
-    return defaultResolve( specifier, context );
+    return nextResolve( specifier, context );
 };
