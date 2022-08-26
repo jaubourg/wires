@@ -48,6 +48,7 @@ export const resolve = ( specifier, context, defaultResolve ) => {
     // in case it was already resolved
     if ( specifier.startsWith( marker ) ) {
         return {
+            "shortCircuit": true,
             "url": specifier,
         };
     }
@@ -59,6 +60,7 @@ export const resolve = ( specifier, context, defaultResolve ) => {
     }
     if ( isValue( specifier ) ) {
         return {
+            "shortCircuit": true,
             "url": `${ marker }${ JSON.stringify( [ getDirectory( context ), specifier ] ) }`,
         };
     }
