@@ -9,7 +9,7 @@
         "@rollup/plugin-commonjs": "28.0.1",
         "@rollup/plugin-json": "6.1.0",
         "@rollup/plugin-node-resolve": "15.3.0",
-        "eslint": "9.16.0",
+        "eslint": "8.56.0",
         "eslint-config-creative-area": "0.11.1",
         "eslint-formatter-codeframe": "7.32.1",
         "fs-extra": "11.2.0",
@@ -20,23 +20,25 @@
         "rollup": "4.28.1"
     },
     "engines": {
-        "node" : ">=12"
+        "node": ">=16"
     },
     "eslintConfig": {
         "extends": "creative-area/es2021/script",
         "env": {
             "node": true
         },
-        "overrides": [ {
-            "extends": "creative-area/es2021/module",
-            "files": "**/*.mjs",
-            "parserOptions": {
-                "ecmaVersion": 2022
-            },
-            "rules": {
-                "prefer-named-capture-group": "off"
+        "overrides": [
+            {
+                "extends": "creative-area/es2021/module",
+                "files": "**/*.mjs",
+                "parserOptions": {
+                    "ecmaVersion": 2022
+                },
+                "rules": {
+                    "prefer-named-capture-group": "off"
+                }
             }
-        } ],
+        ],
         "parserOptions": {
             "ecmaVersion": 2022
         },
@@ -60,13 +62,30 @@
     "nyc": {
         "all": true,
         "cache": true,
-        "exclude": [ "publish/lib/exportable/*.mjs", "publish/lib/parse/index.js" ],
-        "extension": [ ".js", ".mjs" ],
-        "include": [ "publish/lib", "publish/bin.js", "publish/index.js", "publish/loader.mjs", "publish/rollup.js" ]
+        "exclude": [
+            "publish/lib/exportable/*.mjs",
+            "publish/lib/parse/index.js"
+        ],
+        "extension": [
+            ".js",
+            ".mjs"
+        ],
+        "include": [
+            "publish/lib",
+            "publish/bin.js",
+            "publish/index.js",
+            "publish/loader.mjs",
+            "publish/rollup.js"
+        ]
     },
     "private": true,
-    "removePublish": [ "devDependencies", "eslintConfig", "nyc", "scripts" ],
-    "repository" : "github:jaubourg/wires",
+    "removePublish": [
+        "devDependencies",
+        "eslintConfig",
+        "nyc",
+        "scripts"
+    ],
+    "repository": "github:jaubourg/wires",
     "scripts": {
         "coverage": "node scripts/preparePublish 0.0.0 && nyc instrument publish --in-place && WIRES_DIR=publish nyc --eager node test",
         "coverage_html": "$npm_execpath run coverage && node scripts/preparePublish 0.0.0 && nyc report --reporter=html",
