@@ -2,6 +2,8 @@
 
 const { exec } = require( `child_process` );
 
+const SUPPORTS_REGISTER = Boolean( require( `module` ).register );
+
 const bins = {
     "node": [ true, true ],
     "node --require=./index.js": [ false, true ],
@@ -15,7 +17,7 @@ const code = {
 
 const loader = {
     "": [ false, true ],
-    "--loader=./loader.mjs": [ true, true ],
+    [ SUPPORTS_REGISTER ? `--import=./lib/registerLoader.mjs` : `--loader=./loader.mjs` ]: [ !SUPPORTS_REGISTER, true ],
 };
 
 const warnings = {

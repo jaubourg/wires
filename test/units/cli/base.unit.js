@@ -6,6 +6,8 @@ const path = require( `path` );
 const fixtureDir = path.resolve( __dirname, `../fixture/commandLine` );
 const rootDir = process.env.WIRES_DIR;
 
+const SUPPORTS_REGISTER = Boolean( require( `module` ).register );
+
 module.exports = {
     "full test": cliTest( [
         process.execPath,
@@ -30,7 +32,9 @@ module.exports = {
             ],
             "execArgv": [
                 `--require=${ path.resolve( rootDir, `index.js` ) }`,
-                `--loader=${ path.resolve( rootDir, `loader.mjs` ) }`,
+                SUPPORTS_REGISTER ?
+                    `--import=${ path.resolve( rootDir, `lib/registerLoader.mjs` ) }` :
+                    `--loader=${ path.resolve( rootDir, `loader.mjs` ) }`,
                 `--throw-deprecation`,
             ],
             "config": {

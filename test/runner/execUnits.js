@@ -8,9 +8,13 @@ const unitPath = path.resolve( __dirname, `../util/runUnits.js` );
 
 const commonArgs = [ `--experimental-import-meta-resolve` ];
 
+const SUPPORTS_REGISTER = Boolean( require( `module` ).register );
+
 const wiresArgs = [
     `--require=${ path.resolve( `${ process.env.WIRES_DIR }/index.js` ) }`,
-    `--loader=${ path.resolve( `${ process.env.WIRES_DIR }/loader.mjs` ) }`,
+    SUPPORTS_REGISTER ?
+        `--import=${ path.resolve( `${ process.env.WIRES_DIR }/lib/registerLoader.mjs` ) }` :
+        `--loader=${ path.resolve( `${ process.env.WIRES_DIR }/loader.mjs` ) }`,
 ];
 
 module.exports = ( type, { bin, bundle, wiresEnv = `test` } = {} ) => () => new Promise( ( resolve, reject ) => {

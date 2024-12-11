@@ -271,10 +271,15 @@ require( "#childKey" ) === "child value";
 
 Targeting `undefined` or `null` values in expressions may yield potentially undesirable `"undefined"` or `"null"` in the resulting string. If and when you change the leading `#` to a leading `?` and the targeted value is "falsy" (`undefined`, `null`, `false`, etc...), then the result is an empty string (`""`). For instance:
 
-- the expression `"value={#undefinedValue}"` yields `"value=undefined"`
-- the expression `"value={?undefinedValue}"` yields `"value="`
+- the expression `"value is '{#undefinedValue}'"` yields `"value is 'undefined'"`
+- the expression `"value is '{?undefinedValue}'"` yields `"value is ''"`
 
 This is especially handy for environment variables that may or may not be set. While `"#>UNSET_VAR"` would yield `"undefined"`, `?>UNSET_VAR` yields `""`.
+
+`{` and `}` are special characters. Since version `5.1`, it is possible to escape them if and when they're needed verbatim:
+
+- the expression `"{ placeholder }"` throws an exception
+- the expression `"\\{ placeholder \\}"` yields `"{ placeholder }"`
 
 ### Settings
 
@@ -483,6 +488,53 @@ You can put an arbitrary number of spaces after the opening parenthesis and arou
 "(bool ) true"
 "( bool ) true"
 ```
+
+As of version `5.1`, it is possible to treat string values as json in configuration files:
+
+```js
+// wires.json
+
+{
+    "json": "(json) \\{ \"property\": [ 1024 ] \\}"
+}
+
+// file.js
+
+require( "#json.property" )[ 0 ] === 1024;
+```
+
+It makes it possible to inject complex data structures from environment variables:
+
+```js
+// wires.json
+
+{
+    "json": "(json) {?>JSON}"
+}
+
+// file.js
+
+// if env var JSON === '{ "property": [ 1024 ] }'
+require( "#json.property" )[ 0 ] === 1024;
+```
+
+If the string provided is not proper JSON, `null` is returned, allowing the use of a fallback:
+
+```js
+// wires.json
+
+{
+    "jsonWithoutFallback": "(json) not proper json",
+    "jsonWithFallback": "(json) not proper json",
+    "jsonWithFallback?": 712
+}
+
+// file.js
+
+require( "#jsonWithoutFallback" ) === null;
+require( "#jsonWithFallBack" ) === 712;
+```
+
 
 ## Routes
 

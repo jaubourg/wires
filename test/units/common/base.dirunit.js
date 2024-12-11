@@ -21,16 +21,24 @@ module.exports = {
             `(bool) false`,
             `(bool) woops`,
             `(bool) TRUE`,
+            `(json) true`,
+            `(json) 16`,
+            `(json) "string"`,
+            `(json) woops`,
             `(num) 16`,
             `(num)16`,
             `(number) 16`,
             `(number)16`,
             `(num) anything`,
         ],
+        "cast_json_object": `(json) \\{ "property": 1024 \\}`,
+        "cast_json_array": `(json) [ 1, 2, 3 ]`,
         "cast_bool_fallback1": `(bool) wrong`,
         "cast_bool_fallback1?": true,
         "cast_bool_fallback2": `(bool) false`,
         "cast_bool_fallback2?": true,
+        "cast_json_fallback": `(json) woops`,
+        "cast_json_fallback?": `hello`,
         "cast_number_fallback": `(num) not an number`,
         "cast_number_fallback?": 16,
     },
@@ -86,10 +94,25 @@ module.exports = {
                 } );
             },
             async "casts"( __ ) {
-                __.plan( 32 );
+                const check =
+                    [ true, true, true, true, false, null, null, true, 16, `string`, null, 16, 16, 16, 16, NaN ];
+                const fallbacks = [
+                    [ `#cast_bool_fallback1`, true ],
+                    [ `#cast_bool_fallback2`, false ],
+                    [ `#cast_json_fallback`, `hello` ],
+                    [ `#cast_number_fallback`, 16 ],
+                ];
+                const json = [
+                    [
+                        `#cast_json_object`, {
+                            "property": 1024,
+                        },
+                    ],
+                    [ `#cast_json_array`, [ 1, 2, 3 ] ],
+                ];
+                __.plan( ( ( check.length + fallbacks.length + json.length ) * 2 ) + 2 );
                 const cast = require( `#cast` );
                 const { "default": castM } = await import( `#cast` );
-                const check = [ true, true, true, true, false, null, null, 16, 16, 16, 16, NaN ];
                 __.strictEqual( castM.length, check.length, `import: array has correct length` );
                 __.strictEqual( cast.length, check.length, `require: array has correct length` );
                 const isActuallyNaN = n => ( typeof n === `number` ) && isNaN( n );
@@ -102,11 +125,8 @@ module.exports = {
                         __.strictEqual( cast[ i ], v, `require: #${ i } is ${ v }` );
                     }
                 } );
-                await __.importAndRequire.all( [
-                    [ `#cast_bool_fallback1`, true ],
-                    [ `#cast_bool_fallback2`, false ],
-                    [ `#cast_number_fallback`, 16 ],
-                ] ).strictEqual();
+                await __.importAndRequire.all( fallbacks ).strictEqual();
+                await __.importAndRequire.all( json ).deepEqual();
             },
             async route( __ ) {
                 __.plan( 3 );

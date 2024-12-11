@@ -151,6 +151,10 @@ castType
     {
         return `castBoolean`;
     }
+    / "json"
+    {
+        return `castJSON`;
+    }
     / "num" "ber"?
     {
         return `castNumber`;
@@ -167,9 +171,19 @@ templateItem
     {
         return value.castString();
     }
-    / [^{}]+
+    / characters:character+
     {
-        return newValue( text() );
+        return newValue( characters.join( `` ) );
+    }
+
+character
+    = "\\" escaped:.
+    {
+        return escaped;
+    }
+    / [^\\{}]+
+    {
+        return text();
     }
 
 _ = [\t\n\r ]*
