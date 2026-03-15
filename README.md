@@ -7,13 +7,15 @@
 [![Coverage Status][coverage-image]][coverage-url]
 [![Test Status][test-image]][test-url]
 
-__a simple configuration utility for NodeJS featuring smart module wiring for unobtrusive dependency injection__
+__A simple configuration utility for Node.js featuring smart module wiring for unobtrusive dependency injection.__
 
 ## The Problem
 
+<img align="right" width="22.5%" src="https://raw.githubusercontent.com/jaubourg/wires/master/logo.svg?sanitize=true" style="margin:0 3%">
+
 Every Node.js project eventually runs into the same set of annoyances:
 
-- **Relative path hell.** `require( "../../../util/logger" )` breaks on every refactor and tells you nothing about what `logger` actually is in context.
+- **Relative path hell.** `require("../../../util/logger")` breaks on every refactor and tells you nothing about what `logger` actually is in context.
 - **Config threading.** You read `process.env` at the top of your entry point and pass values down through five layers of function arguments or a shared global — neither is great.
 - **Environment switching.** Swapping a real database driver for a test double means either touching application code or maintaining a tangle of `if (NODE_ENV === ...)` branches.
 
@@ -23,133 +25,136 @@ Tools like `dotenv` solve the env-loading part but leave the rest to you. Depend
 
 ## Overview
 
-<img align="right" width="22.5%" src="https://raw.githubusercontent.com/jaubourg/wires/master/logo.svg?sanitize=true" style="margin:0 3%">
-
 __`wires` augments the filename resolution mechanisms used by `import` and `require()` under the hood as a means to transparently inject configuration into your code.__
 
 Your modules keep using plain `require()`. You define what those calls resolve to — and what values they return — in JSON files that sit alongside your code. Switch environments, swap implementations, override settings for a subdirectory: none of it requires touching the modules themselves.
 
-*For simplicity's sake, we only provide examples using `require()` in this documentation but everything described here also applies to `import` with minor specificities discussed in [a dedicated section](#import).*
+*For simplicity's sake, we only provide examples using `require()` in this documentation, but everything described here also applies to `import` with minor differences discussed in [a dedicated section](#import).*
+
+Here is a quick before/after. Without `wires`:
 
 ```js
-require( "#port" );          // http port from config
-require( ":db_driver" );     // database driver, swappable per environment
-require( ":models/user" );   // user model, routed to the right implementation
-require( ":models/article" );
+// before: config is threaded manually, paths are fragile
+
+const port = require("../../../config").port;
+const db = require("../../../drivers/mysql");
+const User = require("../../../db/model-user");
 ```
 
-Hash-lead expressions recover settings. Colon-lead expressions leverage routes to inject modules.
-
-Routes and settings are defined in JSON files:
+With `wires`:
 
 ```js
-// the following JSON
+// after: modules just declare what they need
 
+const port = require("#port");
+const db = require(":db_driver");
+const User = require(":models/user");
+```
+
+The mapping between these expressions and actual values or modules is defined in JSON configuration files:
+
+```json
 {
     "port": 80,
     ":db_driver": "mysql/driver",
     ":models/": "./db/model-"
 }
+```
 
-// will yield the following results
+```js
+require("#port") === 80;
+require(":db_driver") === require("mysql/driver");
+require(":models/user") === require("/.../db/model-user");
+require(":models/article") === require("/.../db/model-article");
+```
 
-require( "#port" ) === 80;
-require( ":db_driver" ) === require( "mysql/driver" );
-require( ":models/user" ) === require ( "/.../db/model-user" );
-require( ":models/article" ) === require ( "/.../db/model-article" )
+Hash expressions read settings. Colon expressions resolve to modules via routes. Swapping to a different environment is just a matter of providing a different JSON file:
 
-// this alternate JSON
-
+```json
 {
     "port": 8080,
     ":db_driver": "./lib/dbDriver",
     ":models/": "models/dbo/"
 }
-
-// will yield the following results
-
-require( "#port" ) === 8080;
-require( ":db_driver" ) === require( "/.../lib/dbDriver" );
-require( ":models/user" ) === require ( "models/dbo/user" );
-require( ":models/article" ) === require ( "models/dbo/article" )
 ```
 
-Note that settings whose keys are at-sign-lead are considered directives and will not appear in your configuration. Currently supported directives are [`@namespace`](#namespace-directive) and [`@root`](#root-directive).
+```js
+require("#port") === 8080;
+require(":db_driver") === require("/.../lib/dbDriver");
+require(":models/user") === require("models/dbo/user");
+require(":models/article") === require("models/dbo/article");
+```
 
-## Table of Content
+Note that settings whose keys are prefixed with `@` are considered directives and will not appear in your configuration. Currently supported directives are [`@namespace`](#namespace-directive) and [`@root`](#root-directive).
+
+## Table of Contents
 
 - [Getting Started](#getting-started)
 - [Cascading Configuration](#cascading-configuration)
-    - [`@namespace` directive](#namespace-directive)
-    - [`@root` directive](#root-directive)
+    - [`@namespace` Directive](#namespace-directive)
+    - [`@root` Directive](#root-directive)
 - [Syntax](#syntax)
     - [Settings](#settings)
     - [Fallbacks](#fallbacks)
     - [Casting](#casting)
 - [Routes](#routes)
-    - [Generic](#generic-routes)
-    - [Computed](#computed-routes)
+    - [Generic Routes](#generic-routes)
+    - [Computed Routes](#computed-routes)
 - [`import`](#import)
 - [Bundlers](#bundlers)
-    - [ `rollup.js` ](#rollup)
+    - [Rollup](#rollup)
+- [Migration Notes](#migration-notes)
 
-## Getting started
+## Getting Started
 
-Typically,
+#### Global Install
 
-1. install `wires` globally: `npm -g install wires`
-2. use the `wires` command in lieu of `node`.
-
-So, `node ...`<br>
-becomes `wires ...`.
-
-As of version `0.4.0`, `wires` will look for local installations based on the current working directory. This means you can add wires as a dependency to your project and have this specific version take precedence whenever the global command is ran from within said project.
+Install `wires` globally and use the `wires` command in lieu of `node`:
 
 ```
-> wires --version
-v0.4.0 (node v0.12.2)
-
-> npm install --save wires@0.2.0
-wires@0.2.0 node_modules\wires
-├── temp@0.8.1 (rimraf@2.2.8)
-└── lodash@3.6.0
-
-> wires --version
-v0.2.0 (node v0.12.2)
+npm install -g wires
 ```
 
-This behavior is compatible with version `0.2.0` and up.
+So, `node ...` becomes `wires ...`.
 
-If you don't want to install `wires` globally, you should use<br>
-`npx wires ...`<br>
-which will find and execute your locally installed `wires` command.
+When a local installation of `wires` exists in your project, the global command will automatically defer to it. This lets you pin a specific version per project.
+
+#### Local Install
+
+If you don't want to install `wires` globally, use `npx`:
+
+```
+npx wires ...
+```
+
+#### Using `node` Directly
 
 If you don't want to use the `wires` command, you can use the `node` executable as follows:
-- `wires` >= `5`: `node --require=wires --loader=wires ...`
-- `wires` < `5`: `node --require=wires ...`
 
-This will enable both the CommonJS and ECMAScript module resolution override.
+```
+node --require=wires --loader=wires ...
+```
+
+This will enable both the CommonJS and ECMAScript module resolution overrides.
 
 Alternatively, if you only need CommonJS support, you can manually require `wires` at the beginning of the entry file of your project and use `node` as usual:
 
 ```js
-require( "wires" );
+require("wires");
 
 // rest of your code
 ```
 
 ## Cascading Configuration
 
-wires uses four types of configuration file:
+`wires` uses four types of configuration files:
 
 - `wires-defaults.json` contains default settings
 - `wires-defaults.XXX.json` contains default settings specific to when the `WIRES_ENV` environment variable is set to `"XXX"`
 - `wires.json` contains actual settings
-- `wires.XXX.json` contains default settings specific to when the `WIRES_ENV` environment variable is set to `"XXX"`
+- `wires.XXX.json` contains actual settings specific to when the `WIRES_ENV` environment variable is set to `"XXX"`
 
-__Prior to version `3.0`, `wires` did use the `NODE_ENV` environment variable rather than `WIRES_ENV`. Please adjust your projects accordingly when upgrading to version `3.0` and higher.__
-
-Actual configuration depends on the position of the file requiring it in the filesystem hierarchy. Each directory gets its own configuration which is computed as follows:
+Actual configuration depends on the position of the file requiring it in the filesystem hierarchy. Each directory gets its own configuration, which is computed as follows:
 
 1. start with an empty object
 2. override with `wires-defaults.json` if it exists
@@ -160,7 +165,7 @@ Actual configuration depends on the position of the file requiring it in the fil
 
 In practice, you'll rarely use all files at once. Typically, parts of your application will define default values in their respective directories while the main app will set actual settings in the root directory, as in the following example:
 
-```js
+```json
 // /app/wires.json
 
 {
@@ -170,7 +175,9 @@ In practice, you'll rarely use all files at once. Typically, parts of your appli
         "database": "test3"
     }
 }
+```
 
+```json
 // /app/database/wires-defaults.json
 
 {
@@ -181,25 +188,25 @@ In practice, you'll rarely use all files at once. Typically, parts of your appli
         "password": ""
     }
 }
+```
 
+```js
 // /app/database/lib/someFile.js
 
-require( "#mysql.host" ) === "localhost";
-require( "#mysql.port" ) === 3306,
-require( "#mysql.user" ) === "root",
-require( "#mysql.password" ) === String( process.env.PASSWORD ),
-require( "#mysql.database" ) === "test3"
+require("#mysql.host") === "localhost";
+require("#mysql.port") === 3306;
+require("#mysql.user") === "root";
+require("#mysql.password") === String(process.env.PASSWORD);
+require("#mysql.database") === "test3";
 ```
 
 ### `@namespace` Directive
 
-Adding in one of your configuration files the directive `@namespace` which value is a string creates a namespace. The namespace isolates the directory and limits its access to the part of the parent configuration defined within said namespace.
-
-This is especially useful for self-contained sub-packages that define their own settings: the sub-package works with flat, unprefixed keys, while the parent configures it through a single namespaced block. The two sides never need to agree on key names.
+The `@namespace` directive lets a sub-directory see only a specific branch of the parent configuration. This is useful for self-contained sub-packages: the sub-package works with flat, unprefixed keys, while the parent configures it through a single namespaced block. The two sides never need to agree on key names.
 
 Let's go back to the previous example:
 
-```js
+```json
 // /app/wires.json
 
 {
@@ -209,7 +216,9 @@ Let's go back to the previous example:
         "database": "test3"
     }
 }
+```
 
+```json
 // /app/database/wires-defaults.json
 
 {
@@ -220,32 +229,34 @@ Let's go back to the previous example:
     "user": "",
     "password": ""
 }
+```
 
+```js
 // /app/database/lib/someFile.js
 
-require( "#host" ) === "localhost";
-require( "#port" ) === 3306,
-require( "#user" ) === "root",
-require( "#password" ) === String( process.env.PASSWORD ),
-require( "#database" ) === "test3"
+require("#host") === "localhost";
+require("#port") === 3306;
+require("#user") === "root";
+require("#password") === String(process.env.PASSWORD);
+require("#database") === "test3";
 ```
 
 _Note that routes are impervious to namespaces._
 
 ### `@root` Directive
 
-Sometimes, it is desirable to isolate your configuration. Set the `@root` directive to true and `wires` will stop climbing any further up the file hierarchy.
+Sometimes you want to fully isolate a directory's configuration from its parents. Set the `@root` directive to `true` and `wires` will stop climbing any further up the file hierarchy.
 
-See the following example:
-
-```js
+```json
 // /parent/wires.json
 
 {
     "parentKey": "parent value",
-    "childKey": "overidden value"
+    "childKey": "overridden value"
 }
+```
 
+```json
 // /parent/child/wires-defaults.json
 
 {
@@ -253,56 +264,53 @@ See the following example:
 
     "childKey": "child value"
 }
+```
 
+```js
 // /parent/child/someFile.js
 
-require( "#parentKey" ) === undefined;
-require( "#childKey" ) === "child value";
+require("#parentKey") === undefined;
+require("#childKey") === "child value";
 ```
 
 ## Syntax
 
-- usual file paths
-    + `require( "./lib/myUtil.js" )`
-    + `require( "fs" )`
-- tilde-slash-lead, for file paths relative to home directory
-    + `require( "~/.jshint.json" )`
-- chevron-slash-lead, for file paths relative to current working directory
-    + `require( ">/logger.js" )`
-- hash-lead, to recover settings
-    + `require( "#username" )`
-    + `require( "#server.db.host" )`
-- hash-then-chevron-lead, to recover environment variables
-    + `require( "#>PATH" )`
-    + `require( "#>WIRES_ENV" )`
-- colon-lead, to inject route-based modules
-    + `require( ":model/person.js" )`
-    + `require( ":cacheFactory" )`
-- templated, to construct paths dynamically
-    + `require( "./lib/{#vendor}/main.js" )`
-    + `require( "nodeunit/reporters/{#unit.reporter}" )`
-- two-colons-lead, to bypass `wires` entirely
-    + `require( "::wires-will-not-transform-this" )`
+The following table summarizes the prefixes `wires` recognizes in `require()` and `import` expressions:
 
-Targeting `undefined` or `null` values in expressions may yield potentially undesirable `"undefined"` or `"null"` in the resulting string. If and when you change the leading `#` to a leading `?` and the targeted value is "falsy" (`undefined`, `null`, `false`, etc...), then the result is an empty string (`""`). For instance:
+| Prefix | Resolves to | Example |
+|--------|-------------|---------|
+| _(none)_ | Standard Node.js resolution | `require("fs")`, `require("./lib/util")` |
+| `~/` | Relative to home directory | `require("~/.eslintrc.json")` |
+| `>/` | Relative to current working directory | `require(">/logger.js")` |
+| `#` | Configuration setting | `require("#server.db.host")` |
+| `#>` | Environment variable | `require("#>PATH")` |
+| `:` | Route-based module | `require(":cacheFactory")` |
+| `{#...}` | Template interpolation | `require("./lib/{#vendor}/main.js")` |
+| `::` | Bypass `wires` entirely | `require("::raw-path")` |
 
-- the expression `"value is '{#undefinedValue}'"` yields `"value is 'undefined'"`
-- the expression `"value is '{?undefinedValue}'"` yields `"value is ''"`
+#### Safe Interpolation with `?`
 
-This is especially handy for environment variables that may or may not be set. While `"#>UNSET_VAR"` would yield `"undefined"`, `?>UNSET_VAR` yields `""`.
+Targeting `undefined` or `null` values in template expressions may yield undesirable `"undefined"` or `"null"` strings. If you replace the leading `#` with `?`, falsy values produce an empty string (`""`) instead:
 
-`{` and `}` are special characters. Since version `5.1`, it is possible to escape them if and when they're needed verbatim:
+- `"value is '{#undefinedValue}'"` yields `"value is 'undefined'"`
+- `"value is '{?undefinedValue}'"` yields `"value is ''"`
+
+This is especially handy for environment variables that may or may not be set. While `"{#>UNSET_VAR}"` would yield `"undefined"`, `"{?>UNSET_VAR}"` yields `""`. This feature works hand in hand with [Fallbacks](#fallbacks).
+
+#### Escaping Braces
+
+`{` and `}` are special characters. You can escape them when they're needed verbatim:
 
 - the expression `"{ placeholder }"` throws an exception
 - the expression `"\\{ placeholder \\}"` yields `"{ placeholder }"`
 
 ### Settings
 
-In your configuration files, every object property which name is not colon-lead is a setting.
+In your configuration files, every object property whose name is not prefixed with a colon is a setting.
 
 A setting can be of any type, including an object. When the value of a setting is a string, it accepts the template syntax seen in the previous section.
 
-```js
+```json
 // /app/wires.json
 
 {
@@ -310,98 +318,82 @@ A setting can be of any type, including an object. When the value of a setting i
     "boolean": false,
     "string": "some string",
     "templateString": "number is {#number}",
-    "array": [ 1, 2 ],
+    "array": [1, 2],
     "object": {
         "templateString": "boolean is {#boolean}"
     },
     "env": "{?>SOME_VAR}"
 }
+```
 
+```js
 // /app/file.js
 
-require( "#number" ) === 56;
-require( "#string" ) === "some string";
-require( "#templateString" ) === "number is 56";
-require( "#array" ); // [ 1, 2 ]
-require( "#object.templateString" ) === "boolean is false";
-require( "#env" ) === ( process.env.SOME_VAR || "" );
+require("#number") === 56;
+require("#string") === "some string";
+require("#templateString") === "number is 56";
+require("#array"); // [1, 2]
+require("#object.templateString") === "boolean is false";
+require("#env") === (process.env.SOME_VAR || "");
 ```
 
 ### Fallbacks
 
-As of version `2.0`, every object property which name ends with a question mark in your configuration files is a fallback. Fallbacks are useful in situations where a setting may be _empty_ (`""`, `NaN`, `null` or `undefined`) yet you still need a default value for it.
+Every object property whose name ends with a question mark in your configuration files is a fallback. Fallbacks provide a default value for settings that are _empty_ (`""`, `NaN`, `null` or `undefined`).
 
-__Prior to version `4.0`, `wires` did consider any _falsy_ value as _empty_ (`0`, `false`, etc). This was changed in order to accommodate casting as introduced in the very same version.__
+Consider the following situation:
 
-Let's considering the following situation:
-
-```js
+```json
 // /app/wires.json
 
 {
     "mysql_user": "{?>SQL_USER}"
 }
+```
 
+```json
 // /app/mysql/wires-defaults.json
 
 {
     "mysql_user": "root"
 }
-
-// /app/mysql/index.js
-
-require( "#mysql_user" ) === ( process.env.SQL_USER || "" );
 ```
 
-The environment variable `SQL_USER` may not be set and so the setting `mysql_user` may end up as an empty string. Yet, it is still _set_ and the default value defined in `wires-defaults.json` will never be used.
-
-The problem can easily be worked around using a fallback:
-
 ```js
+// /app/mysql/index.js
+
+require("#mysql_user") === (process.env.SQL_USER || "");
+```
+
+The environment variable `SQL_USER` may not be set, and so the setting `mysql_user` may end up as an empty string. Yet it is still _set_, and the default value defined in `wires-defaults.json` will never be used.
+
+This is easily solved with a fallback:
+
+```json
 // /app/wires.json
 
 {
     "mysql_user": "{?>SQL_USER}"
 }
+```
 
+```json
 // /app/mysql/wires-defaults.json
 
 {
     "mysql_user?": "root"
 }
-
-// /app/mysql/index.js
-
-require( "#mysql_user" ) === ( process.env.SQL_USER || "root" );
 ```
 
-Fallbacks act like any other setting and can be overridden using the cascading nature of configurations. They can also be recovered programmatically if and when needed.
-
-Coming back to the previous example, if we redefine the fallback in the parent configuration then this new setting will be used in place of `root` as the "fallback value":
-
 ```js
-// /app/wires.json
-
-{
-    "mysql_user": "{?>SQL_USER}",
-    "mysql_user?": "admin"
-}
-
-// /app/mysql/wires-defaults.json
-
-{
-    "mysql_user?": "root"
-}
-
 // /app/mysql/index.js
 
-require( "#mysql_user" ) === ( process.env.SQL_USER || "admin" );
-require( "#mysql_user?" ) === "admin";
+require("#mysql_user") === (process.env.SQL_USER || "root");
 ```
 
-Fallbacks also work within settings that are objects themselves. They just disappear when you require the object in its entirety:
+Fallbacks act like any other setting and can be overridden through cascading configuration. They can also be retrieved programmatically when needed. Within object settings, they work the same way — they simply disappear when you require the object in its entirety:
 
-```js
+```json
 // /app/wires.json
 
 {
@@ -409,7 +401,9 @@ Fallbacks also work within settings that are objects themselves. They just disap
         "user": "{?>SQL_USER}"
     }
 }
+```
 
+```json
 // /app/mysql/wires-defaults.json
 
 {
@@ -417,13 +411,15 @@ Fallbacks also work within settings that are objects themselves. They just disap
         "user?": "root"
     }
 }
+```
 
+```js
 // /app/mysql/index.js
 
-require( "#mysql.user" ) === ( process.env.SQL_USER || "root" );
-require( "#mysql.user?" ) === "root";
+require("#mysql.user") === (process.env.SQL_USER || "root");
+require("#mysql.user?") === "root";
 assert.deepEqual(
-    require( "#mysql" ),
+    require("#mysql"),
     {
         "user": process.env.SQL_USER || "root"
     }
@@ -432,110 +428,91 @@ assert.deepEqual(
 
 ### Casting
 
-As of version `4.0`, it is possible to cast string values into booleans or numbers in configuration files:
+String values in configuration files can be cast to booleans or numbers, or parsed as JSON.
 
-```js
+#### Booleans and Numbers
+
+```json
 // wires.json
 
 {
     "bool": "(boolean) true",
     "number": "(number) 1204"
 }
-
-// file.js
-
-require( "#bool" ) === true;
-require( "#number" ) === 1204;
 ```
 
-It is especially useful when dealing with environment variables:
-
 ```js
+// file.js
+
+require("#bool") === true;
+require("#number") === 1204;
+```
+
+This is especially useful when dealing with environment variables:
+
+```json
 // wires.json
 
 {
     "size": "(number){?>SIZE}"
 }
-
-// file.js
-
-const size = ( process.env.SIZE || "" ).trim();
-require( "#size" ) === ( size ? Number( size ) : NaN );
 ```
 
-Casting follows the following rules:
+```js
+// file.js
+
+const size = (process.env.SIZE || "").trim();
+require("#size") === (size ? Number(size) : NaN);
+```
+
+Casting follows these rules:
 
 - For booleans (cast using `(bool)` or `(boolean)`):
     - `"true"` becomes `true`,
     - `"false"` becomes `false`,
     - any other string becomes `null`.
-- For numbers (cast using `(num)` or `(number)`), any string that cannot be parsed as a number will give `NaN` as a result.
+- For numbers (cast using `(num)` or `(number)`), any string that cannot be parsed as a number will result in `NaN`.
 
-```js
-// wires.json
+Whitespace inside and around the parentheses is ignored, so `"(bool)true"`, `"( bool ) true"`, etc., are all equivalent.
 
-{
-    "true": "(bool) true",
-    "false": "(bool) false",
-    "null": "(bool) not a boolean",
-    "number": "(num) 1204",
-    "NaN": "(num) not a number",
-}
+#### JSON
 
-// file.js
+String values can also be parsed as JSON using the `(json)` cast:
 
-require( "#true" ) === true;
-require( "#false" ) === false;
-require( "#null" ) === null;
-require( "#number" ) === 1204;
-isNaN( require( "#NaN" ) );
-```
-
-You can put an arbitrary number of spaces after the opening parenthesis and around the closing parenthesis. So the following expressions are all valid and strictly equivalent:
-
-```js
-"(bool)true"
-"(bool) true"
-"( bool)true"
-"(bool )true"
-"( bool )true"
-"( bool) true"
-"(bool ) true"
-"( bool ) true"
-```
-
-As of version `5.1`, it is possible to treat string values as json in configuration files:
-
-```js
+```json
 // wires.json
 
 {
     "json": "(json) \\{ \"property\": [ 1024 ] \\}"
 }
-
-// file.js
-
-require( "#json.property" )[ 0 ] === 1024;
 ```
 
-It makes it possible to inject complex data structures from environment variables:
-
 ```js
+// file.js
+
+require("#json.property")[0] === 1024;
+```
+
+This makes it possible to inject complex data structures from environment variables:
+
+```json
 // wires.json
 
 {
     "json": "(json) {?>JSON}"
 }
+```
 
+```js
 // file.js
 
 // if env var JSON === '{ "property": [ 1024 ] }'
-require( "#json.property" )[ 0 ] === 1024;
+require("#json.property")[0] === 1024;
 ```
 
-If the string provided is not proper JSON, `null` is returned, allowing the use of a fallback:
+If the string is not valid JSON, `null` is returned, allowing the use of a [fallback](#fallbacks):
 
-```js
+```json
 // wires.json
 
 {
@@ -543,180 +520,141 @@ If the string provided is not proper JSON, `null` is returned, allowing the use 
     "jsonWithFallback": "(json) not proper json",
     "jsonWithFallback?": 712
 }
-
-// file.js
-
-require( "#jsonWithoutFallback" ) === null;
-require( "#jsonWithFallBack" ) === 712;
 ```
 
+```js
+// file.js
+
+require("#jsonWithoutFallback") === null;
+require("#jsonWithFallback") === 712;
+```
 
 ## Routes
 
-In your configuration files, every object property which name is colon-lead and does not end with a slash defines a route.
+In your configuration files, every object property whose name starts with a colon and does not end with a slash defines a route.
 
-Routes must be strings. Like settings, they do accept the template syntax. The final string must be a path to a file that actually exists.
+Routes must be strings. Like settings, they accept the template syntax. The final string must be a path to a file that actually exists.
 
 File paths may refer to a file:
 
 - globally (relying on `NODE_PATH`)
-- relatively to the directory of the configuration file (start with `"./"` or `"../"`)
-- relatively to the home directory (start with `"~/"`)
-- relatively to the current working directory (start with `">/"`)
+- relative to the directory of the configuration file (start with `"./"` or `"../"`)
+- relative to the home directory (start with `"~/"`)
+- relative to the current working directory (start with `">/"`)
 
-```js
+```json
 // /app/wires.json
 
 {
     ":dbRequest": "mysql/request",
     ":cacheFactory": "../cache/factory",
-    ":data": ">/data.json"
+    ":data": ">/data.json",
     ":eslint": "~/.eslintrc.json"
 }
-
-// /app/some/path/inside/index.js
-
-require( ":dbRequest" ) === require( "mysql/request" );
-require( ":cacheFactory" ) === require( "/cache/factory" );
-require( ":data" ) === require( "/working/dir/data.json" );
-require( ":eslint" ) === require( "/home/me/.eslintrc.json" );
 ```
 
-As of version `2.1.0`, it is possible to set a route to `null`. Requiring such a route would result in `null`.
-
 ```js
+// /app/some/path/inside/index.js
+
+require(":dbRequest") === require("mysql/request");
+require(":cacheFactory") === require("/cache/factory");
+require(":data") === require("/working/dir/data.json");
+require(":eslint") === require("/home/me/.eslintrc.json");
+```
+
+Any route (regular, generic, or computed) can be set to `null`. Requiring such a route will return `null`, which is useful for stubbing out modules that are not yet implemented.
+
+```json
 // /app/wires.json
 
 {
     ":not-implemented-yet": null
 }
+```
 
+```js
 // /app/some/path/inside/index.js
 
-require( ":not-implemented-yet" ) === null;
+require(":not-implemented-yet") === null;
 ```
 
 ### Generic Routes
 
-In your configuration files, every object property which name is colon-lead and ends with a slash defines a generic route.
+In your configuration files, every object property whose name starts with a colon and ends with a slash defines a generic route.
 
-Like normal routes, they must be strings, they do accept the templated syntax and they have the same semantics (`NODE_PATH`, `"./"`, `"../"`, `"~/"`, `">/"` ). However, they may not point to the path of an existing file since the final string will be used as a replacement for the property name in require expressions.
+Like normal routes, they must be strings and they accept the template syntax with the same path semantics (`NODE_PATH`, `"./"`, `"../"`, `"~/"`, `">/"` ). The property name acts as a prefix: `wires` replaces it with the route value and appends whatever follows.
 
-```js
+```json
 // /app/wires.json
 
 {
-    ":dbo/": "./db/model-",
+    ":dbo/": "./db/model-"
 }
-
-// /app/mvc/controllers/mainPage.js
-
-require( ":dbo/client" ) === require( "/app/db/model-client" );
-require( ":dbo/car/bmw" ) === require( "/app/db/model-car/bmw" );
 ```
 
-As of version `2.1.0`, it is possible to set a generic route to `null`. Requiring such a route and its children would result in `null`.
-
 ```js
-// /app/wires.json
-
-{
-    ":to-do/": null,
-}
-
 // /app/mvc/controllers/mainPage.js
 
-require( ":to-do/child" ) === null;
-require( ":to-do/other/path" ) === null;
+require(":dbo/client") === require("/app/db/model-client");
+require(":dbo/car/bmw") === require("/app/db/model-car/bmw");
 ```
 
 ### Computed Routes
 
-As of version `2.1.0`, in your configuration files, every object property which name is colon-lead and ends with a slash followed by an opening then a closing parenthesis defines a computed route.
+When simple prefix replacement isn't enough, computed routes let you run custom resolution logic. A computed route key ends with `/()` and its value points to a CommonJS module exporting a function. `wires` calls that function with the path segments as arguments and uses the returned string as the resolved path.
 
-They are very similar to generic routes except there is no automatic concatenation performed by `wires`. Rather, the value must be a string pointing to a module that exports a function. This function will be called by `wires` with the path segments as arguments and is expected to return the resulting path.
+Let's re-implement the generic route example from the previous section with a computed route:
 
-This sounds quite complicated but let's re-implement the generic route example from the previous section with a computed route:
-
-```js
+```json
 // /app/wires.json
 
 {
-    ":dbo/()": "./helpers/dbo.js",
+    ":dbo/()": "./helpers/dbo.js"
 }
-
-// /app/helpers/dbo.js
-
-module.exports =
-    ( ...pathSegments ) =>
-        "../db/model-" + pathSegments.join( `/` );
-
-// /app/mvc/controllers/mainPage.js
-
-require( ":dbo/client" ) === require( "/app/db/model-client" );
-require( ":dbo/car/bmw" ) === require( "/app/db/model-car/bmw" );
 ```
-
-Please note that paths returned by the function are resolved relatively to the location of the file where the function is defined.
-
-_Computed Route functions must be defined in CommonJS modules. ECMAScript Modules are __not__ supported here._
-
-It is possible for a computed route function to return `null` : requiring such a route and its children would result in `null`.
 
 ```js
-// /app/wires.json
-
-{
-    ":dbo/()": "./helpers/dbo.js",
-}
-
 // /app/helpers/dbo.js
 
-module.exports = () => null; // not implemented yet
+module.exports = (...pathSegments) => "../db/model-" + pathSegments.join("/");
+```
 
+```js
 // /app/mvc/controllers/mainPage.js
 
-require( ":dbo/client" ) === null;
-require( ":dbo/product" ) === null;
+require(":dbo/client") === require("/app/db/model-client");
+require(":dbo/car/bmw") === require("/app/db/model-car/bmw");
 ```
+
+Paths returned by the function are resolved relative to the location of the file where the function is defined. The function may also return `null` to stub out a route.
+
+_Computed route functions must be defined in CommonJS modules. ECMAScript Modules are __not__ supported here._
 
 ## `import`
 
-As of version `5.0`, `wires` overrides both static and dynamic import statements. This makes it compatible with ES Module based projects.
+`wires` overrides both static and dynamic import statements, making it fully compatible with ES-module-based projects.
 
-Unlike `require`, `import()` needs fully defined paths, file extension included, and fails to fetch `index.js` when targeted at a directory, so you have to keep that in mind when creating routes.
+Unlike `require()`, `import` needs fully qualified paths with file extensions and does not resolve `index.js` when pointed at a directory. Make sure your routes include the full path:
 
-```js
+```json
 // /app/wires.json
 
 {
-    ":dir1": "./dir",
-    ":dir2": "./dir/index",
-    ":dir3": "./dir/index.js"
+    ":dir": "./dir/index.js"
 }
-
-// /app/dir/index.js
-
-module.exports = "You Found Me!";
-
-// /app/cjs.js
-
-require( `:dir1` ) === "You Found Me!"
-require( `:dir2` ) === "You Found Me!"
-require( `:dir3` ) === "You Found Me!"
-
-// /app/esm.js
-
-import message1 from ":dir1"; // fails with exception
-import message2 from ":dir2"; // fails with exception
-import message3 from ":dir3"; // succeeds!
-
-message3 === "You Found Me!";
 ```
 
-Also, for object values, `wires` will create a named export for every property which name is a proper JavaScript identifier.
-
 ```js
+// /app/esm.js
+
+import message from ":dir"; // works!
+```
+
+For reference, `require()` is more lenient and would also accept `"./dir"` or `"./dir/index"` as route values.
+
+Additionally, for object values, `wires` creates a named export for every property whose name is a valid JavaScript identifier:
+
+```json
 // /app/wires.json
 
 {
@@ -726,13 +664,15 @@ Also, for object values, `wires` will create a named export for every property w
         "no name export": 3
     }
 }
+```
 
+```js
 // /app/esm.js
 import object, { property1, property2 } from "#object";
 
 object.property1 === 1;
 object.property2 === 2;
-object[ "no name export" ] === 3;
+object["no name export"] === 3;
 
 property1 === 1;
 property2 === 2;
@@ -740,30 +680,29 @@ property2 === 2;
 
 ## Bundlers
 
-A primary goal of `wires` is to be compatible with as many bundlers as possible. The bundle does not need `wires` to run and does not include the core code of the package.
+`wires` is designed to work with bundlers. The bundle does not need `wires` at runtime and does not include the core code of the package. Routes are resolved statically at bundle time, while values that depend on environment variables remain dynamic — `wires` adds a few short functions to the bundle to ensure they are read at runtime.
 
-While routes are computed statically, values that depend on environment variables will properly change if the corresponding environment variable changes. `wires` will add a few short functions to the bundle to ensure as much.
+For instance, given the following situation:
 
-For instance, if we have the following situation:
-
-```js
-
+```json
 // /wires.json
 
 {
     "server": {
         "keepAlive": "(number) {?>KEEP_ALIVE}",
-        "keepAlive": 60,
+        "keepAlive?": 60,
         "port": "(number) {?>PORT}",
         "port?": 8080
     }
 }
+```
 
+```js
 // /index.js
 
 import { keepAlive, port } from "#server";
 
-console.log( keepAlive, port );
+console.log(keepAlive, port);
 ```
 
 then:
@@ -772,11 +711,11 @@ then:
 
 If `index.js` is bundled into `bundle.js`:
 - `node bundle.js` will output `60 8080`
-- `KEEP_ALIVE=30000 PORT=80 node bundle.js` will output `30 80`
+- `KEEP_ALIVE=30 PORT=80 node bundle.js` will output `30 80`
 
 ### Rollup
 
-As of version `5`, `wires` exposes a `rollup` plugin at `wires/rollup` (it is part of the `wires` package itself).
+`wires` exposes a Rollup plugin at `wires/rollup` (it is part of the `wires` package itself).
 
 Simply create a `rollup.config.js` [configuration file](https://www.rollupjs.org/guide/en/#configuration-files) and import the plugin:
 
@@ -789,13 +728,13 @@ export default {
         dir: "output",
         format: "es"
     },
-    plugins: [ wires() ],
+    plugins: [wires()],
 };
 ```
 
 Then call `rollup` either via the [CLI](https://www.rollupjs.org/guide/en/#command-line-reference) or the [API](https://www.rollupjs.org/guide/en/#javascript-api).
 
-The plugin is compatible with both [`@rollup/plugin-commonjs`](https://www.npmjs.com/package/@rollup/plugin-commonjs) and [`@rollup/plugin-node-resolve`](https://www.npmjs.com/package/@rollup/plugin-node-resolve) which makes it possible to bundle CommonJS projects, provided you set the former's `requireReturnsDefault` options to `true` and put the latter after the `wires` plugin in the list of plugins.
+The plugin is compatible with both [`@rollup/plugin-commonjs`](https://www.npmjs.com/package/@rollup/plugin-commonjs) and [`@rollup/plugin-node-resolve`](https://www.npmjs.com/package/@rollup/plugin-node-resolve), which makes it possible to bundle CommonJS projects, provided you set the former's `requireReturnsDefault` option to `true` and put the latter after the `wires` plugin in the list of plugins.
 
 It can also make sense to include [`@rollup/plugin-json`](https://www.npmjs.com/package/@rollup/plugin-json).
 
@@ -816,12 +755,20 @@ export default {
         wires(),
         nodeResolve(),
         json(),
-        commonjs( {
+        commonjs({
             requireReturnsDefault: true
-        } )
+        })
     ]
 };
 ```
+
+## Migration Notes
+
+If you are upgrading from an older version of `wires`, keep the following breaking changes in mind:
+
+- **`3.0`**: `wires` uses `WIRES_ENV` instead of `NODE_ENV`. Adjust your environment configuration accordingly.
+- **`4.0`**: Fallbacks now trigger only on _empty_ values (`""`, `NaN`, `null`, `undefined`). Previously, any _falsy_ value (`0`, `false`, etc.) would trigger a fallback.
+- **`5.0`**: Using `node` directly now requires `--require=wires --loader=wires` (previously just `--require=wires`) to enable ESM support.
 
 ## License
 
