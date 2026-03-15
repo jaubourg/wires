@@ -9,40 +9,36 @@
 
 __a simple configuration utility for NodeJS featuring smart module wiring for unobtrusive dependency injection__
 
-## Table of Content
+## The Problem
 
-<img align="right" width="22.5%" src="https://raw.githubusercontent.com/jaubourg/wires/master/logo.svg?sanitize=true" style="margin:0 3%">
+Every Node.js project eventually runs into the same set of annoyances:
 
-- [Overview](#overview)
-- [Getting Started](#getting-started)
-- [Cascading Configuration](#cascading-configuration)
-    - [`@namespace` directive](#namespace-directive)
-    - [`@root` directive](#root-directive)
-- [Syntax](#syntax)
-    - [Settings](#settings)
-    - [Fallbacks](#fallbacks)
-    - [Casting](#casting)
-- [Routes](#routes)
-    - [Generic](#generic-routes)
-    - [Computed](#computed-routes)
-- [`import`](#import)
-- [Bundlers](#bundlers)
-    - [ `rollup.js` ](#rollup)
+- **Relative path hell.** `require( "../../../util/logger" )` breaks on every refactor and tells you nothing about what `logger` actually is in context.
+- **Config threading.** You read `process.env` at the top of your entry point and pass values down through five layers of function arguments or a shared global — neither is great.
+- **Environment switching.** Swapping a real database driver for a test double means either touching application code or maintaining a tangle of `if (NODE_ENV === ...)` branches.
+
+Tools like `dotenv` solve the env-loading part but leave the rest to you. Dependency injection frameworks solve the wiring part but require you to restructure your code around them.
+
+`wires` takes a different approach: it stays out of your application code entirely.
 
 ## Overview
 
+<img align="right" width="22.5%" src="https://raw.githubusercontent.com/jaubourg/wires/master/logo.svg?sanitize=true" style="margin:0 3%">
+
 __`wires` augments the filename resolution mechanisms used by `import` and `require()` under the hood as a means to transparently inject configuration into your code.__
+
+Your modules keep using plain `require()`. You define what those calls resolve to — and what values they return — in JSON files that sit alongside your code. Switch environments, swap implementations, override settings for a subdirectory: none of it requires touching the modules themselves.
 
 *For simplicity's sake, we only provide examples using `require()` in this documentation but everything described here also applies to `import` with minor specificities discussed in [a dedicated section](#import).*
 
 ```js
-require( "#port" ); // <= http port of the server
-require( ":db_driver" ); // <= database driver
-require( ":models/user" ); // <= user model
-require( ":models/article" ); // <= article model
+require( "#port" );          // http port from config
+require( ":db_driver" );     // database driver, swappable per environment
+require( ":models/user" );   // user model, routed to the right implementation
+require( ":models/article" );
 ```
 
-Hash-lead expressions are used to recover settings. Colon-lead expressions are used to leverage routes and inject modules.
+Hash-lead expressions recover settings. Colon-lead expressions leverage routes to inject modules.
 
 Routes and settings are defined in JSON files:
 
@@ -78,7 +74,24 @@ require( ":models/user" ) === require ( "models/dbo/user" );
 require( ":models/article" ) === require ( "models/dbo/article" )
 ```
 
-Not that settings which keys are at-sign-lead are considered as directives and will not appear in your configuration. Currently supported directives are [`@namespace`](#namespace-directive) and [`@root`](#root-directive).
+Note that settings whose keys are at-sign-lead are considered directives and will not appear in your configuration. Currently supported directives are [`@namespace`](#namespace-directive) and [`@root`](#root-directive).
+
+## Table of Content
+
+- [Getting Started](#getting-started)
+- [Cascading Configuration](#cascading-configuration)
+    - [`@namespace` directive](#namespace-directive)
+    - [`@root` directive](#root-directive)
+- [Syntax](#syntax)
+    - [Settings](#settings)
+    - [Fallbacks](#fallbacks)
+    - [Casting](#casting)
+- [Routes](#routes)
+    - [Generic](#generic-routes)
+    - [Computed](#computed-routes)
+- [`import`](#import)
+- [Bundlers](#bundlers)
+    - [ `rollup.js` ](#rollup)
 
 ## Getting started
 
@@ -182,6 +195,8 @@ require( "#mysql.database" ) === "test3"
 
 Adding in one of your configuration files the directive `@namespace` which value is a string creates a namespace. The namespace isolates the directory and limits its access to the part of the parent configuration defined within said namespace.
 
+This is especially useful for self-contained sub-packages that define their own settings: the sub-package works with flat, unprefixed keys, while the parent configures it through a single namespaced block. The two sides never need to agree on key names.
+
 Let's go back to the previous example:
 
 ```js
@@ -267,7 +282,7 @@ require( "#childKey" ) === "child value";
     + `require( "./lib/{#vendor}/main.js" )`
     + `require( "nodeunit/reporters/{#unit.reporter}" )`
 - two-colons-lead, to bypass `wires` entirely
-	+ `require( "::wires-will-not-transform-this" )`
+    + `require( "::wires-will-not-transform-this" )`
 
 Targeting `undefined` or `null` values in expressions may yield potentially undesirable `"undefined"` or `"null"` in the resulting string. If and when you change the leading `#` to a leading `?` and the targeted value is "falsy" (`undefined`, `null`, `false`, etc...), then the result is an empty string (`""`). For instance:
 
@@ -553,10 +568,10 @@ File paths may refer to a file:
 // /app/wires.json
 
 {
-	":dbRequest": "mysql/request",
-	":cacheFactory": "../cache/factory",
-	":data": ">/data.json"
-	":eslint": "~/.eslintrc.json"
+    ":dbRequest": "mysql/request",
+    ":cacheFactory": "../cache/factory",
+    ":data": ">/data.json"
+    ":eslint": "~/.eslintrc.json"
 }
 
 // /app/some/path/inside/index.js
@@ -573,7 +588,7 @@ As of version `2.1.0`, it is possible to set a route to `null`. Requiring such a
 // /app/wires.json
 
 {
-	":not-implemented-yet": null
+    ":not-implemented-yet": null
 }
 
 // /app/some/path/inside/index.js
@@ -810,7 +825,7 @@ export default {
 
 ## License
 
-© [Julian Aubourg](mailto:j@ubourg.net), 2012-2022 – licensed under the [MIT license][license-url].
+© [Julian Aubourg](mailto:j@ubourg.net), 2012-2026 – licensed under the [MIT license][license-url].
 
 [coverage-image]: https://img.shields.io/coveralls/jaubourg/wires.svg?style=flat-square
 [coverage-url]: https://coveralls.io/r/jaubourg/wires
