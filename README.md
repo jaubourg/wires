@@ -53,7 +53,7 @@ const User = require(":models/user");
 
 The mapping between these expressions and actual values or modules is defined in JSON configuration files:
 
-```json
+```js
 {
     "port": 80,
     ":db_driver": "mysql/driver",
@@ -70,7 +70,7 @@ require(":models/article") === require("/.../db/model-article");
 
 Hash expressions read settings. Colon expressions resolve to modules via routes. Swapping to a different environment is just a matter of providing a different JSON file:
 
-```json
+```js
 {
     "port": 8080,
     ":db_driver": "./lib/dbDriver",
@@ -165,7 +165,7 @@ Actual configuration depends on the position of the file requiring it in the fil
 
 In practice, you'll rarely use all files at once. Typically, parts of your application will define default values in their respective directories while the main app will set actual settings in the root directory, as in the following example:
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -177,7 +177,7 @@ In practice, you'll rarely use all files at once. Typically, parts of your appli
 }
 ```
 
-```json
+```js
 // /app/database/wires-defaults.json
 
 {
@@ -206,7 +206,7 @@ The `@namespace` directive lets a sub-directory see only a specific branch of th
 
 Let's go back to the previous example:
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -218,7 +218,7 @@ Let's go back to the previous example:
 }
 ```
 
-```json
+```js
 // /app/database/wires-defaults.json
 
 {
@@ -247,7 +247,7 @@ _Note that routes are impervious to namespaces._
 
 Sometimes you want to fully isolate a directory's configuration from its parents. Set the `@root` directive to `true` and `wires` will stop climbing any further up the file hierarchy.
 
-```json
+```js
 // /parent/wires.json
 
 {
@@ -256,7 +256,7 @@ Sometimes you want to fully isolate a directory's configuration from its parents
 }
 ```
 
-```json
+```js
 // /parent/child/wires-defaults.json
 
 {
@@ -310,7 +310,7 @@ In your configuration files, every object property whose name is not prefixed wi
 
 A setting can be of any type, including an object. When the value of a setting is a string, it accepts the template syntax seen in the previous section.
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -343,7 +343,7 @@ Every object property whose name ends with a question mark in your configuration
 
 Consider the following situation:
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -351,7 +351,7 @@ Consider the following situation:
 }
 ```
 
-```json
+```js
 // /app/mysql/wires-defaults.json
 
 {
@@ -369,7 +369,7 @@ The environment variable `SQL_USER` may not be set, and so the setting `mysql_us
 
 This is easily solved with a fallback:
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -377,7 +377,7 @@ This is easily solved with a fallback:
 }
 ```
 
-```json
+```js
 // /app/mysql/wires-defaults.json
 
 {
@@ -393,7 +393,7 @@ require("#mysql_user") === (process.env.SQL_USER || "root");
 
 Fallbacks act like any other setting and can be overridden through cascading configuration. They can also be retrieved programmatically when needed. Within object settings, they work the same way — they simply disappear when you require the object in its entirety:
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -403,7 +403,7 @@ Fallbacks act like any other setting and can be overridden through cascading con
 }
 ```
 
-```json
+```js
 // /app/mysql/wires-defaults.json
 
 {
@@ -432,7 +432,7 @@ String values in configuration files can be cast to booleans or numbers, or pars
 
 #### Booleans and Numbers
 
-```json
+```js
 // wires.json
 
 {
@@ -450,7 +450,7 @@ require("#number") === 1204;
 
 This is especially useful when dealing with environment variables:
 
-```json
+```js
 // wires.json
 
 {
@@ -479,7 +479,7 @@ Whitespace inside and around the parentheses is ignored, so `"(bool)true"`, `"( 
 
 String values can also be parsed as JSON using the `(json)` cast:
 
-```json
+```js
 // wires.json
 
 {
@@ -495,7 +495,7 @@ require("#json.property")[0] === 1024;
 
 This makes it possible to inject complex data structures from environment variables:
 
-```json
+```js
 // wires.json
 
 {
@@ -512,7 +512,7 @@ require("#json.property")[0] === 1024;
 
 If the string is not valid JSON, `null` is returned, allowing the use of a [fallback](#fallbacks):
 
-```json
+```js
 // wires.json
 
 {
@@ -542,7 +542,7 @@ File paths may refer to a file:
 - relative to the home directory (start with `"~/"`)
 - relative to the current working directory (start with `">/"`)
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -564,7 +564,7 @@ require(":eslint") === require("/home/me/.eslintrc.json");
 
 Any route (regular, generic, or computed) can be set to `null`. Requiring such a route will return `null`, which is useful for stubbing out modules that are not yet implemented.
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -584,7 +584,7 @@ In your configuration files, every object property whose name starts with a colo
 
 Like normal routes, they must be strings and they accept the template syntax with the same path semantics (`NODE_PATH`, `"./"`, `"../"`, `"~/"`, `">/"` ). The property name acts as a prefix: `wires` replaces it with the route value and appends whatever follows.
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -605,7 +605,7 @@ When simple prefix replacement isn't enough, computed routes let you run custom 
 
 Let's re-implement the generic route example from the previous section with a computed route:
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -636,7 +636,7 @@ _Computed route functions must be defined in CommonJS modules. ECMAScript Module
 
 Unlike `require()`, `import` needs fully qualified paths with file extensions and does not resolve `index.js` when pointed at a directory. Make sure your routes include the full path:
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -654,7 +654,7 @@ For reference, `require()` is more lenient and would also accept `"./dir"` or `"
 
 Additionally, for object values, `wires` creates a named export for every property whose name is a valid JavaScript identifier:
 
-```json
+```js
 // /app/wires.json
 
 {
@@ -684,7 +684,7 @@ property2 === 2;
 
 For instance, given the following situation:
 
-```json
+```js
 // /wires.json
 
 {
